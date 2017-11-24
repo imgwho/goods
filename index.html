@@ -224,7 +224,7 @@
     function ajaxMoreData() {
       let current_height = document.documentElement.scrollTop + document.documentElement.clientHeight;
       let height = 68 + 5 * 244.5;
-      if (current_height + 80 > height) {
+      if (current_height + 100 > height) {
         console.log('当前屏幕高度' + current_height)
         console.log('容器高度:' + height)
         jsonp(++index)
