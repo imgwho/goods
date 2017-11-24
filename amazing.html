@@ -225,10 +225,10 @@
       let current_height = document.documentElement.scrollTop + document.documentElement.clientHeight;
       let p_height = document.querySelector('p').clientHeight
       let nav_height = document.querySelector('nav').clientHeight
-      let item_height = document.querySelector('#product').clientHeight
+      let item_height = document.querySelector('.item').clientHeight
 
-      let height = p_height + nav_height + item_height 
-      if (current_height + 35 > height) {
+      let height = p_height + nav_height + item_height * 5
+      if (current_height + 10 > height) {
         console.log('当前屏幕高度' + current_height)
         console.log('容器高度:' + height)
         jsonp(++index)
