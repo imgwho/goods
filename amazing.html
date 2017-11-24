@@ -27,7 +27,7 @@
 
     main>section {
       /* height: calc(100% - 45px); */
-      padding: 10px;
+      /* padding: 10px; */
       background: #fff;
       /* overflow: scroll; */
       /* -webkit-overflow-scrolling: touch; */
@@ -50,7 +50,7 @@
     header {
       text-align: center;
       line-height: 3;
-      background-color: green;
+      background-color: #1AAD17;
       color: #fff;
     }
 
@@ -59,8 +59,9 @@
     }
 
     nav {
-      font-size: 16px;
-      margin-top: 10px;
+      font-size: 13px;
+      margin-top: 5px;
+      margin-bottom: 5px;
       height: 20px;
       text-align: left;
       margin-left: 10px;
@@ -70,6 +71,7 @@
       text-decoration: none;
       color: #333;
     }
+
 
     #product {
       overflow: hidden;
@@ -81,12 +83,26 @@
       display: inline-block;
       font-size: 12px;
       width: 49%;
-      margin-bottom: 2%;
+      margin-bottom: 5px;
       border: 1px solid #aaa;
+      position: relative;
     }
 
-    #product>.item:nth-child(2n+2) {
-      margin-left: 2%;
+    #product>.item>.count {
+      width: 46px;
+      text-align: center;
+      border-radius: 2px;
+      position: absolute;
+      background-color: rgba(0, 0, 0, .6);
+      font-size: 10px;
+      line-height: 16px;
+      color: #fff;
+      right: 5px;
+      top: 5px;
+    }
+
+    #product>.item:nth-child(2n) {
+      margin-left: 5px;
     }
 
     .detail {
@@ -100,31 +116,32 @@
     }
 
     .price .info {
-      color: green;
+      color: #1AAD17;
     }
 
     .detail .zSccerZhi {}
 
     .zSccerZhi .info {
-      color: red;
+      color: #F58CAD;
     }
 
     .back-icon {
       line-height: 48px;
       float: left;
       margin-left: 10px;
+      color: #fff;
     }
 
     .green {
-      background-color: green;
+      color: #1AAD17;
     }
   </style>
 </head>
 
 <body>
   <header>
-    <span class="back-icon">
-      < </span>
+    <a href="test.html" class="back-icon" target=_self>
+      <</a>
         <p>低碳商品</p>
   </header>
   <nav>
@@ -190,58 +207,35 @@
   </main>
 
   <script>
-    let index = 1,
-      func, sortBy = 'count';
+    let index = 1
+
     window.onload = function () {
       jsonp(index);
-      func = throttle(jsonp);
-      document.querySelector('.byTime').addEventListener('click', function () {
-        dispatchSortBy('time');
-        [...document.querySelectorAll('.nav-btn')].forEach(item => item.classList.remove('green'))
-        this.classList.add('green');
-      })
-      document.querySelector('.byCount').addEventListener('click', function () {
-        dispatchSortBy('count');
-        [...document.querySelectorAll('.nav-btn')].forEach(item => item.classList.remove('green'))
-        this.classList.add('green')
-      })
     }
-    window.onscroll = ajaxMoreData;
 
-    function throttle(callback, delay = 0) {
-      let time = 0;
-      return function () {
-        const current_time = new Date().valueOf();
-        if (current_time > time) {
-          callback(...arguments);
-          time = current_time + delay;
-        }
-      }
-    }
+    // window.ontouchmove = function (e) {
+    // e.preventDefault()
+    // }
+
+    // window.ontouchmove = ajaxMoreData
+    window.onscroll = ajaxMoreData
+
 
     function ajaxMoreData() {
       let current_height = document.documentElement.scrollTop + document.documentElement.clientHeight;
       let height = 68 + 5 * 244.5;
-      if (current_height + 50 > height) {
-        func(++index, sortBy);
+      if (current_height + 1000 > height) {
+        console.log('当前屏幕高度' + current_height)
+        console.log('容器高度:' + height)
+        jsonp(++index)
       }
-    }
-
-    function init(_sortBy) {
-      document.querySelector('#product').innerHTML = '';
-      index = 1;
-      sortBy = _sortBy;
-    }
-
-    function dispatchSortBy(key = 'count') {
-      init(key);
-      jsonp(index, 'time');
     }
 
     function renderHtml(data) {
       let _html =
         ` 
       <div class="item">
+        <div class="count">已销${data.count}</div>
         <span href="#">
           <div class="title"></div>
           <div class="coverImg">
@@ -251,16 +245,22 @@
             <div class="name">${data.title}</div>
             <div class="price"><span class="info">${data.normsJson[0]['price']}</span>碳票</div>
             <div class="zSccerZhi">附送碳: <span class="info">${data.normsJson[0]['zSccerZhi']}</span>吨</div>
+            
           </div>
         </a>
       </div>`;
+
       document.querySelector('#product').innerHTML += _html;
     }
+
 
     function renderData(data) {
       console.log(data);
       const dataArray = data.data;
       dataArray.forEach(info => renderHtml(info));
+      // (function (info) {
+      //   return renderHtml(info);
+      // })
     }
 
     function jsonp(page = 1, sortBy = 'count', order = 0) {
