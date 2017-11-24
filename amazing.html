@@ -82,7 +82,7 @@
       display: inline-block;
       font-size: 12px;
       width: 49%;
-      margin-bottom: 2%;
+      margin-bottom: 5px;
       border: 1px solid #aaa;
       position: relative;
     }
@@ -219,7 +219,7 @@
     function ajaxMoreData() {
       let current_height = document.documentElement.scrollTop + document.documentElement.clientHeight;
       let height = 68 + 5 * 244.5;
-      if (current_height + 50 > height) {
+      if (current_height + 150 > height) {
         jsonp(++index)
       }
     }
