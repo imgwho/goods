@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>product</title>
+  <script src="iscroll.min.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -207,29 +208,55 @@
   </main>
 
   <script>
+    var myScroll
+
     let index = 1
 
     window.onload = function () {
+      myScroll = new IScroll('body')
+      console.log(myScroll)
+      myScroll.on('scrollStart', function () {
+        
+        minY = this.y;
+        // console.log(this);
+        console.log(minY, this.y)
+        jsonp(index + 1)
+      });
+
+      myScroll.on('scroll', function () {
+        minY = minY < this.y ? minY : this.y;
+        // console.log(this);
+        // jsonp(index + 1)
+      });
+
+      myScroll.on('scrollEnd', function () {
+        minY = minY < this.y ? minY : this.y;
+        if (this.y - minY > 10 && (this.directionY === 1)) {
+          // jsonp(index + 1)
+        }
+      });
       jsonp(index);
     }
+
+
 
     // window.ontouchmove = function (e) {
     // e.preventDefault()
     // }
 
     // window.ontouchmove = ajaxMoreData
-    window.onscroll = ajaxMoreData
+    // window.onscroll = ajaxMoreData
 
 
-    function ajaxMoreData() {
-      let current_height = document.documentElement.scrollTop + document.documentElement.clientHeight;
-      let height = 68 + 5 * 244.5;
-      if (current_height + 1000 > height) {
-        console.log('当前屏幕高度' + current_height)
-        console.log('容器高度:' + height)
-        jsonp(++index)
-      }
-    }
+    // function ajaxMoreData() {
+    //   let current_height = document.documentElement.scrollTop + document.documentElement.clientHeight;
+    //   let height = 68 + 5 * 244.5;
+    //   if (current_height + 1000 > height) {
+    //     console.log('当前屏幕高度' + current_height)
+    //     console.log('容器高度:' + height)
+    //     jsonp(++index)
+    //   }
+    // }
 
     function renderHtml(data) {
       let _html =

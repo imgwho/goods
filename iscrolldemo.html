@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>下拉刷新</title>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script type="text/javascript" src="http://cubiq.org/dropbox/iscroll4/src/iscroll.js?v4"></script>
+  <style type="text/css" media="all">
+    body,
+    ul,
+    li {
+      padding: 0;
+      margin: 0;
+      border: 0;
+    }
+
+    body {
+      font-size: 12px;
+      -webkit-user-select: none;
+      -webkit-text-size-adjust: none;
+      font-family: helvetica;
+      background: #777777;
+    }
+
+    #header {
+      position: absolute;
+      z-index: 2;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 45px;
+      line-height: 45px;
+      background-color: #d51875;
+      background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0, #fe96c9), color-stop(0.05, #d51875), color-stop(1, #7b0a2e));
+      background-image: -moz-linear-gradient(top, #fe96c9, #d51875 5%, #7b0a2e);
+      background-image: -o-linear-gradient(top, #fe96c9, #d51875 5%, #7b0a2e);
+      padding: 0;
+      color: #eee;
+      font-size: 20px;
+      text-align: center;
+    }
+
+    #header a {
+      color: #f3f3f3;
+      text-decoration: none;
+      font-weight: bold;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    #footer {
+      position: absolute;
+      z-index: 2;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 48px;
+      background-color: #222;
+      background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0, #999), color-stop(0.02, #666), color-stop(1, #222));
+      background-image: -moz-linear-gradient(top, #999, #666 2%, #222);
+      background-image: -o-linear-gradient(top, #999, #666 2%, #222);
+      padding: 0;
+      border-top: 1px solid #444;
+    }
+
+    p {
+      height: 20px;
+      overflow: hidden;
+      background: red;
+    }
+
+    #wrapper {
+      position: absolute;
+      z-index: 1;
+      top: 45px;
+      bottom: 48px;
+      left: -9999px;
+      width: 100%;
+      background: #aaa;
+      overflow: auto;
+    }
+
+    #scroller {
+      position: absolute;
+      z-index: 1;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+      width: 100%;
+      padding: 0;
+    }
+
+    #scroller ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 auto;
+      width: 100%;
+      text-align: left;
+      width: 80px;
+    }
+
+    #scroller li {
+      overflow: hidden;
+      width: 80px;
+      font-size: 14px;
+    }
+
+    #scroller li img {
+      width: 100%;
+      height: 150px;
+      overflow: hidden;
+      vertical-align: middle;
+    }
+
+    #myFrame {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    #pullUp {
+      background: #fff;
+      height: 40px;
+      line-height: 40px;
+      padding: 5px 10px;
+      border-bottom: 1px solid #ccc;
+      font-weight: bold;
+      font-size: 14px;
+      color: #888;
+    }
+
+    #pullUp .pullUpIcon {
+      display: block;
+      float: left;
+      width: 40px;
+      height: 40px;
+      background: url(http://cubiq.org/dropbox/iscroll4/examples/pull-to-refresh/pull-icon@2x.png) 0 0 no-repeat;
+      -webkit-background-size: 40px 80px;
+      background-size: 40px 80px;
+      -webkit-transition-property: -webkit-transform;
+      -webkit-transition-duration: 250ms;
+    }
+
+    #pullDown .pullDownIcon {
+      -webkit-transform: rotate(0deg) translateZ(0);
+    }
+
+    #pullUp .pullUpIcon {
+      -webkit-transform: rotate(-180deg) translateZ(0);
+    }
+
+    #pullDown.flip .pullDownIcon {
+      -webkit-transform: rotate(-180deg) translateZ(0);
+    }
+
+    #pullUp.flip .pullUpIcon {
+      -webkit-transform: rotate(0deg) translateZ(0);
+    }
+
+    #pullUp.loading .pullUpIcon {
+      background-position: 0 100%;
+      -webkit-transform: rotate(0deg) translateZ(0);
+      -webkit-transition-duration: 0ms;
+      -webkit-animation-name: loading;
+      -webkit-animation-duration: 2s;
+      -webkit-animation-iteration-count: infinite;
+      -webkit-animation-timing-function: linear;
+    }
+
+    @-webkit-keyframes loading {
+      from {
+        -webkit-transform: rotate(0deg) translateZ(0);
+      }
+      to {
+        -webkit-transform: rotate(360deg) translateZ(0);
+      }
+    }
+
+    #loading {
+      display: none;
+      position: absolute;
+      top: 180px;
+      left: 150px;
+      width: 26px;
+      height: 8px;
+      z-index: 99
+    }
+
+    #loading img {
+      margin: 0 0 0 -50%
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div id="header">
+    <a href="http://cubiq.org/iscroll">iScroll</a>
+  </div>
+  <div id="wrapper">
+    <div id="scroller">
+      <div id="loading">
+        <img src="img/loading.gif" />
+      </div>
+      <ul id="bookList">
+        <li>
+          <img src="http://img3.cache.netease.com/photo/0003/2015-10-16/B61JB9AK00AJ0003.jpg" />
+          <p>JavaScript高级程序设计（第3版）</p>
+        </li>
+        <li>
+          <img src="http://img4.cache.netease.com/photo/0003/2015-10-16/900x600_B61JB9IR00AJ0003.jpg" />
+          <p>JavaScript语言精粹</p>
+        </li>
+        <li>
+          <img src="http://img3.cache.netease.com/photo/0003/2015-10-16/900x600_B61JBAGS00AJ0003.jpg" />
+          <p>JavaScript DOM编程艺术</p>
+        </li>
+        <li>
+          <img src="http://img6.cache.netease.com/photo/0003/2013-10-09/900x600_9AOEKEKF00AJ0003.jpg" />
+          <p>JavaScript高级程序设计</p>
+        </li>
+        <li>
+          <img src="http://img4.cache.netease.com/photo/0003/2013-10-09/900x600_9AOEKF7E00AJ0003.jpg" />
+          <p>JavaScript 权威指南</p>
+        </li>
+        <li>
+          <img src="http://img5.cache.netease.com/photo/0003/2013-10-09/900x600_9AOEKFQA00AJ0003.jpg" />
+          <p>JavaScript 权威指南</p>
+        </li>
+        <li>
+          <img src="http://img3.cache.netease.com/photo/0003/2013-10-09/900x600_9AOEKGAF00AJ0003.jpg" />
+          <p>基于MVC的JavaScript Web富应用开发</p>
+        </li>
+        <li>
+          <img src="https://img3.doubanio.com/spic/s6245861.jpg" />
+          <p>高性能JavaScript</p>
+        </li>
+      </ul>
+      <div id="pullUp">
+        <span class="pullUpIcon"></span>
+        <span class="pullUpLabel">滑动加载...</span>
+      </div>
+    </div>
+  </div>
+  <div id="footer"></div>
+</body>
+<script type="text/javascript">
+  var myScroll, pullUpEl, pullUpOffset;
+  var opage = 1;
+
+  function pullUpAction() {
+    $(function () {
+      $.ajax({
+        type: "get",
+        url: "https://api.douban.com/v2/book/search?q=javascript&alt=json&callback=fn1&start=" + (opage++) +
+          "&count=20",
+        cache: false,
+        dataType: "jsonp",
+        jsonpCallback: "fn1",
+        success: function (data) {
+          var odata = data.books;
+          var ohtml = "";
+          for (var i = 0; i < odata.length; i++) {
+            ohtml += "<li><img src='img/07.gif' _src=" + odata[i]["images"]["small"] + "><p>" + odata[i][
+              "title"
+            ] + "</p></li>";
+          }
+          $("#bookList").append(ohtml);
+          // src="http://p19.qhimg.com/t015e7d1233fd0f44cf.gif" _src="http://p18.qhimg.com/t01f08740a9982d6928.png"
+          //                            setTimeout(function() {
+          myScroll.refresh();
+          //                            }, 0);
+        },
+        error: function () {
+          alert("出错");
+        }
+      });
+    });
+  }
+
+  function loaded() {
+    pullUpEl = document.getElementById('pullUp');
+    pullUpOffset = pullUpEl.offsetHeight;
+    myScroll = new iScroll('wrapper', {
+      useTransition: true,
+      onRefresh: function () {
+        if (pullUpEl.className.match('loading')) {
+          pullUpEl.className = '';
+          pullUpEl.querySelector('.pullUpLabel').innerHTML = '滑动刷新...';
+        }
+      },
+      onScrollMove: function () {
+        if (this.y < (this.maxScrollY - 5) && !pullUpEl.className.match('flip')) {
+          pullUpEl.className = 'flip';
+          pullUpEl.querySelector('.pullUpLabel').innerHTML = '释放刷新...';
+          this.maxScrollY = this.maxScrollY;
+        }
+
+      },
+      onScrollEnd: function () {
+        if (pullUpEl.className.match('flip')) {
+          if (opage === 3) {
+            pullUpEl.className = 'flip';
+            pullUpEl.querySelector('.pullUpLabel').innerHTML = '没有更多数据了...';
+          } else {
+            pullUpEl.className = 'loading';
+            pullUpEl.querySelector('.pullUpLabel').innerHTML = '加载中...';
+            pullUpAction();
+          }
+        }
+      }
+    });
+    setTimeout(function () {
+      document.getElementById('wrapper').style.left = '0';
+    }, 800);
+  }
+  document.addEventListener('touchmove', function (e) {
+    e.preventDefault();
+  }, false);
+  document.addEventListener('DOMContentLoaded', function () {
+    setTimeout(loaded, 200);
+  }, false);
+</script>
+<script src="http://s0.qhimg.com/lib/jquery/183.js"></script>
+<script src="http://zsall.mobilem.360.cn/stc_mebook/js/jquery.mobile.custom.js"></script>
+<script type="text/javascript" src="http://s4.qhimg.com/static/ed81309f1c18ce0f.js"></script>
+
+</html>
