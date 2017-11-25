@@ -223,10 +223,10 @@
 
     function ajaxMoreData() {
       let current_height = document.documentElement.scrollTop + document.documentElement.clientHeight;
-      let height = document.documentElement.scrollHeight
-      if (current_height >= height - 10) {
-        console.log('可见高度+滚动高度为:' + current_height)
-        console.log('网页高度为:' + height)
+      let height = 68 + 5 * 244.5;
+      if (current_height + 1000 > height) {
+        console.log('当前屏幕高度' + current_height)
+        console.log('容器高度:' + height)
         jsonp(++index)
       }
     }
@@ -255,7 +255,7 @@
 
 
     function renderData(data) {
-      // console.log(data);
+      console.log(data);
       const dataArray = data.data;
       dataArray.forEach(info => renderHtml(info));
       // (function (info) {
