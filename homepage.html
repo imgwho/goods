@@ -99,25 +99,34 @@
     }
 
 
-    .wrap {
+    .image {
       position: relative;
-      width: 300px;
+      width: 422px;
+      height: 750px;
       margin: 1.2rem auto;
+      background-image: url(http://ww1.sinaimg.cn/large/b8d8d39bgy1fm0fx21qm1j20bq0kuwex.jpg);
+      background-size: 422px 750px;
     }
 
-    .burl {
+    .blur-wrap {
+      top: 440px;
+      left: 0px;
       position: absolute;
-      left: 0;
-      top: 0;
-      width: 300px;
-      height: 540px;
+      width: 422px;
+      height: 310px;
       overflow: hidden;
-      filter: blur(1px);
     }
 
-    .burl-img {
-      width: 90%;
-      height: 90%;
+    .blur {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      bottom: -10px;
+      right: -10px;
+      background-image: url(http://ww1.sinaimg.cn/large/b8d8d39bgy1fm0fx21qm1j20bq0kuwex.jpg);
+      background-position: 10px -430px;
+      background-size: 422px 750px;
+      filter: blur(5px);
     }
   </style>
 </head>
@@ -132,12 +141,17 @@
     <p class="subtitle">一个集成信息交流以及交易的专注于节能、环保、新能源以及碳排放领域的互动型网络平台</p>
     <a href="https://itunes.apple.com/cn/app/绿豆芽-金山银山/id1184767071?l=zh&ls=1&mt=8">iPhone 版下载</a>
     <a href="http://app.qq.com/#id=detail&appid=1106034858">Android 版下载</a>
-    <div class="wrap">
+    <!-- <div class="wrap">
       <img  class= "burl-img" src="http://ww1.sinaimg.cn/large/b8d8d39bgy1fm0fx21qm1j20bq0kuwex.jpg" alt="">
       <div class="burl">
         <img  class= "burl-img" src="http://ww1.sinaimg.cn/large/b8d8d39bgy1fm0fx21qm1j20bq0kuwex.jpg" alt="">
       </div>
-    </div>
+    </div> -->
+    <div class="image">
+        <div class="blur-wrap">
+          <div class="blur"></div>
+        </div>
+      </div>
   </main>
 </body>
 
