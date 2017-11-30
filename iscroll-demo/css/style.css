@@ -1,0 +1,56 @@
+html,body{
+  width:100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  	overflow: hidden; /* On modern browsers, prevent the whole page to bounce */
+}
+.header,.content,.footer{
+  position: absolute;
+  width: 100%;
+  z-index:1;
+  left: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  
+}
+
+.header{
+  top: 0;
+  height: 40px;
+  line-height: 40px;
+  background: #ccc;
+}
+.footer{
+  bottom: 0;
+  height: 50px;
+  line-height: 50px;
+  background: #bbb;
+}
+.content{
+  top: 40px;
+  bottom: 50px;
+  overflow: hidden;  /* imporant */
+}
+.main p:nth-child(5){
+  background: #aaa;
+}
+.a, .b {
+  width:500px;
+  height:300px;
+  display: inline-block;
+}
+.a {
+  background-color: #ABCDEF;
+}
+.b {
+  background-color: #FEDBCA;
+}
+.c {
+  margin-left:300px;
+}
+.main {
+  font-size:0;
+  width: 4000px;
+}

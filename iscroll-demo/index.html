@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>IScroll demo</title>
+
+
+
+  <style>
+    /* NOTE: The styles were added inline because Prefixfree needs access to your styles and they must be inlined if they are on local disk! */
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+      /* On modern browsers, prevent the whole page to bounce */
+    }
+
+    .header,
+    .content,
+    .footer {
+      position: absolute;
+      width: 100%;
+      z-index: 1;
+      left: 0;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    .header {
+      top: 0;
+      height: 40px;
+      line-height: 40px;
+      background: #ccc;
+    }
+
+    .footer {
+      bottom: 0;
+      height: 50px;
+      line-height: 50px;
+      background: #bbb;
+    }
+
+    .content {
+      top: 40px;
+      bottom: 50px;
+      overflow: hidden;
+      /* imporant */
+    }
+
+    .main p:nth-child(5) {
+      background: #aaa;
+    }
+
+    .a,
+    .b {
+      width: 500px;
+      height: 300px;
+      display: inline-block;
+    }
+
+    .a {
+      background-color: #ABCDEF;
+    }
+
+    .b {
+      background-color: #FEDBCA;
+    }
+
+    .c {
+      margin-left: 300px;
+    }
+
+    .main {
+      font-size: 0;
+      width: 4000px;
+    }
+  </style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+
+</head>
+
+<body>
+  <div class="view view-current">
+    <div class="header">
+      headdddddddddddddddddddder
+    </div>
+    <div class="content iscroll">
+      <div class="main">
+        <div class="a">
+          <div class="c"></div>
+        </div>
+        <div class="b">
+          <div class="c"></div>
+        </div>
+        <div class="a">
+          <div class="c"></div>
+        </div>
+        <div class="b">
+          <div class="c"></div>
+        </div>
+        <div class="a">
+          <div class="c"></div>
+        </div>
+        <div class="b">
+          <div class="c"></div>
+        </div>
+        <div class="a">
+          <div class="c"></div>
+        </div>
+        <div class="b">
+          <div class="c"></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      footttttttttttttttttttttttttter
+    </div>
+  </div>
+  <script src='http://cdnjs.cloudflare.com/ajax/libs/iScroll/5.1.1/iscroll-min.js'></script>
+
+  <script src="js/index.js"></script>
+
+</body>
+
+</html>
