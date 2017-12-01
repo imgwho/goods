@@ -30,22 +30,28 @@
     }
 
     body {
-      font: 300 1em/1.8 PingFang SC, Lantinghei SC, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, Helvetica, sans-serif;
+      /* font: 300 1em/1.8 PingFang SC, Lantinghei SC, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, Helvetica, sans-serif;
+       */
+      /* font-family: "San Francisco", "Lucida Grande", "Lucida Sans Unicode", "helvetica neue", Verdana, tahoma, Aril, PingFangSC-Light, "hiragino sans gb", STXihei, YouYuan, "幼圆", "WenQuanYi Micro Hei", "Microsoft YaHei UI", "Microsoft YaHei", "微软雅黑", Heiti, "黑体", sans-serif; */
+      /* font-family: "Comic Sans MS", "幼圆", "黑体", sans-serif; */
+      font-family: "Comic Sans MS", "幼圆", "黑体", sans-serif;
       box-sizing: border-box;
     }
 
     nav {
       height: 3rem;
       border-bottom: none;
-      box-shadow: 0 0 30px rgba(0, 0, 0, .1);
+      box-shadow: inset 10px 9px 20px 0px rgba(0,0,0,.1);
       background-color: #1AAD19;
+      /* background-color: #fff; */
+      z-index: 1;
     }
 
     nav>.name {
       width: 4rem;
       height: 1.25rem;
       position: absolute;
-      left: 50%;
+      left: 53%;
       top: 1rem;
       -webkit-transform: translate(-50%);
       transform: translate(-50%);
@@ -101,19 +107,19 @@
 
     .image {
       position: relative;
-      width: 422px;
-      height: 750px;
+      width: 295.4px;
+      height: 525px;
       margin: 1.2rem auto;
       background-image: url(http://ww1.sinaimg.cn/large/b8d8d39bgy1fm0fx21qm1j20bq0kuwex.jpg);
-      background-size: 422px 750px;
+      background-size: 295.4px, 525px;
     }
 
     .blur-wrap {
-      top: 440px;
+      top: 308px;
       left: 0px;
       position: absolute;
-      width: 422px;
-      height: 310px;
+      width: 295.4px;
+      height: 217px;
       overflow: hidden;
     }
 
@@ -124,9 +130,9 @@
       bottom: -10px;
       right: -10px;
       background-image: url(http://ww1.sinaimg.cn/large/b8d8d39bgy1fm0fx21qm1j20bq0kuwex.jpg);
-      background-position: 10px -430px;
-      background-size: 422px 750px;
+      background-position: 10px -298px;
       filter: blur(5px);
+      background-size: 295.4px, 525px;
     }
   </style>
 </head>
@@ -138,7 +144,7 @@
   <main>
     <img class="logo" src="http://ww1.sinaimg.cn/large/b8d8d39bgy1fm0fldf79tj20b40b4jsp.jpg" alt="logo" class="logo">
     <h1 class="title">绿豆芽</h1>
-    <p class="subtitle">一个集成信息交流以及交易的专注于节能、环保、新能源以及碳排放领域的互动型网络平台</p>
+    <p class="subtitle">今天你减排了吗？</p>
     <a href="https://itunes.apple.com/cn/app/绿豆芽-金山银山/id1184767071?l=zh&ls=1&mt=8">iPhone 版下载</a>
     <a href="http://app.qq.com/#id=detail&appid=1106034858">Android 版下载</a>
     <!-- <div class="wrap">
@@ -148,10 +154,10 @@
       </div>
     </div> -->
     <div class="image">
-        <div class="blur-wrap">
-          <div class="blur"></div>
-        </div>
+      <div class="blur-wrap">
+        <div class="blur"></div>
       </div>
+    </div>
   </main>
 </body>
 
