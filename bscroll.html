@@ -13,15 +13,10 @@
 
   <style type="text/css">
     * {
-      -webkit-box-sizing: border-box;
-      -moz-box-sizing: border-box;
       box-sizing: border-box;
     }
 
-    html {
-      -ms-touch-action: none;
-    }
-
+    html,
     body,
     ul,
     li {
@@ -32,9 +27,7 @@
 
     body {
       font-size: 12px;
-      font-family: ubuntu, helvetica, arial;
       overflow: hidden;
-      /* this is important to prevent the whole page to bounce */
     }
 
     #header {
@@ -81,21 +74,11 @@
       z-index: 1;
       -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
       width: 100%;
-      -webkit-transform: translateZ(0);
-      -moz-transform: translateZ(0);
-      -ms-transform: translateZ(0);
-      -o-transform: translateZ(0);
       transform: translateZ(0);
       -webkit-touch-callout: none;
       -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
       user-select: none;
       -webkit-text-size-adjust: none;
-      -moz-text-size-adjust: none;
-      -ms-text-size-adjust: none;
-      -o-text-size-adjust: none;
-      text-size-adjust: none;
     }
 
     ul {
@@ -178,9 +161,23 @@
 
   <div id="footer"></div>
   <script type="text/javascript">
-    let wrapper = document.querySelector('#wrapper')
-    window.onload = new BScroll(wrapper)
-    console.log(new BScroll(wrapper))
+    // let wrapper = document.querySelector('#wrapper')
+    // let scroll = new BScroll(wrapper, {
+    //   click: true,
+    //   proberType: 3
+    // })
+
+    // scroll.on('scroll', (position) => {
+    //   console.log(position.x + ' ' + position.y)
+    // })
+
+    let scroll = new BScroll(document.getElementById('wrapper'), {
+      probeType: 3
+    })
+    scroll.on('scroll', (pos) => {
+      console.log(pos.x +
+        ',' + pos.y)
+    })
 
     // document.addEventListener('touchmove', function (e) {
     //   e.preventDefault();
