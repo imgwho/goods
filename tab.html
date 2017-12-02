@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>tab</title>
+</head>
+<style type="text/css">
+  div {
+    display: none
+  }
+
+  .show {
+    display: block;
+  }
+
+  .active {
+    background: red;
+  }
+</style>
+
+<body>
+
+  <button class="active">1</button>
+  <button>2</button>
+  <button>3</button>
+  <div class="show">11111</div>
+  <div>22223</div>
+  <div>33333</div>
+  <script>
+    var btns = document.querySelectorAll('button')
+    var divs = document.querySelectorAll('div')
+    for (let i = 0; i < btns.length; i++) {
+      /*可以看到这里少了保存的索引的操作*/
+      btns[i].onclick = function () {
+        for (let j = 0; j < btns.length; j++) {
+          btns[j].className = ''
+          divs[j].className = ''
+        }
+        this.className = 'active'
+        divs[i].className = 'show'
+      }
+    }
+  </script>
+</body>
+
+</html>

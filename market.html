@@ -40,8 +40,8 @@
     }
 
     .coverImg {
-      height: 150px;
-      width: 150px;
+      width: 100%;
+      height: 100%;
     }
 
     header {
@@ -61,7 +61,7 @@
       margin-bottom: 5px;
       height: 20px;
       text-align: left;
-      margin-left: 10px;
+      /* margin-left: 10px; */
     }
 
     a {
@@ -77,16 +77,14 @@
     }
 
     #product>.item {
-      width: 300px;
       display: inline-block;
       font-size: 12px;
       width: 48%;
-      margin-bottom: 10px;
+      margin: 2px;
     }
 
     .item-wrap {
       position: relative;
-      width: 150px;
     }
 
     .detail {
@@ -108,11 +106,11 @@
     }
 
     #product>.item:nth-child(2n+2) {
-      margin-left: 3px;
+      margin-right: 1%;
     }
 
     #product>.item:nth-child(2n+1) {
-      margin-left: 7px;
+      margin-left: 1%;
     }
 
     .back-icon {
@@ -122,12 +120,16 @@
       color: #fff;
     }
 
-    .green, .sale-text {
+    .sale-text {
       color: #1AAD17;
     }
 
     .buy-text {
       color: red;
+    }
+
+    .active {
+      color: #FF9D0A;
     }
   </style>
 </head>
@@ -139,7 +141,7 @@
         <p>碳市场</p>
   </header>
   <nav>
-    <span class="nav-btn byCount green">综合排序</span>
+    <span class="nav-btn byCount active">综合排序</span>
     <span class="nav-btn byTime">成交优先</span>
     <span class="nav-btn byTime">收购优先</span>
     <span class="nav-btn byTime">未持仓</span>
