@@ -269,6 +269,7 @@
     });
     // 滚动绑定事件
     myScroll.on("scrollEnd", function () {
+      //上拉加载更多
       if (this.y <= this.maxScrollY && !upFlag) {
         upFlag = true;
         setTimeout(function () {
@@ -277,9 +278,11 @@
           upFlag = false;
         }, 1000);
       }
+      //下拉刷新
       if (this.y <= 0 && !downFlag) {
         downFlag = true;
         setTimeout(function () {
+          jsonp(pageNo)
           myScroll.refresh();
           downFlag = false;
         }, 1000);
