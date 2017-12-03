@@ -222,25 +222,6 @@
     // const scroll = new BScroll(wrapper)
     // console.log(BScroll)
 
-    var myScroll = new IScroll(".scroll", {
-      preventDefault: false,
-      scrollbars: false,
-      mouseWheel: false,
-      interactiveScrollbars: true,
-      shrinkScrollbars: 'scale',
-      fadeScrollbars: true,
-      scrollY: true,
-      probeType: 2,
-      bindToWrapper: true
-    });
-
-    myScroll.on("scroll", function () {
-
-      setTimeout(function () {
-        console.log(myScroll);
-      }, 330);
-
-    });
 
 
 
@@ -374,7 +355,7 @@
 
 
 
-    // window.onscroll = loadMore
+    window.onscroll = loadMore
 
     function loadMore() {
       let current_height = document.documentElement.scrollTop + document.documentElement.clientHeight;
