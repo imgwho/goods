@@ -7,7 +7,7 @@
 
   <title>iScroll demo: simple</title>
 
-  <script type="text/javascript" src="iscroll.min.js"></script>
+  <script type="text/javascript" src="./iscroll.min.js"></script>
 
 
 
@@ -186,11 +186,15 @@
       myScroll = new IScroll('#wrapper', {
         mouseWheel: true
       });
+
+      myScroll.on('scroll', function () {
+        console.log('scroll !');
+      })
     }
 
-    document.addEventListener('touchmove', function (e) {
-      e.preventDefault();
-    }, false);
+    // document.addEventListener('touchmove', function (e) {
+    //   e.preventDefault();
+    // }, false);
   </script>
 </body>
 

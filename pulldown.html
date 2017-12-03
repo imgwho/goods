@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+    }
+
+    html,
+    body,
+    div,
+    ul,
+    li {
+      padding: 0;
+      margin: 0;
+    }
+
+    ul,
+    li {
+      list-style-type: none;
+    }
+
+    #wrapper {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    #scroller {
+      position: relative;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+      float: left;
+      width: 100%;
+      padding: 0;
+    }
+
+    #scroller ul {
+      position: relative;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      width: 100%;
+      text-align: left;
+    }
+
+    #scroller li {
+      padding: 0 10px;
+      height: 40px;
+      line-height: 40px;
+      border-bottom: 1px solid #ccc;
+      border-top: 1px solid #fff;
+      background-color: #fafafa;
+      font-size: 14px;
+    }
+
+    #scroller li>a {
+      display: block;
+    }
+    /**
+         *
+         * 下拉样式 Pull down styles
+         *
+         */
+
+    #pullDown,
+    #pullUp {
+      background: #fff;
+      height: 40px;
+      line-height: 40px;
+      padding: 5px 10px;
+      border-bottom: 1px solid #ccc;
+      font-weight: bold;
+      font-size: 14px;
+      color: #888;
+    }
+
+    #pullDown .pullDownIcon,
+    #pullUp .pullUpIcon {
+      display: block;
+      float: left;
+      width: 40px;
+      height: 40px;
+      /*background:url(pull-icon@2x.png) 0 0 no-repeat;*/
+      -webkit-background-size: 40px 80px;
+      background-size: 40px 80px;
+      -webkit-transition-property: -webkit-transform;
+      -webkit-transition-duration: 250ms;
+    }
+
+    #pullDown .pullDownIcon {
+      -webkit-transform: rotate(0deg) translateZ(0);
+    }
+
+    #pullUp .pullUpIcon {
+      -webkit-transform: rotate(-180deg) translateZ(0);
+    }
+    /**
+         * 动画效果css3代码
+         */
+
+    #pullDown.flip .pullDownIcon {
+      -webkit-transform: rotate(-180deg) translateZ(0);
+    }
+
+    #pullUp.flip .pullUpIcon {
+      -webkit-transform: rotate(0deg) translateZ(0);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="scroller">
+
+      <div id="pullDown">
+        <span class="pullDownIcon"></span>
+        <span class="pullDownLabel">下拉刷新...</span>
+      </div>
+
+      <ul id="thelist">
+        <li>数据 1</li>
+        <li>数据 2</li>
+        <li>数据 3</li>
+        <li>数据 4</li>
+        <li>数据 5</li>
+        <li>数据 6</li>
+        <li>数据 7</li>
+        <li>数据 8</li>
+        <li>数据 9</li>
+        <li>数据 10</li>
+        <li>数据 11</li>
+        <li>数据 12</li>
+        <li>数据 13</li>
+        <li>数据 11</li>
+        <li>数据 12</li>
+        <li>数据 13</li>
+        <li>数据 6</li>
+        <li>数据 7</li>
+        <li>数据 8</li>
+        <li>数据 9</li>
+        <li>数据 10</li>
+        <li>数据 11</li>
+        <li>数据 12</li>
+        <li>数据 13</li>
+        <li>数据 11</li>
+        <li>数据 12</li>
+        <li>数据 13</li>
+      </ul>
+
+      <div id="pullUp">
+        <span class="pullUpIcon"></span>
+        <span class="pullUpLabel">上拉加载更多...</span>
+      </div>
+
+    </div>
+  </div>
+  <script src="iscroll-probe.js"></script>
+  <script src="bscroll.js"></script>
+  <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      // 初始化并配置 iscroll
+      var upFlag = false;
+      var downFlag = false;
+      var myScroll = new IScroll("#wrapper", {
+        mouseWheel: true,
+        bounch: true
+      });
+      // 滚动绑定事件
+      myScroll.on("scrollEnd", function () {
+        if (this.y <= this.maxScrollY && !upFlag) {
+          upFlag = true;
+          setTimeout(function () {
+            $("#thelist").append("<li>上拉加载数据</li><li>上拉加载数据</li><li>上拉加载数据</li>");
+            myScroll.refresh();
+            upFlag = false;
+          }, 1000);
+        }
+        if (this.y <= 0 && !downFlag) {
+          downFlag = true;
+          setTimeout(function () {
+            $("#thelist").prepend("<li>下拉刷新</li>");
+            myScroll.refresh();
+            downFlag = false;
+          }, 1000);
+        }
+      });
+      // 这个scroll要在iscroll-probe.js中才有用，但是貌似没用，监听滚动
+      myScroll.on("scroll", function () {
+
+      });
+    });
+  </script>
+</body>
+
+</html>

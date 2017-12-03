@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>market</title>
+  <title>碳市场</title>
   <script src="iscroll-probe.js"></script>
   <script src="bscroll.js"></script>
   <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -162,6 +162,25 @@
       visibility: visible;
       opacity: 1;
     }
+
+    #wrapper {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    #scroller {
+      position: relative;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+      float: left;
+      width: 100%;
+      padding: 0;
+    }
   </style>
 </head>
 
@@ -178,9 +197,10 @@
     <span class="nav-btn byDeal" data-tab="3">收购优先</span>
   </nav>
   <main>
-    <div class="scroll">
-      <section id="product">
-        <!-- <div class="item">
+    <div id="wrapper">
+      <div id="scroller">
+        <section id="product">
+          <!-- <div class="item">
               <a href="#">
                 <div class="item-wrap">
                   <div class="title"></div>
@@ -198,7 +218,8 @@
                 </div>
               </a>
             </div> -->
-      </section>
+        </section>
+      </div>
     </div>
     <div class="modal">
       <div class="search" data-type="风电" data-s="456">风电</div>
@@ -214,42 +235,36 @@
     </div>
   </main>
 
-
-
-
   <script>
-    // const wrapper = document.querySelector('.scroll')
-    // const scroll = new BScroll(wrapper)
-    // console.log(BScroll)
-
-    var myScroll = new IScroll(".scroll", {
-      preventDefault: false,
-      scrollbars: false,
-      mouseWheel: false,
-      interactiveScrollbars: true,
-      shrinkScrollbars: 'scale',
-      fadeScrollbars: true,
-      scrollY: true,
-      probeType: 2,
-      bindToWrapper: true
+    let upFlag = false;
+    let downFlag = false;
+    let myScroll = new IScroll("#wrapper", {
+      mouseWheel: true,
+      bounch: true
     });
-
+    // 滚动绑定事件
+    myScroll.on("scrollEnd", function () {
+      if (this.y <= this.maxScrollY && !upFlag) {
+        upFlag = true;
+        setTimeout(function () {
+          jsonp(++pageNo)
+          myScroll.refresh();
+          upFlag = false;
+        }, 1000);
+      }
+      if (this.y <= 0 && !downFlag) {
+        downFlag = true;
+        setTimeout(function () {
+          myScroll.refresh();
+          downFlag = false;
+        }, 1000);
+      }
+    });
+    // 这个scroll要在iscroll-probe.js中才有用，但是貌似没用，监听滚动
     myScroll.on("scroll", function () {
 
-      setTimeout(function () {
-        console.log(myScroll);
-      }, 330);
-
     });
 
-
-
-    // document.querySelectorAll('search').forEach(item => {
-    //   item.addEventListener('click', function() {
-    //     renderType(this.dataset['type']);
-    //     this.getAttribute('myType');
-    //   })
-    // })
 
 
     $('.modal').on('click', '.search', function () {
@@ -258,7 +273,7 @@
       window.onmousewheel = null;
     });
 
-    document.querySelector('.type').addEventListener('click', function () {
+    $('.type').on('click', function () {
       if ($('.modal').hasClass('show')) {
         $(this).text('类型');
         $('.modal').removeClass('show');
@@ -276,88 +291,29 @@
 
       orderNo = 0;
 
-    //   function changeVariable() {
-    //     let text = '', pageNo = 1, sortNo = 1, orderNo = 0;
-    //     return {
-    //       changeText: _text =>{ text = _text}, 
-    //       getVariable: () => ({text, pageNo, sortNo, orderNo})
-    //     }
-    //   }
-
-    //   changeVariable().getVariable().text;
 
     window.onload = jsonp()
 
 
 
-    $(document).on('click', '.nav-btn', function () {
-      changeTab(this);
-    })
+    $('.nav-btn').on('click', function () {
+      // changeTab(this);
+      let index = $(this).index()
+      $(this).addClass('active').siblings().removeClass('active')
 
-    // function eventEmitter(target, className, callback) {
-    //   target.addEventListener('click', function(e) {
-    //     var current_node = e.target;
-    //     while (current_node.getAttribute('class') === className) {
-    //       current_node = current_node.parentNode;
-    //     }
-    //     callback(current_node);
-    //   }, false);
+      sortHomepage(index + 1)
+    });
+
+
+    // function changeTab(target) {
+    //   document.querySelectorAll('.nav-btn').forEach(item => {
+    //     item === target ?
+    //       item.classList.add('active') :
+    //       item.classList.remove('active');
+    //   })
+
+    //   sortHomepage(target.dataset['tab']);
     // }
-
-    // eventEmitter(document, 'nav-btn', function(target) {
-    //   changeTab(target);
-    // })
-    // document.querySelector('.byAll').addEventListener('click', function () {
-    //   // sortHomepage()
-    //   // document.querySelectorAll('.nav-btn').forEach(item => item.classList.remove('active'))
-    //   // this.classList.add('active');
-    //   changeTab(this);
-    // });
-    // document.querySelector('.byBuy').addEventListener('click', function () {
-    //   // sortHomepage(2)
-    //   // document.querySelectorAll('.nav-btn').forEach(item => item.classList.remove('active'))
-    //   // this.classList.add('active')
-    //   changeTab(this)
-    // });
-    // document.querySelector('.byDeal').addEventListener('click', function () {
-    //   // sortHomepage(3)
-    //   // document.querySelectorAll('.nav-btn').forEach(item => item.classList.remove('active'))
-    //   // this.classList.add('active')
-    //   changeTab(this)
-    // });
-
-    function changeTab(target) {
-
-      document.querySelectorAll('.nav-btn').forEach(item => {
-        item === target ?
-          item.classList.add('active') :
-          item.classList.remove('active');
-      })
-
-      sortHomepage(target.dataset['tab']);
-    }
-
-    // var comment = {
-    //   bindAction: {
-    //     init: function() {
-    //       action1();
-    //       action2();
-    //     },
-    //     action1: () => {},
-    //     action2: () => {}
-
-    //   },
-    //   newTab: {
-    //     init: () => {}
-    //   }
-    // }
-
-    //绑定事件
-    // comment.bindAction.init();
-
-    // export const getType = target => Object.prototype.toString.call(target).match(/\[object ([a-zA-Z]+)\]/)[1];
-    // import { getType } from '.util';
-
 
     function init(_sort) {
       document.querySelector('#product').innerHTML = '';
@@ -369,27 +325,6 @@
       init(sortNo);
       jsonp(pageNo, text, sortNo);
     }
-
-
-
-
-
-    // window.onscroll = loadMore
-
-    function loadMore() {
-      let current_height = document.documentElement.scrollTop + document.documentElement.clientHeight;
-      let height = 68 + 5 * document.querySelector('.item').clientHeight * pageNo;
-      if (current_height + 10 > height) {
-        console.log('当前屏幕高度' + current_height)
-        console.log('容器高度:' + height)
-        jsonp(++pageNo);
-      }
-
-    }
-
-    // document.addEventListener('touchmove', function (e) {
-    //   e.preventDefault();
-    // }, false);
 
 
     function renderItem(data) {
