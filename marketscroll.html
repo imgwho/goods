@@ -146,13 +146,17 @@
       position: relative;
     }
 
+    ::-webkit-scrollbar {
+      display: none;
+    }
+
     .modal {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       height: 100vh;
-      background-color: red;
+      background-color: #FFFFFF;
       visibility: hidden;
       opacity: 0;
       transition: all .5s ease-in-out;
@@ -222,22 +226,31 @@
       </div>
     </div>
     <div class="modal">
-      <div class="search" data-type="风电" data-s="456">风电</div>
-      <div class="search" myType="123" data-type="2" data-s="123">2</div>
-      <div class="search" data-type="1" data-s="456">1</div>
-      <div class="search" myType="123" data-type="2" data-s="123">2</div>
-      <div class="search" data-type="1" data-s="456">1</div>
-      <div class="search" myType="123" data-type="2" data-s="123">2</div>
-      <div class="search" data-type="1" data-s="456">1</div>
-      <div class="search" myType="123" data-type="2" data-s="123">2</div>
-      <div class="search" data-type="1" data-s="456">1</div>
-      <div class="search" myType="123" data-type="2" data-s="123">2</div>
+      <div class="search" data-type="风电">风电</div>
+      <div class="search" data-type="风电">风电</div>
+      <div class="search" data-type="风电">风电</div>
+      <div class="search" data-type="风电">风电</div>
+      <div class="search" data-type="风电">风电</div>
+      <div class="search" data-type="风电">风电</div>
+      <div class="search" data-type="风电">风电</div>
+      <div class="search" data-type="风电">风电</div>
+      <div class="search" data-type="风电">风电</div>
+      <div class="search" data-type="风电">风电</div>
+      <div class="search" data-type="风电">风电</div>
+      <div class="search" data-type="风电">风电</div>
+      <div class="search" data-type="风电">风电</div>
+      <div class="search" data-type="风电">风电</div>
+      <div class="search" data-type="风电">风电</div>
     </div>
   </main>
 
   <script>
+
+    //函数加锁
     let upFlag = false;
     let downFlag = false;
+
+    //初始化IScroll
     let myScroll = new IScroll("#wrapper", {
       mouseWheel: true,
       bounch: true
@@ -260,19 +273,21 @@
         }, 1000);
       }
     });
-    // 这个scroll要在iscroll-probe.js中才有用，但是貌似没用，监听滚动
     myScroll.on("scroll", function () {
 
     });
 
 
 
+    //模态框
     $('.modal').on('click', '.search', function () {
       renderType($(this).attr('data-type'));
       $('.modal').removeClass('show');
       window.onmousewheel = null;
     });
 
+
+    //模态框
     $('.type').on('click', function () {
       if ($('.modal').hasClass('show')) {
         $(this).text('类型');
@@ -285,17 +300,18 @@
       };
     })
 
+    //初始化jsonp参数
     let text = '',
       pageNo = 1,
       sortNo = 1,
-
       orderNo = 0;
 
 
+    //初始化
     window.onload = jsonp()
 
 
-
+    //主页tab切换
     $('.nav-btn').on('click', function () {
       // changeTab(this);
       let index = $(this).index()
@@ -305,28 +321,22 @@
     });
 
 
-    // function changeTab(target) {
-    //   document.querySelectorAll('.nav-btn').forEach(item => {
-    //     item === target ?
-    //       item.classList.add('active') :
-    //       item.classList.remove('active');
-    //   })
-
-    //   sortHomepage(target.dataset['tab']);
-    // }
-
+    //切换过去的初始化方法
     function init(_sort) {
       document.querySelector('#product').innerHTML = '';
       pageNo = 1;
       sortNo = _sort;
     }
 
+
+    //首页排序
     function sortHomepage(sortNo = 1, text = '') {
       init(sortNo);
       jsonp(pageNo, text, sortNo);
     }
 
 
+    //拼接一个产品的图文
     function renderItem(data) {
       let _html =
         ` 
@@ -353,16 +363,20 @@
       document.querySelector('#product').innerHTML += _html;
     }
 
+    //按照类型渲染
     function renderType(text) {
       sortHomepage(1, text);
     }
 
+    //jsonp请求后的数据分析
     function renderData(data) {
       console.log(data);
       const dataArray = data.data;
       dataArray.forEach(info => renderItem(info));
     }
 
+
+    //jsonp的一些回掉方法
     function jsonp(pageNo = 1, text = '', sortNo = 1, orderNo = 0) {
       let url =
         `http://114.55.103.71:9006/ldy/cshop/searchCcer?callback=renderData&searchText=${text}&pageNo=${pageNo}&sort=${sortNo}&order=${orderNo}`
