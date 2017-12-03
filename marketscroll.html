@@ -147,6 +147,8 @@
     }
 
     .modal {
+      display: flex;
+      flex-wrap: wrap;
       position: absolute;
       top: 0;
       left: 0;
@@ -156,6 +158,17 @@
       visibility: hidden;
       opacity: 0;
       transition: all .5s ease-in-out;
+      margin: -1px;
+    }
+
+
+    .modal>.search {
+      flex: 0 0 20%;
+      /* padding-top: 25%; */
+      border: 1px solid black;
+      margin: 2px;
+      height: 20px;
+      /* height: 60px; */
     }
 
     .show {
@@ -223,25 +236,28 @@
     </div>
     <div class="modal">
       <div class="search" data-type="风电">风电</div>
-      <div class="search" data-type="风电">风电</div>
-      <div class="search" data-type="风电">风电</div>
-      <div class="search" data-type="风电">风电</div>
-      <div class="search" data-type="风电">风电</div>
-      <div class="search" data-type="风电">风电</div>
-      <div class="search" data-type="风电">风电</div>
-      <div class="search" data-type="风电">风电</div>
-      <div class="search" data-type="风电">风电</div>
-      <div class="search" data-type="风电">风电</div>
-      <div class="search" data-type="风电">风电</div>
-      <div class="search" data-type="风电">风电</div>
-      <div class="search" data-type="风电">风电</div>
-      <div class="search" data-type="风电">风电</div>
-      <div class="search" data-type="风电">风电</div>
+      <div class="search" data-type="光伏">光伏</div>
+      <div class="search" data-type="水电">水电</div>
+      <div class="search" data-type="沼气">沼气</div>
+      <div class="search" data-type="瓦斯">瓦斯</div>
+      <div class="search" data-type="气电">气电</div>
+      <div class="search" data-type="余热">余热</div>
+      <div class="search" data-type="废电">废电</div>
+      <div class="search" data-type="CCPP">CCPP</div>
+      <div class="search" data-type="生物">生物</div>
+      <div class="search" data-type="改气">改气</div>
+      <div class="search" data-type="冷能">冷能</div>
+      <div class="search" data-type="地热">地热</div>
+      <div class="search" data-type="废处">废处</div>
+      <div class="search" data-type="填埋">填埋</div>
+      <div class="search" data-type="节能">节能</div>
+      <div class="search" data-type="碳汇">碳汇</div>
+      <div class="search" data-type="">全部</div>
+
     </div>
   </main>
 
   <script>
-
     //函数加锁
     let upFlag = false;
     let downFlag = false;
