@@ -253,7 +253,6 @@
       <div class="search" data-type="节能">节能</div>
       <div class="search" data-type="碳汇">碳汇</div>
       <div class="search" data-type="">全部</div>
-
     </div>
   </main>
 
@@ -270,13 +269,14 @@
     // 滚动绑定事件
     myScroll.on("scrollEnd", function () {
       //上拉加载更多
+      console.log(this)
       if (this.y <= this.maxScrollY && !upFlag) {
         upFlag = true;
         setTimeout(function () {
           jsonp(++pageNo)
           myScroll.refresh();
           upFlag = false;
-        }, 1000);
+        }, 500);
       }
       //下拉刷新
       if (this.y <= 0 && !downFlag) {
@@ -285,11 +285,13 @@
           jsonp(pageNo)
           myScroll.refresh();
           downFlag = false;
-        }, 1000);
+        }, 500);
       }
     });
     myScroll.on("scroll", function () {
-
+      // setTimeout(() => {
+      //   console.log('scroll')
+      // }, 1000);
     });
 
 
@@ -297,7 +299,10 @@
     //模态框
     $('.modal').on('click', '.search', function () {
       renderType($(this).attr('data-type'));
+      //模态框消失
       $('.modal').removeClass('show');
+      //右上角从返回变成类型
+      $('.type').text('类型');
       window.onmousewheel = null;
     });
 
@@ -380,12 +385,15 @@
 
     //按照类型渲染
     function renderType(text) {
+      setTimeout(function () {
+        myScroll.refresh();
+      }, 0);
       sortHomepage(1, text);
     }
 
     //jsonp请求后的数据分析
     function renderData(data) {
-      console.log(data);
+      // console.log(data);
       const dataArray = data.data;
       dataArray.forEach(info => renderItem(info));
     }
