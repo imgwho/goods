@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<title>paySuccess</title>
+<style>
+body
+{
+	margin:0;
+	background-color:#f0f0f2;
+	font-family: sans-serif; 
+}
+</style>
+</head>
+<link rel="stylesheet" type="text/css" href="css/weui.css">
+<script type="text/javascript" src="js/jquery-3.1.1.min.js" ></script>
+<script src="js/functionPublic.js"></script>
+
+<body>
+<div style="width:100%; height:40px; background-color:#1AAD19;"></div>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td id="td_pay" style="vertical-align:middle; text-align:center; height:300px;">
+    <img src="img/pay_success.png" style="max-height:80px; vertical-align:middle;" /><br /><br /><font style="color:#1AAD19; font-size:18px;">支付成功</font><br />
+    <font style="font-size:12px; color:#8a8a8a;">2017-5-22 12:20</font>
+    </td>
+  </tr>
+</table>
+
+<div style="bottom:20px; position:fixed; width:100%;">
+	<div style="width:80%; margin:0 auto;">
+        <a href="javascript:closeActivityJava();" class="weui_btn weui_btn_primary">返回商城</a>
+        <a href="javascript:go_buyOrder();" class="weui_btn weui_btn_plain_primary" style="background-color:#fff;">查看订单</a>
+    </div>
+</div>
+
+</body>
+</html>
+
+<script>
+var token=GetUrlParam("token");
+
+function go_buyOrder() { window.location="mall_buyOrder.html?token="+token+"&goto=1"; }
+
+function closeActivityJava()
+{
+	aif.javaCloseActivity();
+}
+</script>

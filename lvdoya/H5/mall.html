@@ -1,0 +1,551 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<title>mall</title>
+<style>
+body
+{
+	margin:0;
+	background-color:#f0f0f2;
+	font-family: sans-serif; 
+	overflow: hidden; /* this is important to prevent the whole page to bounce FOR iScorll */
+}
+.td_menu {
+	width:25%;	font-size:12px;	color:#333;	vertical-align:middle;	text-align:center; height:50px;}
+.td_menu img {
+	max-height:18px;	vertical-align:middle;	margin-bottom:2px;	margin-top:2px;}
+.td_userLogo {
+	width:60px;}
+.td_userLogo img {
+	margin:5px auto 5px 10px;	width:40px;	height:40px;	border-radius:50%;}
+.div_shop {
+	background-color:#fff;	width:100%; margin-bottom:5px;}
+.div_care {
+	vertical-align: middle;
+	border: 1px solid #e36c39;
+	color: #e36c39;
+	border-radius: 3px;
+	width: 60px;
+	height: 24px;
+	line-height: 24px;
+	font-size: 12px;
+	position:absolute;
+	float:right;
+	right: 7px;
+	top:12px;
+	text-align: center;
+}
+.div_care img {
+	max-height:12px; vertical-align:middle; margin-right:3px;}
+.div_cared {
+	vertical-align: middle;
+	border: 1px solid #bbbbbb;
+	color: #bbbbbb;
+	border-radius: 3px;
+	width: 60px;
+	height: 24px;
+	line-height: 24px;
+	font-size: 12px;
+	position:absolute;
+	float:right;
+	right: 7px;
+	top:12px;
+	text-align: center;
+}
+.div_cared img {
+	max-height:12px; vertical-align:middle; margin-right:3px;}	
+.td_goods {
+	width:33%; vertical-align:middle; text-align:center;}
+.td_goods img {
+	width:auto; height:auto;}	
+.td_load
+{
+	width:50%;
+}
+.td_load img
+{
+	position:absolute;
+	overflow:hidden;
+}
+/*iScorll*/
+
+#wrapper {  
+    position: absolute;  
+    z-index: 1;  
+    top: 100px;  
+    bottom: 0px;  
+    left: 0;  
+    width: 100%;   
+    /*overflow: hidden; */ 
+}  
+  
+#scroller {  
+    position: absolute;  
+    z-index: 1;  
+    -webkit-tap-highlight-color: rgba(0,0,0,0);  
+	-webkit-transform:translate3d(0,0,0);
+    width: 100%;  
+	min-height:100.25%;
+    -webkit-transform: translateZ(0);  
+    -moz-transform: translateZ(0);  
+    -ms-transform: translateZ(0);  
+    -o-transform: translateZ(0);  
+    transform: translateZ(0);  
+    -webkit-touch-callout: none;  
+    -webkit-user-select: none;  
+    -moz-user-select: none;  
+    -ms-user-select: none;  
+    user-select: none;  
+    -webkit-text-size-adjust: none;  
+    -moz-text-size-adjust: none;  
+    -ms-text-size-adjust: none;  
+    -o-text-size-adjust: none;  
+    text-size-adjust: none;  
+}  
+  
+#pullDown,#pullUp,.pulldown-tips{  
+    height:40px;  
+    line-height:40px;  
+    text-align:center; 
+	background-color:#fff; 
+	color:#979797;
+	font-size:12px;
+}  
+.pulldown-tips{  
+	position:absolute;  
+	top:-40px;  
+	left:0;  
+	width:100%;
+	display:none;
+} 
+
+</style>
+</head>
+
+<link rel="stylesheet" type="text/css" href="css/weui.css">
+<script type="text/javascript" src="js/jquery-3.1.1.min.js" ></script>
+<script type="text/javascript" src="js/iscroll-probe.js"></script>
+<script src="js/functionPublic.js"></script>
+
+<body onload="init();">
+<!--<table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; background-color:#f9f9f9; position:fixed; top:0px; z-index:8888;">
+  <tr>
+    <td style="width:40px; text-align:center; vertical-align:middle;" onclick="go_back();"><img src="ico/ico_back.png" style="max-width:26px;" /></td>
+    <td id="td_shopName" style="text-align:center; font-size:16px; color:#333;">低碳商城</td>
+    <td id="td_shopShare" style="width:40px; vertical-align:middle; text-align:center;"><img src="ico/ico_share_fff.png" style="max-width:26px;" /></td>
+  </tr>
+</table>
+<div style="width:100%; height:45px;"></div>-->
+<table id="table_top" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#fff; height:50px; margin-bottom:5px; z-index:2;position:fixed; border-bottom:1px solid #e9e9e9;">
+<tr>
+<td id="td_search" style="text-align:center; vertical-align:middle;" colspan="4" onclick="go_search_JAVA();"><img id="img_search" src="img/searchBar.jpg" style="max-height:46px; max-width:100%; vertical-align:middle;"/></td>
+</tr>
+  <tr>
+    <td class="td_menu" onclick="go_care_java();"><img src="ico/ico_care_8a.png" /><br />关注(<font id="font_collNum">0</font>)</td>
+    <td class="td_menu" onclick="go_goods_listAll();"><img src="ico/ico_goods_8a.png" /><br />低碳商品</td>
+    <td class="td_menu" onclick="go_shopCar_java();"><img src="ico/ico_shopcar_8a2.png" /><br />购物车(<font id="font_carNum">0</font>)</td>
+    <td class="td_menu" onclick="go_order_java();"><img src="ico/ico_order_8a.png" /><br />订单</td>
+  </tr>
+</table>
+<div id="wrapper"> 
+<div id="scroller">
+<div id="pullDown" class=""><div class="pullDownLabel"></div></div>
+<div class="pulldown-tips">下拉刷新</div>
+
+<div id="div_store1"></div>
+
+</div><!--scroller-->
+</div><!--wrapper-->
+</body>
+</html>
+<input id="hid_pageNo" type="hidden" value="1" />
+<!--==================================================================================================================================================-->
+<div id="loadingToast" class="weui_loading_toast" style="display:none; z-index:999999;">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui_toast">
+        <div class="weui_loading">
+            <div class="weui_loading_leaf weui_loading_leaf_0"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_1"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_2"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_3"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_4"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_5"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_6"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_7"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_8"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_9"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_10"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_11"></div>
+        </div>
+        <p id="p_loadContent" class="weui_toast_content">正在加载</p>
+    </div>
+</div>
+<!--==================================================================================================================================================-->
+<script>
+
+var token=GetUrlParam("token");
+var collect_num=0;
+var collect_list="";
+var local_token="";
+var javaLoadCompelte="NO";
+
+
+
+//var imgHeight=$("#img_search").height();
+//$("#td_search").css("height",imgHeight+"px");
+//var wrapperTop=parseInt(imgHeight)+50;
+//$("#wrapper").css("top",+wrapperTop+"px");
+
+
+
+function init()
+{
+	var tableHeight=$("#table_top").height();
+	$("#wrapper").css("top",+tableHeight+"px");	
+	//GetFilepath("functionPublic.js");
+	//cleanFootprint();
+	window.localStorage.setItem("ldy_token",token);
+	localStorage.setItem("ldy_token",token);
+	//cleanFootprint();
+	url=window.location.href;//pathname
+	saveFootprint(url);
+	$("#loadingToast").css("display","block");
+	$("#hid_pageNo").val(1);
+	$("#pullDown").hide();
+	localStorage.setItem("ldy_token",token);
+//	local_token = localStorage.getItem("ldy_token"); 
+	localStorage.setItem("ldy_storeid",""); 
+	$.ajax({
+		type:"POST",url:"http://114.55.103.71:9006/ldy/collect/getCollect?callback=?&typeId=1&token="+token,data:{},dataType:"jsonp",
+		success: function(data){
+			var json=eval(data);
+			if(json.code==200){
+				if(json.data!=null){
+					collect_num=json.data.num;
+					collect_list="";
+					if(collect_num>99){
+						$("#font_collNum").html("99+");
+					}else{
+						$("#font_collNum").html(collect_num);
+					}
+					for (var i=0; i<json.data.list.length; i++){
+						collect_list+=json.data.list[i].dxId+",";
+					}
+					loadBuyCar();
+					loadStore();
+				}
+			}else
+			{
+				$("#loadingToast").css("display","none");
+			}
+		},
+		error: function(textStatus){
+		}
+	});
+	setTimeout(function(){myScroll.refresh();},500);	
+}
+
+function loadBuyCar()
+{
+	$.ajax	//加载商品
+	({
+		type : "POST",url:"http://114.55.103.71:9006/ldy/ubc/getBuyCarSpsToJSON?callback=?&token="+token,data: {},dataType : "jsonp",
+		success : function(data) 
+		{   
+		
+			var json = eval(data); 	
+			if (json.code==200){
+				$("#font_carNum").html(json.data.length);	
+			}		
+		},
+		error : function(textStatus) 		
+		{
+	
+		}
+	});	
+}
+
+function loadStore()
+{
+	var pageNo=$("#hid_pageNo").val();
+	$.ajax	//加载商品
+	({
+		type : "POST",url:"http://114.55.103.71:9006/ldy/store/searchStore?callback=?&tuijian=1&pageNo="+pageNo,data: {},dataType : "jsonp",
+		success : function(data) 
+		{   
+		
+			var json = eval(data); 	
+			if (json.code==200){
+				if (json.data.length>0){
+					var result="";
+					for (var i=0; i<json.data.length; i++){
+						if (json.data[i].tj_list){   //判断是否有店铺推荐字段，现在返回数据有错，出现个人字段，这里判断一下
+							var sid=json.data[i].store_id;	
+							if(checkStoreId(sid)==1){
+								result+='<div id="div_shop" class="div_shop"><table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#fff; height:50px; border-bottom:1px dashed #f2f2f2;"><tr><td style="text-align:left;" id="td_userLogo" class="td_userLogo"><img src="'+json.data[i].userLogo+'"/></td><td style="position:relative;"><div id="div_shopName" style="height:30px; font-size:16px; text-align:left; line-height:34px;" onclick="go_store_java(\''+json.data[i].store_userId+'\');">'+json.data[i].store_title+'</div><div id="div_shopPs" style="height:20px; font-size:12px; text-align:left; overflow:hidden; margin-right:70px;">'+json.data[i].store_ps+'</div>';
+//								$("#div_store"+pageNo).append('<div id="div_shop" class="div_shop"><table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#fff; height:50px; border-bottom:1px dashed #f2f2f2;"><tr><td style="text-align:left;" id="td_userLogo" class="td_userLogo"><img src="'+json.data[i].userLogo+'"/></td><td style="position:relative;"><div id="div_shopName" style="height:30px; font-size:16px; text-align:left; line-height:34px;" onclick="go_store_java(\''+json.data[i].store_userId+'\');">'+json.data[i].store_title+'</div><div id="div_shopPs" style="height:20px; font-size:12px; text-align:left; overflow:hidden; margin-right:70px;">'+json.data[i].store_ps+'</div>');
+								if(collect_list.indexOf(json.data[i].store_id+",")>=0){//关注店铺
+									result+='<div class="div_cared" id="cared_'+sid+'" onclick="delCollect(\''+sid+'\');"><img src="ico/ico_cared_8a.png" />已关注</div>';
+//									$("#div_store"+pageNo).append('<div class="div_cared" id="cared_'+sid+'" onclick="delCollect(\''+sid+'\');"><img src="ico/ico_cared_8a.png" />已关注</div>');
+								}else{ //未关注店铺
+									result+='<div class="div_care" id="cared_'+sid+'" onclick="addCollect(\''+sid+'\');"><img src="ico/ico_care_e36.png"/>关注</div>';
+//									$("#div_store"+pageNo).append('<div class="div_care" id="cared_'+sid+'" onclick="addCollect(\''+sid+'\');"><img src="ico/ico_care_e36.png"/>关注</div>');
+								}
+								result+="</td></tr></table><table width='100%' border='0' cellspacing='0' cellpadding='0'><tr>";
+//								$("#div_store"+pageNo).append("</td></tr></table><table width='100%' border='0' cellspacing='0' cellpadding='0'><tr>");
+								if(json.data[i].store_tuijian!=""){
+									for (k=0;k<3;k++ ) 
+									{ 
+										if (k<json.data[i].tj_list.length) {  //
+											result+='<td class="td_goods" onclick="go_goods_java(\''+json.data[i].tj_list[k].spId+'\');">'+json.data[i].tj_list[k].coverImg+'</td>';
+//											$("#div_store"+pageNo).append('<td class="td_goods" onclick="go_goods_java(\''+json.data[i].tj_list[k].spId+'\');">'+json.data[i].tj_list[k].coverImg+'</td>');
+										} else {
+											result+='<td class="td_goods"><img class="img_goodsFace" src="ico/ico_recommend_empty.png" /></td>';
+//											$("#div_store"+pageNo).append('<td class="td_goods"><img class="img_goodsFace" src="ico/ico_recommend_empty.png" /></td>');
+										}
+									} 
+		
+								}	
+								result+="</tr></table><div style='width:100%; height:3px;'></div></div>";
+//								$("#div_store"+pageNo).append("</tr></table><div style='width:100%; height:3px;'></div></div>");
+							}
+						}							
+					}
+					var pageNextNo=parseInt(pageNo)+1;
+					
+					$("#div_store"+pageNo).html(result+"<div id='div_store"+pageNextNo+"'></div>");	//载入商品HTML	
+//					$("#div_store"+pageNo).append("<div id='div_store"+pageNextNo+"'></div>");
+
+					pageNo++;
+					$("#hid_pageNo").val(pageNo);										
+					//设置载入后UI
+					
+					goodsFaceHeight();			
+					 var tdGoodsHeight=$(window).width()*0.34;
+					$(".td_goods").css("height",tdGoodsHeight);
+					
+					$(".img_goodsFace").css("width","95%");
+					var imgGoodsHeight=$(".img_goodsFace").css("width");
+					$(".img_goodsFace").css("height",imgGoodsHeight);
+					
+					javaLoadCompelte="YES";
+//					alert("welcome");
+					setTimeout(function(){$("#loadingToast").css("display","none");},10);		
+					
+				}
+				else{
+					$("#loadingToast").css("display","none");
+				}				  
+			}
+			else
+			{
+				$("#loadingToast").css("display","none");
+			}			
+		},
+		error : function(textStatus) 		
+		{
+			$("#loadingToast").css("display","none");
+		}
+	});	
+}
+
+function delCollect(dxId){
+	$.ajax({
+		type:"POST",url:"http://114.55.103.71:9006/ldy/collect/delCollect?callback=?&token="+token+"&typeId=1&dxId="+dxId,data:{},dataType:"jsonp",
+		success: function(data){
+			var json=eval(data);
+			if(json.code==200){
+				if(collect_num>0)
+					collect_num--;
+				else
+					collect_num=0;
+				if(collect_num>99){
+					$("#font_collNum").html("99+");
+				}else{
+					$("#font_collNum").html(collect_num);
+				}
+				$("#cared_"+dxId).removeClass("div_cared").addClass("div_care");
+				
+				$("#cared_"+dxId).html("<img src='ico/ico_care_e36.png'/>关注</div>");
+				document.getElementById("cared_"+dxId).onclick = function(){ addCollect(dxId);}; 
+			}
+		},
+		error: function(textStatus){
+		}
+	});
+}
+
+function addCollect(dxId){
+	$.ajax({
+		type:"POST",url:"http://114.55.103.71:9006/ldy/collect/setCollect?callback=?&token="+token+"&typeId=1&dxId="+dxId,data:{},dataType:"jsonp",
+		success: function(data){
+			var json=eval(data);
+			if(json.code==200){
+				collect_num++;
+				if(collect_num>99){
+					$("#font_collNum").html("99+");
+				}else{
+					$("#font_collNum").html(collect_num);
+				}
+				
+				
+				$("#cared_"+dxId).removeClass("div_care").addClass("div_cared");
+				$("#cared_"+dxId).html("<img src='ico/ico_cared_8a.png' />已关注</div>");
+				document.getElementById("cared_"+dxId).onclick = function(){ delCollect(dxId);}; 
+			}
+		},
+		error: function(textStatus){
+		}
+	});
+}
+function go_goods_java(goodsId)
+{
+	aif.javaGoGoods(goodsId);
+}
+
+function go_goods_listAll()
+{
+	aif.javaGoGoodsList();
+}
+
+function go_care_java()
+{
+	aif.javaGoCare();
+}
+
+function go_shopCar_java()
+{
+	aif.javaGoShopCar();
+}
+
+function go_order_java()
+{
+	aif.javaGoShopOrder();
+}
+
+function go_store_java(userid)
+{
+	aif.javaGoShopStore(userid);
+}
+function go_search_JAVA()
+{
+	aif.javaGoSearch();
+}
+
+function go_goods(goodsId)
+{
+	window.location="mall_goods.html?token="+GetUrlParam("token")+"&goodsId="+goodsId;
+}
+function go_goodsList()
+{
+	window.location="mall_goodsListAll.html?token="+GetUrlParam("token");
+}
+function go_store(userid)
+{
+
+	window.location="mall_shop.html?token="+GetUrlParam("token")+"&userid="+userid;
+}
+function go_myCared()
+{
+	window.location="mall_myCared.html";
+}
+function go_buyCar()
+{
+	window.location="mall_shopCar.html?token="+token;
+}
+function go_order()
+{
+	window.location="mall_buyOrder.html?token="+token+"&goto=1";
+}
+function go_search()
+{
+	window.location="mall_search.html";
+}
+function goodsFaceHeight()
+{
+	//计算显示商品图片正方形
+	divListWidth=$(".td_goods").css("width");
+	$(".td_goods").css("height",divListWidth);	
+	//END 计算显示商品图片正方形	
+	//$(".div_goodsListFather").css("height",parseInt(divListWidth.replace("px",""))+70+"px");
+}
+
+//function iscorll() {  
+	var myScroll,  
+	pullDown = $("#pullDown"),  
+	pullDownLabel = $(".pullDownLabel"),  
+
+	loadingStep = 0;//加载状态0默认，1显示加载状态，2执行加载数据，只有当为0时才能再次加载，这是防止过快拉动刷新  
+//  
+	pullDown.hide();  
+  
+	myScroll = new IScroll("#wrapper", {  
+		preventDefault:false,
+		scrollbars: false,  
+		mouseWheel: false,  
+		interactiveScrollbars: true,  
+		shrinkScrollbars: 'scale',  
+		fadeScrollbars: true,  
+		scrollY:true,  
+		probeType: 2,  
+		bindToWrapper:true  
+	});  
+
+	myScroll.on("scroll",function(){  
+		if(loadingStep == 0 && !pullDown.attr("class").match('refresh|loading')){  
+			if(this.y > 40){//下拉刷新操作  
+				$(".pulldown-tips").hide();  
+				pullDown.addClass("refresh").show();  
+				pullDownLabel.text("松手刷新数据");  
+				loadingStep = 1; 
+				
+				myScroll.refresh();  				
+			}else if(this.y <= (this.maxScrollY)  && this.directionY == 1){//上拉加载更多  
+				loadingStep = 1;  
+				$("#p_loadContent").html("正在加载");
+				$("#loadingToast").css("display","block");
+				pullUpAction();  
+			}  
+		}  
+	});  
+	myScroll.on("scrollEnd",function(){  
+		if(loadingStep == 1){  
+			if( pullDown.attr("class").match("refresh") ){//下拉刷新操作  
+				pullDown.removeClass("refresh").addClass("loading");  
+				$("#p_loadContent").html("正在刷新");
+				$("#loadingToast").css("display","block");
+				loadingStep = 2;  
+				pullDownAction();  
+			}  
+		}  
+	});  
+
+	function pullDownAction(){  
+		setTimeout(function(){  
+			
+			init();
+			pullDown.attr('class','').hide();
+			loadingStep = 0;
+			$(".pulldown-tips").show(); 
+			$("#loadingToast").css("display","none");
+			$(".pulldown-tips").css("display","none");
+		},500);  
+		setTimeout(function(){
+			myScroll.refresh();
+//			$("#wrapper").css("top",wrapperTop+"px");			
+		},1000);
+	}		
+	function pullUpAction(){  
+		setTimeout(function(){  
+			loadingStep = 0;  
+			loadStore();			
+		},500);  
+		setTimeout(function(){myScroll.refresh();},1);
+	}  
+  
+    document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);  
+//}  	
+</script>

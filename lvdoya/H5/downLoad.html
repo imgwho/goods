@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta http-equiv="Access-Control-Allow-Origin" content="*">
+		<title>绿豆芽</title>		
+		<style>
+			body {
+				margin: 0;
+				background-color: #FFFFFF;
+				font-family: sans-serif;
+				overflow: hidden; /* this is important to prevent the whole page to bounce FOR iScorll */
+			}
+		</style>
+	</head>
+	<link rel="stylesheet" type="text/css" href="css/weui.css">
+	<script type="text/javascript" src="js/jquery-3.1.1.min.js" ></script>
+	<script type="text/javascript" src="js/iscroll-probe.js"></script>
+	<script src="js/functionPublic.js"></script>
+	<body>
+		
+		<div style="width: 100%; height: 45px; background: #1AAD19;">
+			<div style="float: left; width: auto; height: 45px; line-height: 45px; font-size: 16px; color: #FFFFFF; margin-left: 10px;">绿豆芽</div>
+			<div style="float: right; width: auto; height: 45px; line-height: 45px; font-size: 12px; color: #FFFFFF; margin-right: 10px;">蜀ICP备13005194号-1</div>
+		</div>
+
+
+		<!--<div style="width: 100%; text-align: center;">
+			<img src="img/logoLong.jpg" style="max-width: 30%; margin-top: 20px;" />
+		</div>-->
+		
+		<div style="width: 100%; height: 30px; background: #F0F0F2;">
+			<div style="width: auto; height: 30px; line-height: 30px; margin-left: 10px; font-size: 16px; color: #000000; font-weight: bold;">APP下载</div>
+		</div>
+		
+		<div style="width: 100%; height: 100px">
+			<div style="float: left; width: 50%; text-align: center; font-size: 14px;" onclick="go_android();">
+				<img src="img/androidok.png" style="max-height: 50px; margin-top: 10px;" /><br>安卓下载
+			</div>
+			<div style="float: left; width: 50%; text-align: center; font-size: 14px;" onclick="go_ios();">
+				<img src="img/iOSok.png" style="max-height: 50px; margin-top: 10px;" /><br>苹果下载
+			</div>			
+		</div>
+		
+		
+		<!--<div style="width: 100%; height: 24px; background: #F0F0F2;">
+			<div style="width: auto; height: 24px; line-height: 24px; margin-left: 10px; font-size: 14px; color: #888888;">限时推广</div>
+		</div>-->
+		<!--<img src="img/coverSx.jpg" style="max-width: 100%;" onclick="go_sx();" />-->
+		<!--<img src="img/coverHzZjMain.jpg" style="max-width: 100%;" onclick="go_zj();" />-->
+		<!--<div style="width: 100%; height: 60px;">
+			<div style="width: 80%; height: 40px; line-height: 40px; text-align: center; font-size: 14px; margin: 10px auto; border: 1px solid #CCCCCC; border-radius: 3px;" onclick="go_zj();">2017国际低碳（镇江）大会碳中和行动</div>
+		</div>-->
+		
+		<div style="width: 100%; height: 5px; background: #1AAD19; position: fixed; bottom: 0px;"></div>
+	</body>
+</html>
+
+<!--============================================================================================================-->
+<div class="weui_dialog_alert" id="notice" style="display:none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">温馨提示</strong></div>
+        <div class="weui_dialog_bd" id="noticeContent">&nbsp;</div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:$('#notice').css('display','none');" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+
+<div id="loadingToast" class="weui_loading_toast" style="display:none; z-index:999999;">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui_toast">
+        <div class="weui_loading">
+            <div class="weui_loading_leaf weui_loading_leaf_0"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_1"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_2"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_3"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_4"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_5"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_6"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_7"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_8"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_9"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_10"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_11"></div>
+        </div>
+        <p id="p_loadContent" class="weui_toast_content">正在加载</p>
+    </div>
+</div>
+<!--============================================================================================================-->
+
+<script>
+	var token=GetUrlParam("token");
+
+	
+	function go_android(){
+		window.location.href = "http://app.qq.com/#id=detail&appid=1106034858";
+//		window.location.href = "http://www.lvdoya.com/app/apk/lvdoya.apk";
+	}
+	
+	function go_ios(){
+		window.location.href = "https://itunes.apple.com/cn/app/绿豆芽-金山银山/id1184767071?l=zh&ls=1&mt=8";
+	}
+	
+	function go_zj(){
+		window.location="netu_exhibition_zjMain.html";
+	}
+	
+	function go_sx(){
+		var token=window.localStorage.getItem("ldyToken");
+		if (token=="" || token==null){
+			window.location="user_regist.html";
+		} else {
+			window.location="netu_details.html?token="+token+"&netuId=59f839fd0cf21e4d70d1de53&fromPage=H5";
+		}		
+	}
+	
+	function getUserIdByToken(){
+		$.ajax	
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/user/getCurrentUserToJSON?callback=?&token="+token,data: {},dataType : "jsonp",	
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+					currentUserId=json.data.user_id;
+				}
+				else
+				{
+					$("#loadingToast").css("display","none");
+					jectNotice(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});			
+	}
+</script>

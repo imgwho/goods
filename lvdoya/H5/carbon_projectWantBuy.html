@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+		<meta http-equiv="Access-Control-Allow-Origin" content="*">
+		<title>碳项目</title>		
+		<style>
+			body {
+				margin: 0;
+				background-color: #f0f0f2;
+				font-family: sans-serif;
+				/*overflow: hidden;*/ /* this is important to prevent the whole page to bounce FOR iScorll */
+			}
+		</style>
+	</head>
+	<link rel="stylesheet" type="text/css" href="css/weui.css">
+	<script type="text/javascript" src="js/jquery-3.1.1.min.js" ></script>
+	<script type="text/javascript" src="js/iscroll-probe.js"></script>
+	<script src="js/functionPublic.js"></script>
+	<script src="js/tripledes.js"></script>
+	<script src="js/mode-ecb.js"></script>
+	<script type="text/javascript" src="js/fastclick.js"></script>
+	<body onload="init();">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; background-color:#1AAD19;">
+			<tr>
+				<td style="width:40px; text-align:center; vertical-align:middle;" onclick="go_back()"><img src="ico/ico_back.png" style="max-width:26px; vertical-align: middle;" /></td>
+				<td style="width: 36px;">&nbsp;</td>
+				<td style="text-align:center; font-size:16px; color:#fff;">我要收购</td>
+				<td style="width:76px; vertical-align:middle; text-align:center;">&nbsp;</td>
+			</tr>
+		</table>
+		<div style="width:100%; background-color: #fff; height: 40px; line-height: 40px; overflow: hidden;">
+			<font style="margin-left: 10px; font-size: 16px;" id="font_ccerName">&nbsp;</font>
+		</div>
+		<div id="div_ccerImg" style="width: 100%; margin-top: 10px; text-align: center; background-color: #f0f0f2;"></div>
+		<div style="background-color: #FFFFFF; height: 45px; line-height: 45px; width: 100%;">
+			<font style="float: left; margin-left: 10px; font-size: 12px; color: #979797;">碳票余额</font>
+			<font id="font_myTicketAmount" style="float: left; margin-left: 10px; font-size: 18px; font-weight: bold;">&nbsp;</font>
+		</div>
+		<div style="width: 100%; background-color: #f0f0f2; height: 30px; line-height: 30px;">
+			<font style="float: left; margin-left: 10px; font-size: 12px; color: #000000;">填写收购数量(吨)</font>
+		</div>
+		<div style="width: 100%; background-color: #FFFFFF; height: 45px;">
+			<div style="margin: 0px 10px 0px 10px ;">
+				<input id="txtWantBuyAmount" type="number" style="width: 100%; height: 45px; padding: 0px; border: 0px; font-size: 26px;" value="0" onfocus="if(this.value==0){this.value='';}" onblur="if(this.value==''){this.value='0';}" oninput="calcTicket();" />
+			</div>
+		</div>
+		<div style="width: 100%; background-color: #f0f0f2; height: 30px; line-height: 30px;">
+			<font style="float: left; margin-left: 10px; font-size: 12px; color: #000000;">填写收购单价(碳票/吨)</font>
+		</div>
+		<div style="width: 100%; background-color: #FFFFFF; height: 45px;">
+			<div style="margin: 0px 10px 0px 10px ;">
+				<input id="txtWantBuyPrice" type="number" style="width: 100%; height: 45px; padding: 0px; border: 0px; font-size: 26px;" value="0.00" onfocus="if(this.value==0.00){this.value='';}" onblur="if(this.value==''){this.value='0.00';}" oninput="calcTicket();" />
+			</div>
+		</div>		
+		<div style="position: absolute; bottom: 0px; background: #FFFFFF; width: 100%; height: 50px; border-top: 1px solid #CCCCCC; z-index: -1;">
+			<div style="width: auto; height: 50px; line-height: 50px; margin-left: 10px; float: left; font-size: 14px;">
+				收购共需:<font id="font_buyTicket" style="font-size: 16px;">0.00</font>碳票
+			</div>
+			<div style="float: right; width: 100px; height: 50px; line-height: 50px; background-color: #1AAD19; color: #FFFFFF; font-size: 14px; text-align: center;" onclick="clickConfirm();">确认收购</div>
+		</div>
+	</body>
+</html>
+
+
+<!--============================================================================================================-->
+<div class="weui_dialog_alert" id="notice" style="display:none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
+        <div class="weui_dialog_bd" id="noticeContent">&nbsp;</div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:$('#notice').css('display','none');" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+
+<div class="weui_dialog_confirm" id="dialogDone" style="display: none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title" id="dialogTitle">提示</strong></div>
+        <div id="dialogContent" class="weui_dialog_bd" style="font-weight: bold;">收购挂单成功</div>
+      <div class="weui_dialog_ft">
+            <a id="dialogCancle" href="javascript:goMyShop();" class="weui_btn_dialog default">去碳铺</a>
+            <a id="dialogConfirm" href="javascript:goClose();" class="weui_btn_dialog primary">返回</a>
+        </div>
+    </div>
+</div>
+
+<div id="loadingToast" class="weui_loading_toast" style="display:none; z-index:999999;">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui_toast">
+        <div class="weui_loading">
+            <div class="weui_loading_leaf weui_loading_leaf_0"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_1"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_2"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_3"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_4"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_5"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_6"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_7"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_8"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_9"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_10"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_11"></div>
+        </div>
+        <p id="p_loadContent" class="weui_toast_content">正在加载</p>
+    </div>
+</div>
+
+<!--BEGIN actionSheetPassword-->
+<div class="weui_dialog_confirm" id="dialogPassword" style="display: none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title" id="dialogTitle">提示</strong></div>
+        <div id="dialogContent" class="weui_dialog_bd">你还未设置安全密码</div>
+      <div class="weui_dialog_ft">
+            <a id="dialogCancle" href="javascript:$('#dialogPassword').css('display','none');" class="weui_btn_dialog default">取消</a>
+            <a id="dialogConfirm" href="javascript:go_setPassword();" class="weui_btn_dialog primary">去设置</a>
+        </div>
+    </div>
+</div>
+
+<style>
+	.txt_password
+	{
+		width:100%;	height:50px; border-radius:0px;	border:none; color:#000; font-size:40px; padding:0px; -webkit-appearance: none; margin-top:5px; margin-bottom:10px; text-align:center; margin-top:5px;
+	}
+	.tablePassword
+	{
+		background-color:#fff;
+	}
+	.tablePassword td
+	{
+		width:33%; height:50px; vertical-align:middle; text-align:center; font-size:20px; border-bottom:1px solid #f2f2f2; border-right:1px solid #f2f2f2;
+	}	
+</style>
+<div id="actionSheet_wrapPassword" style="z-index:9999;">
+    <div class="weui_mask_transition" id="maskPassword"></div>
+    <div class="weui_actionsheet" id="weui_actionsheetPassword">
+    <div style="width:100%; height:50px; line-height:50px; font-size:16px; color:#1AAD19; text-align:center; font-weight:bold;">请输入安全密码</div>
+    <div style="width:100%; height:60px; text-align:center;"><input id="txt_password" type="password" class="txt_password" readonly="true" /></div>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tablePassword">
+      <tr>
+        <td onclick="typePassword(this);">1</td>
+        <td onclick="typePassword(this);">2</td>
+        <td onclick="typePassword(this);">3</td>
+      </tr>
+      <tr>
+        <td onclick="typePassword(this);">4</td>
+        <td onclick="typePassword(this);">5</td>
+        <td onclick="typePassword(this);">6</td>
+      </tr>
+      <tr>
+        <td onclick="typePassword(this);">7</td>
+        <td onclick="typePassword(this);">8</td>
+        <td onclick="typePassword(this);">9</td>
+      </tr>    
+      <tr>
+        <td onclick="" style="font-size:10px; color:#8a8a8a;">&nbsp;</td>
+        <td onclick="typePassword(this);">0</td>
+        <td onclick="typePassword(this);">×</td>
+      </tr>         
+    </table>	       
+    </div>
+</div>
+<script>
+	function showActionSheetPassword() {
+		$("#txt_password").val("");
+		var maskPassword = $('#maskPassword');
+		var weuiActionsheetPassword = $('#weui_actionsheetPassword');
+		weuiActionsheetPassword.addClass('weui_actionsheet_toggle');
+		maskPassword.show().addClass('weui_fade_toggle').click(function() {
+			hideActionSheetPassword(weuiActionsheetPassword, maskPassword);
+		});
+		weuiActionsheetPassword.unbind('transitionend').unbind('webkitTransitionEnd');
+	}
+	
+	function hideActionSheetPassword() {
+		$("#loadingToast").css("display", "none");
+		var maskPassword = $('#maskPassword');
+		var weuiActionsheetPassword = $('#weui_actionsheetPassword');
+	
+		weuiActionsheetPassword.removeClass('weui_actionsheet_toggle');
+		maskPassword.removeClass('weui_fade_toggle');
+		weuiActionsheetPassword.on('transitionend', function() {
+			maskPassword.hide(); }).on('webkitTransitionEnd',function() {
+				maskPassword.hide(); 
+			})
+	}
+	function typePassword(obj) {
+		if($(obj).html() != "×") {
+			typeNumber = $(obj).html();
+			typed = $("#txt_password").val();
+			$("#txt_password").val(typed + typeNumber);
+			if($("#txt_password").val().length == 6) {
+				submitBuy();
+			}
+		} else {
+			typeLength = $("#txt_password").val().length;
+			typeed = $("#txt_password").val();
+			$("#txt_password").val(typed.substring(0, typeLength - 1));
+		}
+	}
+	
+	function queryPassword()
+	{
+		if (token==null || token==""){
+			jectNotice("登录已过期");
+			return;
+		}		
+		$.ajax	
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/user/checkSecPwdToJSON?callback=?&token="+token,data: {},dataType : "jsonp",
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+					if (json.data==1){ //已设置
+						showActionSheetPassword();		
+						$("#loadingToast").css("display","none");	
+					} else {
+						$("#dialogPassword").css("display","block");
+					}					
+				}
+				else
+				{				
+					$("#loadingToast").css("display","none");
+					jectNotice(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});	
+	}
+	
+	
+	function go_setPassword(){
+		aif.javaGoSetPassword();
+	}	
+</script>
+<!--END actionSheetPassword-->
+<!--============================================================================================================-->
+
+
+<script>
+	var ccerNumber=GetUrlParam("ccerNumber");
+	var ccerName=GetUrlParam("ccerName");
+	var token=GetUrlParam("token");
+	var userId="";
+	var key = CryptoJS.enc.Utf8.parse("huangkaishitemegedahaoren");  
+	var iv  = CryptoJS.enc.Utf8.parse("BrTc2404");
+	
+	$(function() {    
+	    FastClick.attach(document.body); 		//FastClick插件，提高点击速度   
+	}); 	
+	
+	function init(){
+		loadCcerInfo();
+		getUserInfo();
+	}
+
+	function go_back(){
+//		history.go(-1);
+		aif.javaCloseActivity();
+	}
+
+	function goClose(){
+		aif.javaCloseActivity();
+	}
+	
+	function goMyShop(){
+		var newUrl="http://www.lvdoya.com/H5/carbon_myShop.html?token="+token+"&userId="+userId;
+		aif.javaOpenNewWindow(newUrl);
+		aif.javaCloseActivity();
+	}
+
+	function calcTicket(){
+		amount=$("#txtWantBuyAmount").val();
+		price=$("#txtWantBuyPrice").val();
+		sumTicket=parseFloat(amount)*parseFloat(price);
+		$("#font_buyTicket").html(parseFloat(sumTicket).toFixed(2));
+	}
+
+	function getUserInfo(){
+		$.ajax	//获取用户信息
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/user/getCurrentUserToJSON?callback=?&token="+token,data: {},dataType : "jsonp",
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+					userId=json.data.user_id;
+				}
+				else{
+					jectNotice(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});			
+	}
+
+	function loadCcerInfo(){
+		$("#loadingToast").css("display","block");
+		$.ajax	//获取CCER名称和图片
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/cshop/getCcerByCnumberToJSON?callback=?&cnumber="+ccerNumber,data: {},dataType : "jsonp",
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+					$("#font_ccerName").html(json.data.c_title);
+					$("#div_ccerImg").html("<img src='"+json.data.c_img+"' style='max-width:50%;' />");
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});	
+		
+		$.ajax	//获取当前用户碳票数量
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/order/orderCanPay?callback=?&token="+token,data: {},dataType : "jsonp",
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+					$("#font_myTicketAmount").html(json.data.account);
+					$("#loadingToast").css("display","none");
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});			
+	}
+
+	function clickConfirm(){
+		tokenIsNull();
+		
+		var currentAmount=$("#font_myTicketAmount").html();
+		var inputAmount=$("#txtWantBuyAmount").val();
+		var inputPrice=$("#txtWantBuyPrice").val();
+		
+				
+		if (parseInt(inputAmount)==0){
+//			jectNotice("收购数量不能为0");
+			aif.javaToastNotice("收购数量不能为0");
+			return;
+		}
+				
+		if (parseInt(inputPrice)<1){
+//			jectNotice("收购单价不能小于1碳票");
+			aif.javaToastNotice("收购单价不能小于1碳票");
+			return;
+		}		
+		
+		if (parseInt(inputAmount)*parseFloat(inputPrice)>parseFloat(currentAmount)){
+//			jectNotice("碳票不足");
+			aif.javaToastNotice("你的碳票余额不足");
+			return;
+		}
+		
+		queryPassword();
+//		showActionSheetPassword();
+	}
+
+	function submitBuy() {
+		/*
+		 * 发布ccer产品
+		 *  token
+		 *  cnumber  碳资产编号
+		 *  sl       数量
+		 *  price    单价
+		 *  type	   1：转让，2：收购
+		 *  payPwd   安全密码
+		 */
+		var currentAmount=$("#font_myTicketAmount").html();
+		var inputAmount=$("#txtWantBuyAmount").val();
+		var inputPrice=$("#txtWantBuyPrice").val();
+		
+		var payPwd="";
+		payPwd=$("#txt_password").val();
+		payPwd=Encrypt(payPwd)+"";
+
+		//必须对+和&进行转义替换，否则服务端接收后会变成空格
+	    payPwd = payPwd.replace(/\+/g,"%2B");
+	    payPwd = payPwd.replace(/\&/g,"%26"); 
+		//END //必须对+和&进行转义替换，否则服务端接收后会变成空格
+
+		$.ajax	
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/cshop/issueCcer?callback=?&token="+token+"&cnumber="+ccerNumber+"&sl="+$("#txtWantBuyAmount").val()+"&price="+$("#txtWantBuyPrice").val()+"&type=2&payPwd="+payPwd,data: {},dataType : "jsonp",
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+					$("#font_myTicketAmount").html(parseFloat(currentAmount)-parseInt(inputAmount)*parseFloat(inputPrice));
+					$("#txtWantBuyAmount").val(0);
+					$("#txtWantBuyPrice").val("0.00");					
+					hideActionSheetPassword();
+//					jectNotice("收购挂单成功");
+					$("#dialogDone").css("display","block");
+					$("#txt_password").val("");
+				}
+				else{
+					hideActionSheetPassword();
+					jectNotice(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});			
+	}
+	
+	function Encrypt(word) {
+		srcs = CryptoJS.enc.Utf8.parse(word);
+		var encrypted = CryptoJS.TripleDES.encrypt(srcs, key, {
+			iv: iv,
+			mode: CryptoJS.mode.CBC,
+			padding: CryptoJS.pad.Pkcs7
+		});
+		return encrypted;
+	}
+</script>

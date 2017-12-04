@@ -1,0 +1,823 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>myShopAdd</title>
+<style>
+body
+{
+	margin:0;
+	background-color:#f0f0f2;
+	font-family: sans-serif;
+}
+
+.txt
+{
+	width:100%;
+	height:45px;
+	border-radius:0px;
+	border:none;
+	color:#999;
+	font-size:16px;
+	padding:0px;
+	-webkit-appearance: none;
+}
+#xm_setp{width:100%; height:100%; background:#fff; z-index:9000; top:0px; left:100%; display:none; overflow:scroll; position:fixed;}
+
+#clipArea {
+	/*height: 90%;*/
+}
+#file,
+#clipBtn {   
+	display:block;
+	text-align: center;
+}
+
+	/*项目列表*/
+	.cssDivProject{
+		width: 100%; height: 80px; background-color: #FFFFFF; position: relative; margin-bottom: 5px;
+	}
+	.cssDivProjectImgCover img {
+		width: 60px; height: 60px; margin: 10px; float: left;
+	}
+	.cssDivProjectTitle {
+		width: auto; overflow: hidden; height: 40px; line-height: 40px; font-size: 16px;
+	}
+	.cssDivProjectContent {
+		width: auto; overflow: hidden; height: 40px; line-height: 40px; font-size: 14px;
+	}
+	.cssDivProjectGoMarket{
+		width: auto; height: 40px; line-height: 40px; font-size: 14px; color: #0099CC; position: absolute; bottom: -5px; right: 10px;
+	}
+	.cssDivProjectImgDel{
+		position: absolute; top: 10px; right: 10px; max-height: 20px;
+	}			
+	/*END 项目列表*/
+</style>
+<link rel="stylesheet" href="css/weui.css">
+
+<script type="text/javascript" src="js/jquery-3.1.1.min.js" ></script>
+<!--图片上传-->
+<script src="plugIn/imgyasuo/lib/iscroll-zoom.js"></script>
+<script src="plugIn/imgyasuo/lib/hammer.min.js"></script>
+<script src="plugIn/imgyasuo/lib/lrz.all.bundle.js" type="text/javascript" ></script>
+<script src="plugIn/imgyasuo/lib/PhotoClip.js"></script>
+<!--<script src="plugIn/imgyasuo/lib/jquery.min.js" type="text/javascript" ></script>-->
+<script src="plugIn/imgyasuo/lib/netuAddFace.js" type="text/javascript" ></script>
+<link rel="stylesheet" type="text/css" href="plugIn/imgyasuo/lib/progress.css">
+
+<!--<script type="text/javascript" src="pluginUpimg/mallGoodsDetails.js"></script>-->
+
+<!--END 图片上传-->
+
+<script type="text/javascript" src="js/iscroll.js"></script>
+<script src="js/functionPublic.js"></script>
+<!--<script type="text/javascript" src="js/fastclick.js"></script>-->
+<!--
+<script type="text/javascript" src="pluginGoodsType/js/swiper-3.2.5.min.js"></script>
+<script type="text/javascript" src="pluginGoodsType/js/ectouch.js"></script>
+<script type="text/javascript" src="pluginGoodsType/js/jquery.json.js"></script> 
+<script type="text/javascript" src="pluginGoodsType/js/common.js"></script>
+<script type="text/javascript">
+	$(function($){
+		$('#sidebar ul li').click(function(){
+			$(this).addClass('active').siblings('li').removeClass('active');
+			var index = $(this).index();
+			$('.j-content').eq(index).show().siblings('.j-content').hide();
+		})
+	})
+</script>-->
+<!--END 产品分类页面使用-->
+</head>
+
+<body onload="init();">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; background-color:#1AAD19; position:fixed; top:0px; z-index: 1;">
+  <tr>
+    <td style="width:40px; text-align:center; vertical-align:middle;" onclick="closeCurrent();"><img src="ico/ico_back.png" style="max-width:26px;" /></td>
+    <td style="text-align:center; font-size:16px; color:#fff; vertical-align:middle;">发起中和</td>
+    <td style="width:40px; vertical-align:middle; text-align:center; font-size:14px; color:#fff;" onclick="saveAsk();">
+    	<img src="ico/ico_save_fff.png" style="max-height:20px;" /><br />保存
+    </td>
+  </tr>
+</table>
+<div style="width:100%; height:45px;"></div>
+<div style="width:100%; display:none;" id="div_imgMallGoodsFace" class="div_imgMallGoodsFace"></div>
+<div id="tb_upMallGoodsFace">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td style="vertical-align:middle; text-align:center; height:120px; border-bottom:1px solid #bbbbbb;">
+            <img src="ico/ico_camera_circle.png" id="img_upFace" style="max-height:70px; vertical-align:middle; margin-top:10px; margin-bottom:10px;" /><br />
+            <font style="color:#333; font-size:14px;">上传我的碳中和图片</font><br />
+        </td>
+      </tr>
+    </table>
+</div>
+
+<!--截图框-->
+<div style="width:100%;"><div class="fileListFace"></div></div>        
+<div id="clip" style="position:absolute; width:100%; height:100%; top:0px; left:0px; display:none;">        
+
+    <div id="clipArea"></div>
+    <div style="width:100%; height:50px; background-color:#f9f9f9; text-align:center;">  
+        <button id="clipBtn" style="width:80%; height:40px; border:1px solid #cccccc; background-color:#1AAD19; color:#fff; font-size:16px; margin:0 auto; margin-top:5px; border:none; border-radius:3px;">确定</button>
+    </div>
+</div>
+<!--截图框-->
+<div style="width: 100%; height: 10px; background: #f0f0f2;"></div>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#fff; border-top:1px solid #bbbbbb; border-bottom:1px solid #bbbbbb;">
+  <tr>
+    <td style="width:10px;">&nbsp;</td>
+    <td>
+    	<input id="txt_netuTitle" class="txt" maxlength="20" type="text" onfocus="if(this.value==defaultValue) {this.value=''; this.style.color='#000';}" onblur="if(!value) {value=defaultValue; this.style.color='#999';};" value="请填写碳中和名称（2-20个字）" />
+    </td>
+    <td style="width:10px;">&nbsp;</td>
+  </tr>
+</table>
+
+<div style="width: 100%; height: 10px; background: #F0F0F2; display: none;"></div>
+<select id="selectType" style="width: 100%; height: 45px; background: #FFFFFF; font-size: 16px; border-top: 1px solid #BBBBBB; border-bottom: 1px solid #BBBBBB; border-left: 0px; border-right: 0px; display: none;">
+  <option value="null">&nbsp;&nbsp;选择碳中和类型</option>
+  <option value="show">&nbsp;&nbsp;演出</option>
+  <option value="meeting">&nbsp;&nbsp;会议/会展</option>
+  <option value="other">&nbsp;&nbsp;其它</option>
+</select>
+
+
+<div style="width: 100%; height: 30px; background: #F0F0F2;">
+	<div style="margin: 0px 10px 0px 10px; line-height: 30px; font-size: 12px; color: #999999;">填写碳中和原因及描述</div>
+</div>
+<textarea id="txt_netuInfo" class="txt" style="border-top: 1px solid #CCCCCC; border-bottom: 1px solid #CCCCCC; color: #000000; height: 80px;"></textarea>
+<div style="width: 100%; height: 10px; background: #F0F0F2;"></div>
+
+<div style="width:100%; height:45px; background-color:#fff; border-top:1px solid #bbbbbb; border-bottom:1px solid #bbbbbb;" onclick="showProject();">
+	<div style="line-height:45px; float:left; margin-left:10px; font-size:16px; color:#333;" id="div_choosedProject">选择我的碳量</div>
+    <img src="ico/ico_more_444.png" style="float:right; margin-right:10px; max-height:17px; margin-top:14px;" />
+</div>
+
+
+<div style="display:block;">
+	
+	<div style="width: 100%; height: 30px; background: #F0F0F2;">
+		<div style="margin: 0px 10px 0px 10px; line-height: 30px; font-size: 12px; color: #999999;">每人碳量不得小于0.01吨</div>
+	</div>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; border-top:1px solid #bbbbbb; background-color:#fff;">
+      <tr>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">每人</td>
+        <td style="">
+        	<input id="txt_unitAmount" class="txt" maxlength="20" type="number" value="0" oninput="calcFromAmount(this);" onfocus="if(this.value==defaultValue) {this.value='';}" onblur="if(!value) {value=defaultValue;};" style="color: #000000; font-size: 18px;" />
+        </td>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">吨</td>
+      </tr>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; border-top:1px solid #bbbbbb; border-bottom:1px solid #bbbbbb; background-color:#fff;">
+      <tr>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">人数</td>
+        <td style="">
+        	<input id="txt_unitCount" class="txt" maxlength="10" type="number" oninput="calcFromCount(this);" style="color:#000; font-size: 18px;" onfocus="if(this.value==defaultValue) {this.value='';}" onblur="if(!value) {value=defaultValue;};" value="0"/>
+        </td>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">位</td>
+      </tr>
+    </table>
+</div>
+
+<div style="width: 100%; height: 30px; background: #FAFAFA; margin-top: 5px;">
+	<div style="line-height: 30px; margin: 0px 10px 0px 10px; font-size: 14px;">
+		计划中和:<font id="font_netuCount" style="font-size: 20px; font-weight: bold; margin: 0px 5px 0px 5px; color: #FF9900;">0.00</font>吨
+	</div>
+</div>
+<div style="width: 100%; height: 20px; background: #FAFAFA;">
+	<div style="line-height: 20px; margin: 0px 10px 0px 10px; font-size: 12px; color: #FF0000;">
+		保存成功后，计划中和碳量将被冻结用于碳中和
+	</div>
+</div>
+
+<!--<div style="width: 100%; height: 20px; background: #F0F0F2; margin-top: 10px;">
+	<div style="margin: 0px 10px 0px 10px; line-height: 20px; font-size: 12px; color: #888888;">设置最多4位减排口令(可使用任意字符)</div>
+</div>-->
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; border-top:1px solid #bbbbbb; border-bottom:1px solid #bbbbbb; background-color:#fff;">
+  <tr>
+    <td style="width:10px; text-align:center; vertical-align:middle; font-size:16px;">&nbsp;</td>
+    <td style="">
+    	<input id="txt_netuCode" class="txt" maxlength="4" type="text" style="color: #666666; font-size: 14px; text-align: center;" onfocus="if(this.value==defaultValue) {this.value=''; $('#txt_netuCode').css('font-size','30px'); $('#txt_netuCode').css('color','#FF9900');}" onblur="if(!value) {value=defaultValue; $('#txt_netuCode').css('font-size','14px'); $('#txt_netuCode').css('color','#666666');};" value="点击输入最多4位减排口令"/>
+    </td>
+    <td style="width:10px; text-align:center; vertical-align:middle; font-size:16px;">&nbsp;</td>
+  </tr>
+</table>
+<div style="width: 100%;">
+	<div style="margin: 0px 10px 0px 10px; line-height: 24px; font-size: 12px; color: #888888;">
+		发起碳中和：哪里需要碳减排，哪里就有碳中和，告诉减排口令给你想一起碳减排的伙伴们，一起碳中和！
+	</div>
+</div>
+<div style="width: 100%; height: 60px;"></div>
+<!--<div style="width: 100%; height: 50px; border-top: 1px solid #CCCCCC; background: #F9F9F9; position: fixed; bottom: 0px; z-index: -10;">
+	<div style="width: 80%; height: 40px; line-height: 40px; font-size: 14px; color: #FFFFFF; background: #1AAD19; text-align: center; margin: 5px auto; border-radius: 3px;" onclick="saveAsk();">确认发布</div>
+</div>-->
+</body>
+</html>
+<!--==============================================================================================-->
+<input id="hid_goodsFace" type="hidden" value="" />
+<input id="hid_goodsDetails" type="hidden" value="" />
+<input id="hid_seletedBigTypeId" type="hidden" value=""  />
+<input id="hid_seletedBigTypeName" type="hidden" value=""  />
+
+<div id="toastSuccess" style="display: none;">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui_toast">
+        <i class="weui_icon_toast"></i>
+        <p class="weui_toast_content">保存成功</p>
+    </div>
+</div>
+
+<div class="weui_dialog_alert" id="notice" style="display:none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
+        <div class="weui_dialog_bd" id="noticeContent">&nbsp;</div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:$('#notice').css('display','none');" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+
+<div id="loadingToast" class="weui_loading_toast" style="display:none;">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui_toast">
+        <div class="weui_loading">
+            <!-- :) -->
+            <div class="weui_loading_leaf weui_loading_leaf_0"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_1"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_2"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_3"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_4"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_5"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_6"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_7"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_8"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_9"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_10"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_11"></div>
+        </div>
+        <p class="weui_toast_content">正在处理</p>
+    </div>
+</div>
+
+<div class="weui_dialog_confirm" id="dialogAsk" style="display: none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title" id="dialogTitle"></strong>询问</div>
+        <div id="dialogContent" class="weui_dialog_bd">确定发布该碳中和吗？</div>
+      <div class="weui_dialog_ft">
+            <a id="dialogCancle" href="javascript:$('#dialogAsk').css('display','none');" class="weui_btn_dialog default">取消</a>
+            <a id="dialogConfirm" href="javascript:saveGoodsClick();" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+
+<!--BEGIN actionSheetProject-->
+<div id="actionSheet_wrapProject" style="z-index: 8888;">
+    <div class="weui_mask_transition" id="maskProject"></div>
+    <div class="weui_actionsheet" id="weui_actionsheetProject" style="height:100%; overflow:scroll;">
+		<div id="divJectBanner" style="width:100%; height:40px; text-align:center; background-color:#1AAD19; color:#fff; font-size:16px; line-height:40px; position: fixed; top: 0px;">
+			<img src="ico/ico_close_fff.png" style="float:right; margin-right:10px; max-height:30px; margin-top:5px;" onclick="hideActionSheetProject();" />
+		</div>
+        <div style="width: 100%; height: 50px;"></div>
+        <div id="div_ProjectList">
+        	<div id="div_ProjectList1"></div>
+        </div>
+    </div>
+</div>
+<!--END actionSheetProject-->
+
+
+<!--BEGIN actionSheetPassword-->
+<div class="weui_dialog_confirm" id="dialogPassword" style="display: none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title" id="dialogTitle">提示</strong></div>
+        <div id="dialogContent" class="weui_dialog_bd">你还未设置安全密码</div>
+      <div class="weui_dialog_ft">
+            <a id="dialogCancle" href="javascript:$('#dialogPassword').css('display','none');" class="weui_btn_dialog default">取消</a>
+            <a id="dialogConfirm" href="javascript:go_setPassword();" class="weui_btn_dialog primary">去设置</a>
+        </div>
+    </div>
+</div>
+
+<style>
+	.txt_password
+	{
+		width:100%;	height:50px; border-radius:0px;	border:none; color:#000; font-size:40px; padding:0px; -webkit-appearance: none; margin-top:5px; margin-bottom:10px; text-align:center; margin-top:5px;
+	}
+	.tablePassword
+	{
+		background-color:#fff;
+	}
+	.tablePassword td
+	{
+		width:33%; height:50px; vertical-align:middle; text-align:center; font-size:20px; border-bottom:1px solid #f2f2f2; border-right:1px solid #f2f2f2;
+	}
+</style>
+
+<div id="actionSheet_wrapPassword" style="z-index:9999;">
+    <div class="weui_mask_transition" id="maskPassword"></div>
+    <div class="weui_actionsheet" id="weui_actionsheetPassword">
+    <div style="width:100%; height:50px; line-height:50px; font-size:16px; color:#1AAD19; text-align:center; font-weight:bold;">请输入安全密码</div>
+    <div style="width:100%; height:60px; text-align:center;"><input id="txt_password" type="password" class="txt_password" readonly="true" /></div>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tablePassword">
+      <tr>
+        <td onclick="typePassword(this);">1</td>
+        <td onclick="typePassword(this);">2</td>
+        <td onclick="typePassword(this);">3</td>
+      </tr>
+      <tr>
+        <td onclick="typePassword(this);">4</td>
+        <td onclick="typePassword(this);">5</td>
+        <td onclick="typePassword(this);">6</td>
+      </tr>
+      <tr>
+        <td onclick="typePassword(this);">7</td>
+        <td onclick="typePassword(this);">8</td>
+        <td onclick="typePassword(this);">9</td>
+      </tr>    
+      <tr>
+        <td onclick="" style="font-size:10px; color:#8a8a8a;">&nbsp;</td>
+        <td onclick="typePassword(this);">0</td>
+        <td onclick="typePassword(this);">×</td>
+      </tr>         
+    </table>	       
+    </div>
+</div>
+
+<script src="js/tripledes.js"></script>
+<script src="js/mode-ecb.js"></script>
+<script>
+var key = CryptoJS.enc.Utf8.parse("huangkaishitemegedahaoren");  
+var iv  = CryptoJS.enc.Utf8.parse("BrTc2404");
+
+function showActionSheetPassword() {
+	$("#txt_password").val("");	
+	var maskPassword = $('#maskPassword');
+	var weuiActionsheetPassword = $('#weui_actionsheetPassword');
+	weuiActionsheetPassword.addClass('weui_actionsheet_toggle');
+	maskPassword.show().addClass('weui_fade_toggle').click(function() {
+		hideActionSheetPassword(weuiActionsheetPassword, maskPassword);
+	});
+	weuiActionsheetPassword.unbind('transitionend').unbind('webkitTransitionEnd');
+}
+
+function hideActionSheetPassword() {
+	$("#loadingToast").css("display", "none");
+	var maskPassword = $('#maskPassword');
+	var weuiActionsheetPassword = $('#weui_actionsheetPassword');
+
+	weuiActionsheetPassword.removeClass('weui_actionsheet_toggle');
+	maskPassword.removeClass('weui_fade_toggle');
+	weuiActionsheetPassword.on('transitionend', function() {
+		maskPassword.hide();
+	}).on('webkitTransitionEnd',
+		function() {
+			maskPassword.hide();
+		})
+}
+
+function typePassword(obj) {
+	if($(obj).html() != "×") {
+		typeNumber = $(obj).html();
+		typed = $("#txt_password").val();
+		$("#txt_password").val(typed + typeNumber);
+		if($("#txt_password").val().length == 6) {
+			saveNeutral();
+		}
+	} else {
+		typeLength = $("#txt_password").val().length;
+		typeed = $("#txt_password").val();
+		$("#txt_password").val(typed.substring(0, typeLength - 1));
+	}
+}
+
+function Encrypt(word) {
+	srcs = CryptoJS.enc.Utf8.parse(word);
+	var encrypted = CryptoJS.TripleDES.encrypt(srcs, key, {
+		iv: iv,
+		mode: CryptoJS.mode.CBC,
+		padding: CryptoJS.pad.Pkcs7
+	});
+	return encrypted;
+}
+
+function go_setPassword(){
+	if (mobileSystem=="android"){
+		aif.javaGoSetPassword();	
+		$("#dialogPassword").css("display","none");
+	} else if (mobileSystem=="ios") {
+		aif.javaGoRecharge();
+		$("#dialogPassword").css("display","none");
+	}	
+}
+</script>
+<!--END actionSheetPassword-->
+<input id="hid_netuFace" type="hidden" value="" />   <!--在netuAddFace.js里操作对其赋值，存放图片标签<img....>-->
+<!--=====================================================================================================-->
+
+
+<script>
+	var token=GetUrlParam("token");
+	var userId="";
+	var searchText="";
+	var pageNo=1;
+	var chooseCcerNumber="";   //用于存放选择的项目编号
+	var chooseCcerAmount=0;    //用于存放选择的项目可用数量
+	var setPwd=false;
+	var mobileSystem="";
+	var ccerCount=0;   //存放ajax请求的ccer数量
+	
+	//发布碳中和传参
+	var netuTitle="";
+	var netuImg="";
+	var netuInfo="";
+	var netuAmount=""; //总量
+	var netuCopies=""; //份数
+	var netuUnit=""; //单量
+	var netuType="";
+	//END 发布碳中和传参
+	
+//	$(function() {    
+//	    FastClick.attach(document.body); 		//FastClick插件，提高点击速度   
+//	}); 	
+	
+	function closeCurrent(){
+		aif.javaCloseActivity();
+	}
+	
+	function init(){
+		$("#loadingToast").css("display","block");
+		//==检查是否设置安全密码==
+		$.ajax	//获取用户信息
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/user/getCurrentUserToJSON?callback=?&token="+token,data: {},dataType : "jsonp",
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+					if (json.data.user_passwordPay==false){						
+						setPwd=false;
+					} else if (json.data.user_passwordPay==true) {
+						setPwd=true;
+					}
+					if (setPwd==false){
+						$("#loadingToast").css("display","none");
+						$("#dialogPassword").css("display","block");			
+					}					
+				}
+				else{
+					jectNotice(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});			
+		//==END 检查是否设置安全密码==			
+		
+		searchStoreCcerList();
+		androidOrIos();
+	}
+	
+	function calcFromAmount(obj){
+		$("#font_netuCount").html(parseFloat(parseFloat(obj.value)*parseFloat($("#txt_unitCount").val())).toFixed(2));
+	}
+	
+	function calcFromCount(obj){
+		if (obj.value.indexOf(".")>0){
+			obj.value=obj.value.replace(".","");
+		}
+		$("#font_netuCount").html(parseFloat(parseFloat(obj.value)*parseFloat($("#txt_unitAmount").val())).toFixed(2));
+	}
+	
+	function searchStoreCcerList(){
+	/**
+	 * 查找用户挂单
+	 * 	userid
+	 *  searchText   该值为""时，查询所有，支持多关键字，用空格或者逗号间隔
+	 *  pageNo    页码
+	 *  sort		1:综合排序，2：收购优先，3：成交优先，默认1
+	 *  order     排序方式 0为降序，1为升序 ，该字段只有在sortName不为""的时候有效
+	 */	
+		$.ajax	
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/carbon/searchCcerByowner?callback=?&pageNo=0&token="+token+"&searchText="+searchText+"&sort=1&order=1",data: {},dataType : "jsonp",	
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+//					console.log(json.data.length);
+					var result="";
+					if (json.data.length==0) {
+						noMoreData=true;
+					}
+					if (json.data.length==0 && pageNo==1){
+						$("#div_ProjectList"+pageNo).html("<div style='width: 100%; margin-top: 30px; text-align: center;'><img src='ico/ico_noContent.png' style='max-height: 50px;'><br><font style='color: #8A8A8A; font-size: 14px;'>你还没有任何挂单</font></div>");
+						$("#loadingToast").css("display","none");
+						return;
+					}
+					for (var i=0; i<json.data.length; i++){
+//						console.log(json.data[i].c_hold);
+						if (json.data[i].c_quantity!="0.00"){
+							result+="<div class='cssDivProject'>";
+							result+="<div class='cssDivProjectImgCover' id='divProjectImgCover"+json.data[i].c_number+"' onclick='chooseProject(&apos;"+json.data[i].c_number+"&apos;);'>";
+							result+="<img src='"+json.data[i].c_img+"' /></div>";
+							result+="<div class='cssDivProjectTitle' id='divProjectTitle"+json.data[i].c_number+"' onclick='chooseProject(&apos;"+json.data[i].c_number+"&apos;);'>"+json.data[i].c_title+"</div>";
+							result+="<div class='cssDivProjectContent' id='chooseProjectContent"+json.data[i].c_number+"'>"+json.data[i].c_number+"&nbsp;";
+							result+="持仓&nbsp;<font id='fontQuantity"+json.data[i].c_number+"'>"+json.data[i].c_quantity+"</font>吨</div>";
+							result+="<div class='cssDivProjectGoMarket' onclick='goMarketProject(&apos;"+json.data[i].c_title+"&apos;,&apos;"+json.data[i].c_number+"&apos;);'>补充</div></div>";
+						}
+						ccerCount++;
+					}
+					if (pageNo==1){
+						$("#div_ProjectList").html("<div id='div_ProjectList1'></div>");
+					}
+					$("#div_ProjectList"+pageNo).html(result);
+					$("#div_ProjectList"+pageNo).append("<div id='div_ProjectList"+parseInt(pageNo+1)+"'></div>");
+					$("#loadingToast").css("display","none");
+					searchUnholdCcerList();
+				}
+				else
+				{
+					$("#loadingToast").css("display","none");
+					jectNotice(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});			
+	}
+	
+	function searchUnholdCcerList(){
+		$("#loadingToast").css("display","block");
+		$.ajax	
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/cshop/SearchUnholdCcerByUser?callback=?&pageNo=0&sort=&order=&token="+token,data: {},dataType : "jsonp",	
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+//					console.log(json.data.length);
+					var result="";
+					if (json.data.length==0) {
+						noMoreData=true;
+					}
+//					if (json.data.length==0 && pageNo==1){
+//						$("#div_ProjectList"+pageNo).html("<div style='width: 100%; margin-top: 30px; text-align: center;'><img src='ico/ico_noContent.png' style='max-height: 50px;'><br><font style='color: #8A8A8A; font-size: 14px;'>你还没有任何挂单</font></div>");
+//						$("#loadingToast").css("display","none");
+//						return;
+//					}
+					for (var i=0; i<json.data.length; i++){
+//						console.log(json.data[i].c_hold);
+						result+="<div class='cssDivProject'>";
+						result+="<div class='cssDivProjectImgCover' id='divProjectImgCover"+json.data[i].c_number+"' onclick='chooseProject(&apos;"+json.data[i].c_number+"&apos;);'>";
+						result+="<img src='"+json.data[i].c_img+"' /></div>";
+						result+="<div class='cssDivProjectTitle' id='divProjectTitle"+json.data[i].c_number+"' onclick='chooseProject(&apos;"+json.data[i].c_number+"&apos;);'>"+json.data[i].c_title+"</div>";
+						result+="<div class='cssDivProjectContent' id='chooseProjectContent"+json.data[i].c_number+"'>"+json.data[i].c_number+"&nbsp;";
+						result+="持仓&nbsp;<font id='fontQuantity"+json.data[i].c_number+"'>0.00</font>吨</div>";
+						result+="<div class='cssDivProjectGoMarket' onclick='goMarketProject(&apos;"+json.data[i].c_title+"&apos;,&apos;"+json.data[i].c_number+"&apos;);'>补充</div></div>";
+						ccerCount++;
+					}
+					$("#div_ProjectList1").append(result);
+//					$("#div_ProjectList1").append("<div id='div_ProjectList"+parseInt(pageNo+1)+"'></div>");
+					$("#loadingToast").css("display","none");
+					if (ccerCount==0){
+						searchStoreCcerList();
+					}
+				}
+				else
+				{
+					$("#loadingToast").css("display","none");
+					jectNotice(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});		
+	}
+	
+	function chooseProject(ccerNumber){
+		$("#div_choosedProject").html($("#chooseProjectContent"+ccerNumber).html());
+		hideActionSheetProject();
+		chooseCcerNumber=ccerNumber;
+		chooseCcerAmount=$("#fontQuantity"+ccerNumber).html().replace("补充","");
+	}
+	
+	function goMarketProject(ccerName,ccerNumber){
+		var newUrl="http://www.lvdoya.com/H5/carbon_project.html?token="+token+"&ccerName="+escape(ccerName)+"&ccerNumber="+ccerNumber;
+		aif.javaOpenNewWindow(newUrl);
+	}
+	
+	function showProject() 
+	{
+		var maskProject = $('#maskProject');
+		var weuiActionsheetProject = $('#weui_actionsheetProject');
+		weuiActionsheetProject.addClass('weui_actionsheet_toggle');
+		maskProject.show().addClass('weui_fade_toggle').click(function() {
+			hideActionSheetProject(weuiActionsheetProject, maskProject);
+		});
+		weuiActionsheetProject.unbind('transitionend').unbind('webkitTransitionEnd');
+	}
+	
+	function hideActionSheetProject() {
+		pageNo=1;
+		var maskProject = $('#maskProject');
+		var weuiActionsheetProject = $('#weui_actionsheetProject');
+	
+		weuiActionsheetProject.removeClass('weui_actionsheet_toggle');
+		maskProject.removeClass('weui_fade_toggle');
+		weuiActionsheetProject.on('transitionend', function() {
+			maskProject.hide();
+		}).on('webkitTransitionEnd',
+			function() {
+				maskProject.hide();
+			})
+	}
+
+
+	function saveAsk()
+	{				
+		if (!$(".imgDivFace")) {
+			aif.javaToastNotice("请添加碳中和封面图");
+			return;
+		}
+		
+		if ($("#txt_netuTitle").val()=="请填写碳中和名称（2-20个字）"){
+			aif.javaToastNotice("请填写碳中和名称");
+			return;		
+		}
+		
+		if ($("#txt_netuInfo").val()==""){
+			aif.javaToastNotice("请填写碳中和描述");
+			return;				
+		}
+		
+//		if ($("#selectType").val()=="null"){
+//			aif.javaToastNotice("请选择碳中和类型");
+//			return;
+//		}
+		
+		if ($("#div_choosedProject").html()=="选择碳中和项目"){
+			aif.javaToastNotice("请选择碳中和项目");
+			return;		
+		}
+		
+		if (parseFloat($("#txt_unitAmount").val())==0){
+			aif.javaToastNotice("请输入每份碳量");
+			return;
+		}
+		
+		if (parseFloat($("#txt_unitAmount").val())<0.01){
+			aif.javaToastNotice("每份碳量不能小于0.01");
+			return;
+		}		
+		
+		if (parseInt($("#txt_unitCount").val())==0){
+			aif.javaToastNotice("请输入份数");
+			return;
+		}			
+		
+		if (parseFloat($("#font_netuCount").html())>parseFloat(chooseCcerAmount)){
+			aif.javaToastNotice("选择项目可用碳量不足");
+			return;
+		}		
+		
+		if ($("#txt_netuCode").val()=="点击输入最多4位减排口令" || $("#txt_netuCode").val().length==8){
+			aif.javaToastNotice("请设置最多4位减排口令");
+			return;
+		}		
+		
+		showActionSheetPassword();
+	}
+
+	function saveNeutral(){
+		$("#loadingToast").css("display","block");
+		hideActionSheetPassword();
+		setTimeout(function(){post_netuFace();},500);
+		setTimeout(function(){issueNeutral();},1500);
+	}
+	
+	function issueNeutral(){
+		var payPwd="";
+		payPwd=$("#txt_password").val();
+		payPwd=Encrypt(payPwd)+"";
+		
+		//必须对+和&进行转义替换，否则服务端接收后会变成空格
+	    payPwd = payPwd.replace(/\+/g,"%2B");
+	    payPwd = payPwd.replace(/\&/g,"%26"); 
+		//END //必须对+和&进行转义替换，否则服务端接收后会变成空格
+		
+		netuTitle=$("#txt_netuTitle").val();
+		netuInfo=$("#txt_netuInfo").val();
+		netuAmount=$("#font_netuCount").html();
+		netuUnit=$("#txt_unitAmount").val();
+		netuCopies=$("#txt_unitCount").val();
+		netuType=$("#selectType").val();
+		netuImg=$("#hid_netuFace").val();
+		netuCode=$("#txt_netuCode").val();
+		
+		if (netuImg==""){
+			netuImg="<img src='img/netuDefault.jpg' />"
+		}
+		
+		var netuUrl="http://114.55.103.71:9006/ldy/neutral/issueNeutral?callback=?&token="+token+"&title="+netuTitle
+		+"&img="+netuImg+"&info="+netuInfo+"&cnumber="+chooseCcerNumber+"&sl="+netuAmount+"&copies="+netuCopies+"&unit="+netuUnit+"&type="+netuType
+		+"&payPwd="+payPwd+"&code="+netuCode;
+		
+		console.log(netuUrl);
+		$.ajax
+		({
+			
+			type : "POST",url:netuUrl,data: {},dataType : "jsonp",
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+					$("#loadingToast").css("display","none");
+					$("#toastSuccess").css("display","block");
+					setTimeout(function(){
+						$("#toastSuccess").css("display","none");
+						closeCurrent();
+					},1500);
+				}
+				else
+				{
+					$("#loadingToast").css("display","none");
+					alert(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+			}
+		});		
+	}
+	
+	function androidOrIos(){
+		var u = navigator.userAgent;
+		var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+		var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+//		alert('是否是Android：'+isAndroid);
+//		alert('是否是iOS：'+isiOS);		
+		if (isAndroid==true){
+			mobileSystem="android";
+		} else if (isiOS==true){
+			mobileSystem="ios";
+		}
+	}
+	
+	//截图
+	var pc = new PhotoClip('#clipArea', {
+	size: 260,
+	outputSize: 640,
+	//adaptive: ['60%', '80%'],
+	file: '#file',
+	view: '#view',
+	ok: '#clipBtn',
+	
+	loadStart: function() {
+//		$("#loadingToast").css("display","block");
+		console.log('开始读取照片');
+	},
+	loadComplete: function() {
+		//计算clipArea高度
+		cah=$(window).height();
+		cah=cah-50;
+		$("#clipArea").css("height",cah+"px");
+		//END 计算clipArea高度
+		
+		//隐藏选择框
+		$("#tb_upMallGoodsFace").css("display","none");
+		$("#loadingToast").css("display","none");
+		console.log('照片读取完成');
+	},
+	done: function(dataURL) {
+			
+			var imgDivFace = $(configFace['img_tpl']);           
+		   
+			var img = imgDivFace.children('img');
+			img.attr("src",dataURL);              
+			var filename = get_randfile();
+			imgdataFace[filename] = {
+				'filename':filename,
+				'content':dataURL,
+				'filelen':dataURL.length
+			}
+			img.attr('key', filename);
+		   
+			 $(".fileListFace").append(imgDivFace);
+			 $("#clip").hide();
+	},
+	fail: function(msg) {
+		alert(msg);
+	}
+	});
+	//END 截图
+</script>

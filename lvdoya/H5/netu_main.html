@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta http-equiv="Access-Control-Allow-Origin" content="*">
+		<title>碳市场</title>		
+		<style>
+			body {
+				margin: 0;
+				background-color: #f0f0f2;
+				font-family: sans-serif;
+				overflow: hidden; /* this is important to prevent the whole page to bounce FOR iScorll */
+			}
+			.font_netuType{
+				font-size: 14px; float: left; margin-left: 10px;
+			}
+			/*列表样式*/
+			.listTable{
+				border-bottom: 1px solid #E8E8E8; height: 80px; background: #FFFFFF; width: 100%;
+			}
+			.listTd1{
+				width: 80px;
+			}
+			.listTd1 img{
+				max-height: 60px; float: left; margin: 10px auto 10px 10px; border-radius: 3px;
+			}
+			.listDiv1{
+				width: 100%; height: 40px; line-height: 40px; font-size: 14px;
+			}
+			.listDiv1 img{
+				width: 30px; height: 30px; border-radius: 50%; float: left; margin-top: 5px;
+			}
+			.listDivTime{
+				float: right; color: #979797; font-size: 12px; margin-right: 5px;
+			}
+			.listDiv2{
+				width: 100%; height: 20px; line-height: 20px; font-weight: bold; font-size: 16px; overflow: hidden;
+			}
+			.listDiv3{
+				width: 100%; height: 20px; font-size: 12px; text-align: right;
+			}
+			.listDiv3-1{
+				width: auto; height: 20px; line-height: 30px; float: left; color: #979797;
+			}
+			.listDiv3-2{
+				width: auto; height: 20px; line-height: 30px; float: right; color: #000000;
+			}
+			/*END 列表样式*/
+			
+			/*iScorll*/
+			
+			#wrapper {  
+			    position: absolute;  
+			    z-index: 1;  
+			    top: 90px;  
+			    bottom: 0px;  
+			    left: 0;  
+			    width: 100%;   
+			    /*overflow: hidden; */ 
+			}  
+			  
+			#scroller {  
+			    position: absolute;  
+			    z-index: 1;  
+			    -webkit-tap-highlight-color: rgba(0,0,0,0);  
+				-webkit-transform:translate3d(0,0,0);
+			    width: 100%;  
+				min-height:100.25%;
+			    -webkit-transform: translateZ(0);  
+			    -moz-transform: translateZ(0);  
+			    -ms-transform: translateZ(0);  
+			    -o-transform: translateZ(0);  
+			    transform: translateZ(0);  
+			    -webkit-touch-callout: none;  
+			    -webkit-user-select: none;  
+			    -moz-user-select: none;  
+			    -ms-user-select: none;  
+			    user-select: none;  
+			    -webkit-text-size-adjust: none;  
+			    -moz-text-size-adjust: none;  
+			    -ms-text-size-adjust: none;  
+			    -o-text-size-adjust: none;  
+			    text-size-adjust: none;  
+			}  
+			  
+			#pullDown,#pullUp,.pulldown-tips{  
+			    height:40px;  
+			    line-height:40px;  
+			    text-align:center; 
+				background-color:#fff; 
+				color:#979797;
+				font-size:12px;
+			}  
+			.pulldown-tips{  
+				position:absolute;  
+				top:-40px;  
+				left:0;  
+				width:100%;
+				display:none;
+			}
+			/*END iScorll*/
+		</style>
+	</head>
+	<link rel="stylesheet" type="text/css" href="css/weui.css">
+	<script type="text/javascript" src="js/jquery-3.1.1.min.js" ></script>
+	<script type="text/javascript" src="js/iscroll-probe.js"></script>
+	<script src="js/functionPublic.js"></script>
+	<body onload="init()">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; background-color:#1AAD19; position:fixed; top:0px; z-index:8888;">
+			<tr>
+				<td style="width:40px; text-align:center; vertical-align:middle;" onclick="go_back()"><img src="ico/ico_back.png" style="max-width:26px; vertical-align: middle;" /></td>
+				<td id="td_shopName" style="text-align:center; font-size:16px; color:#fff; position: relative;">
+					碳中和
+					<img src="ico/ico_search_fff.png" style="position: absolute; right: 15px; max-height: 22px;" onclick="searchBar();" />
+				</td>
+				<td id="td_shopShare" style="width:40px; vertical-align:middle; text-align:center; font-size: 12px; color: #FFFFFF; line-height: 14px;" onclick="go_myNetu();">	 <!--onclick="showMarketFilter();"-->
+					<img src="ico/ico_me.png" style="max-height:20px; vertical-align: middle; margin-bottom: 2px;" /><!--<br />我的-->
+				</td>
+			</tr>
+		</table>
+
+		<div id="divSearchBar" style="width: 100%; height: 50px; background: #1AAD19; position: absolute; top: 45px; z-index: 8888; border-top: 1px solid #FFFFFF; display: none;">
+			<input id="txtSearchKey" type="text" style="-webkit-appearance: none; border: none; padding: 0px; border-radius: 5px; width: 85%; height: 32px; color: #888888; font-size: 16px; margin-left: 10px; margin-top: 9px;" value=" 输入搜索关键字" onfocus="if(this.value==' 输入搜索关键字'){this.value='';}" value="0" onblur="if(this.value==''){this.value=' 输入搜索关键字';}" />
+			<div style="width: auto; height: 50px; line-height: 50px; float: right; margin-right: 10px; font-size: 14px; color: #FFFFFF;" onclick="beginSearch();">搜索</div>
+		</div>
+
+		<div style="width:100%; background-color: #fff; height: 40px; line-height: 40px; top: 45px; z-index: 2; position: fixed; border-bottom: 1px solid #CCCCCC;">
+			<font class="font_netuType" id="font_netuTag0" style="color: #F90;" onclick="filtNetu('all',0);">进行中</font>
+			<!--<font class="font_netuType" id="font_netuTag1" onclick="filtNetu('show',1);">演出</font>
+			<font class="font_netuType" id="font_netuTag2" onclick="filtNetu('meeting',2);">会议</font>
+			<font class="font_netuType" id="font_netuTag3" onclick="filtNetu('party',3);">派对</font>
+			<font class="font_netuType" id="font_netuTag4" onclick="filtNetu('other',4);">其它</font>-->
+			<font class="font_netuType">|</font>
+			<font class="font_netuType" id="font_netuTag5" onclick="filtNetu('done',5);">已完成</font>
+			<font id="font_filtType"  style="float: right; margin-right: 10px; font-size: 14px; color: #000000;" onclick="go_pubNetu();">发起碳中和</font>
+			<!--<div style="height: 26px; line-height: 26px; float: right; padding: 0px 5px 0px 5px; border-radius: 3px; border:1px solid #1AAD19; margin-top: 6px; margin-right: 10px; font-size: 14px;" onclick="go_pubNetu();">发起碳中和</div>-->
+			<img src="ico/ico_add_1.png" style="max-height: 20px; float: right; margin-top: 10px; margin-right: 5px;" onclick="go_pubNetu();" />
+		</div>
+		
+		
+		<div id="wrapper"> 
+		<div id="scroller">
+		<div id="pullDown" class=""><div class="pullDownLabel"></div></div>
+		<div class="pulldown-tips">下拉刷新</div>
+		
+		<div style="width: 100%;" onclick="goCdWlDetails();">
+			<img src="img/cover2017cdwlst.png" style="max-width: 100%;"  />
+		</div>
+		<div style="width: 100%;" onclick="goFsQnyDetails();">
+			<img src="img/cover2017qny.jpg" style="max-width: 100%;"  />
+		</div>		
+		<!--<div style="width: 100%;" onclick="goZjDetails();">
+			<img src="img/coverHzZjMain.jpg" style="max-width: 100%;"  />
+		</div>-->
+		<div id="div_searchNetuContent">
+			<div id="div_searchNetuContent1">
+
+			</div>
+		</div>
+		
+		</div><!--scroller-->
+		</div><!--wrapper-->
+		
+	</body>
+</html>
+
+<!--============================================================================================================-->
+<div id="loadingToast" class="weui_loading_toast" style="display:none; z-index:999999;">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui_toast">
+        <div class="weui_loading">
+            <div class="weui_loading_leaf weui_loading_leaf_0"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_1"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_2"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_3"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_4"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_5"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_6"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_7"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_8"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_9"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_10"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_11"></div>
+        </div>
+        <p id="p_loadContent" class="weui_toast_content">正在加载</p>
+    </div>
+</div>
+<!--============================================================================================================-->
+
+
+
+<!--BEGIN actionSheetMarketFilter-->
+<style>
+	.table_carbonMarketFilter{
+		margin-top: ;
+	}
+	.table_carbonMarketFilter td {
+		width: 25%; height: 60px; text-align: center; vertical-align: middle;
+	}
+	.table_carbonMarketFilter td div {
+		width:70%; height: 30px; line-height: 30px; text-align: center; font-size: 14px; border: 1px solid #999; margin: 0 auto; border-radius: 5px;
+	}	
+</style>
+<div id="actionSheetMarketFilter" style="width: 100%; overflow:scroll;">
+    <div class="weui_mask_transition" id="maskMarketFilter"></div>
+    <div class="weui_actionsheet" id="weui_actionsheetMarketFilter" style="height:100%;">     
+    	<div style="width: 100%; height: 40px; line-height: 40px; background-color: #FFFFFF; margin-top: 45px;"><font style="margin-left: 10px; font-size: 14px;">项目类型</font></div>
+    	
+		<table class="table_carbonMarketFilter" width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td><div onclick="searchNetuByType(this);">风电</div></td>
+				<td><div onclick="searchNetuByType(this);">光伏</div></td>
+				<td><div onclick="searchNetuByType(this);">水电</div></td>
+				<td><div onclick="searchNetuByType(this);">沼气</div></td>
+			</tr>
+			<tr>
+				<td><div onclick="searchNetuByType(this);">瓦斯</div></td>
+				<td><div onclick="searchNetuByType(this);">气电</div></td>
+				<td><div onclick="searchNetuByType(this);">余热</div></td>
+				<td><div onclick="searchNetuByType(this);">废电</div></td>
+			</tr>			
+			<tr>
+				<td><div onclick="searchNetuByType(this);">CCPP</div></td>
+				<td><div onclick="searchNetuByType(this);">生物</div></td>
+				<td><div onclick="searchNetuByType(this);">改气</div></td>
+				<td><div onclick="searchNetuByType(this);">冷能</div></td>
+			</tr>			
+			<tr>
+				<td><div onclick="searchNetuByType(this);">地热</div></td>
+				<td><div onclick="searchNetuByType(this);">废处</div></td>
+				<td><div onclick="searchNetuByType(this);">填埋</div></td>
+				<td><div onclick="searchNetuByType(this);">节能</div></td>
+			</tr>			
+			<tr>
+				<td><div onclick="searchNetuByType(this);">碳汇</div></td>
+				<td><div onclick="searchNetuByType(this);">全部</div></td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>			
+		</table>
+		<div style="width: 100%; height: 40px; text-align: center; position: fixed; bottom: 0px; line-height: 40px; background-color: #FFFFFF; border-top: 1px solid #CCCCCC; font-size: 14px;" onclick="hideMarketFilter();">关闭</div>
+    </div>
+</div>
+<!--END actionSheetMarketFilter-->
+
+
+<script>
+	var token=GetUrlParam("token");
+	var pageNo=1;
+	var searchText="";  //查询关键字，支持逗号分隔
+	var sort=1; //1:综合排序，2：收购优先，3：成交优先，默认1
+	var order=0;  //排序方式 0为降序，1为升序 ，该字段只有在sortName不为""的时候有效
+	var netuStatus=0;
+	var noMoreData=false;
+	var allowLoad=false; //用于判断是否加载完成，用于是否允许加载更多，以防止在数据还未返回的时候就开始第二次加载
+	var netuType="";
+	var currentUserId="";
+	var searchStauts=false;  //搜索状态，用于记录是否在搜索条件下，上拉下拉时调用不同的方法
+	
+	function go_back(){
+		aif.javaCloseActivity();
+	}
+	
+	function showMarketFilter() 
+	{
+		var maskMarketFilter = $('#maskMarketFilter');
+		var weuiActionsheetMarketFilter = $('#weui_actionsheetMarketFilter');
+		weuiActionsheetMarketFilter.addClass('weui_actionsheet_toggle');
+		maskMarketFilter.show().addClass('weui_fade_toggle').click(function() {
+			hideActionSheetMarketFilter(weuiActionsheetMarketFilter, maskMarketFilter);
+		});
+		weuiActionsheetMarketFilter.unbind('transitionend').unbind('webkitTransitionEnd');
+	}
+
+	function hideMarketFilter() {
+		var maskMarketFilter = $('#maskMarketFilter');
+		var weuiActionsheetMarketFilter = $('#weui_actionsheetMarketFilter');
+	
+		weuiActionsheetMarketFilter.removeClass('weui_actionsheet_toggle');
+		maskMarketFilter.removeClass('weui_fade_toggle');
+		weuiActionsheetMarketFilter.on('transitionend', function() {
+			maskMarketFilter.hide();
+		}).on('webkitTransitionEnd',
+			function() {
+				maskMarketFilter.hide();
+			})
+	}
+	
+	function searchBar(){
+		if ($("#divSearchBar").css("display")=="none"){
+			$("#divSearchBar").css("display","block");
+			$("#txtSearchKey").val("");
+			$("#txtSearchKey").focus();
+		} else {
+			$("#divSearchBar").css("display","none");
+			if (searchStauts==true){
+				filtNetu("all",0);
+				setTimeout(function(){myScroll.refresh();},500);
+				myScroll.scrollTo(0,0);	//Iscroll回到顶部				
+			}			
+			searchStauts=false;
+		}
+	}	
+	
+	function init()
+	{
+		$("#loadingToast").css("display","block");
+		pageNo=1;
+		getUserIdByToken();
+		searchNetu();	
+	}
+	
+	function beginSearch(){
+		if ($("#txtSearchKey").val()==" 输入搜索关键字" || $("#txtSearchKey").val()==""){
+			aif.javaToastNotice("输入搜索关键字");
+			return;
+		}
+		
+		$("#loadingToast").css("display","block");
+		searchText=$("#txtSearchKey").val();
+		netuType="";
+		pageNo=1;
+		searchNetu();
+		searchStauts=true;		
+	}
+	
+	function searchNetu()
+	{
+		$.ajax	
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/neutral/searchNeutral?callback=?&searchText="+searchText+"&type="+netuType+"&pageNo="+pageNo+"&status="+netuStatus,data: {},dataType : "jsonp",	
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+//					console.log(json.data.length);
+					var result="";
+					if (json.data.length==0) {
+						noMoreData=true;
+					}
+					if (json.data.length==0 && pageNo==1){
+						$("#div_searchNetuContent"+pageNo).html("<div style='width: 100%; margin-top: 30px; text-align: center;'><img src='ico/ico_noContent.png' style='max-height: 50px;'><br><font style='color: #8A8A8A; font-size: 14px;'>没有相关项目</font></div>");
+						$("#loadingToast").css("display","none");
+						return;
+					}
+					for (var i=0; i<json.data.length; i++){
+						result+="<table class='listTable' onclick='go_netuDetails(&apos;"+json.data[i].neutralId+"&apos;);'><tr><td class='listTd1'>";
+						result+=json.data[i].n_img;
+						result+="</td><td><div class='listDiv1'><img src='"+json.data[i].user_logo+"' />&nbsp;"+json.data[i].user_nickname;
+						result+="<div class='listDivTime'>"+json.data[i].createTime.substring(0,10)+"</div></div><div class='listDiv2'>";
+						result+=json.data[i].n_title;
+						result+="</div><div class='listDiv3'><div class='listDiv3-1'>计划中和:<font id='font_planNetu' style='font-size: 14px;'>";
+						result+=parseFloat(json.data[i].sl).toFixed(2);
+						result+="</font>吨</div><div class='listDiv3-2'>已中和:<font id='font_doneNetu' style='font-size: 14px;'>";
+						result+=parseFloat(json.data[i].completed_count).toFixed(2);
+						result+="</font>吨</div></div></td></tr></table>";
+					}
+					if (pageNo==1){
+						$("#div_searchNetuContent").html("<div id='div_searchNetuContent1'></div>");
+					}
+					$("#div_searchNetuContent"+pageNo).html(result);
+					$("#div_searchNetuContent"+pageNo).append("<div id='div_searchNetuContent"+parseInt(pageNo+1)+"'></div>");
+					$("#loadingToast").css("display","none");
+					allowLoad=true;
+					pageNo++;
+				}
+				else
+				{
+					$("#loadingToast").css("display","none");
+					jectNotice(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});			
+	}
+	
+	function getUserIdByToken(){
+		$.ajax	
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/user/getCurrentUserToJSON?callback=?&token="+token,data: {},dataType : "jsonp",	
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+					currentUserId=json.data.user_id;
+				}
+				else
+				{
+					$("#loadingToast").css("display","none");
+					jectNotice(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});			
+	}
+	
+	function go_netuDetails(netuId){
+		var newUrl="http://www.lvdoya.com/H5/netu_details.html?token="+token+"&netuId="+netuId;
+		aif.javaOpenNewWindow(newUrl);
+	}	
+	
+	function go_myNetu(){
+		var newUrl="http://www.lvdoya.com/H5/netu_myNetu.html?token="+token+"&userId="+currentUserId;
+		aif.javaOpenNewWindow(newUrl);
+	}
+	
+	function goCdWlDetails(){
+		var newUrl="http://www.lvdoya.com/H5/netu_details.html?token="+token+"&netuId=5a0d4d250cf26bcac730e03c"
+		aif.javaOpenNewWindow(newUrl);		
+	}
+	
+	function goFsQnyDetails(){
+		var newUrl="http://www.lvdoya.com/H5/netu_details.html?token="+token+"&netuId=5a1d10df0cf277b710598892"
+		aif.javaOpenNewWindow(newUrl);			
+	}	
+	
+	function go_pubNetu(){
+		var newUrl="http://www.lvdoya.com/H5/netu_myNetuAdd.html?token="+token;
+		aif.javaOpenNewWindow(newUrl);		
+	}
+	
+	function filtNetu(filtStr,tagIndex){
+		$("#loadingToast").css("display","block");
+		netuStatus=0;
+		pageNo=1;
+		noMoreData=false;
+		allowLoad=false;
+		searchText=""
+		netuType=filtStr;
+		if (filtStr=="all"){
+			netuType="";
+		}
+		
+		for (var i=0; i<6; i++){
+			if (i==parseInt(tagIndex)){
+				$("#font_netuTag"+i).css("color","#FF9900");
+			} else {
+				$("#font_netuTag"+i).css("color","#000000");
+			}
+		}
+		
+		if (filtStr=="done"){
+			netuType="";
+			netuStatus=1;
+		}
+		searchNetu();	
+		setTimeout(function(){myScroll.refresh();},500);
+		myScroll.scrollTo(0,0);
+	}
+	
+	function searchNetuByType(obj){
+		$("#loadingToast").css("display","block");
+		pageNo=1;
+		searchText=obj.innerHTML;
+		if (searchText=="全部"){
+			searchText="";
+			pageNo=1;
+		}
+		noMoreData=false;
+		allowLoad=false;
+		searchNetu();
+		setTimeout(function(){myScroll.refresh();},500);
+		myScroll.scrollTo(0,0);
+		hideMarketFilter();
+		if (searchText==""){
+			$("#font_filtType").html("全部");
+		} else {
+			$("#font_filtType").html(searchText);	
+		}		
+	}
+	
+	// Iscorll
+	var myScroll,  
+	pullDown = $("#pullDown"),  
+	pullDownLabel = $(".pullDownLabel"),  
+
+	loadingStep = 0;//加载状态0默认，1显示加载状态，2执行加载数据，只有当为0时才能再次加载，这是防止过快拉动刷新  
+	pullDown.hide();  
+  
+	myScroll = new IScroll("#wrapper", {  
+		preventDefault:false,
+		scrollbars: false,  
+		mouseWheel: false,  
+		interactiveScrollbars: true,  
+		shrinkScrollbars: 'scale',  
+		fadeScrollbars: true,  
+		scrollY:true,  
+		probeType: 2,  
+		bindToWrapper:true  
+	});  
+
+	myScroll.on("scroll",function(){  
+		if(loadingStep == 0 && !pullDown.attr("class").match('refresh|loading')){  
+			if(this.y > 40){//下拉刷新操作  
+				$(".pulldown-tips").hide();  
+				pullDown.addClass("refresh").show();  
+				pullDownLabel.text("松手刷新数据");  
+				loadingStep = 1; 
+				
+				myScroll.refresh();  				
+			}else if(this.y <= (this.maxScrollY)  && this.directionY == 1){//上拉加载更多
+				if (noMoreData==false && allowLoad==true){
+					loadingStep = 1;  
+					$("#p_loadContent").html("正在加载");
+					$("#loadingToast").css("display","block");
+					pullUpAction(); 					
+				} else {
+					setTimeout(function(){myScroll.refresh();},1);
+				}
+
+			}  
+		}  
+	});  
+	myScroll.on("scrollEnd",function(){  
+		if(loadingStep == 1){  
+			if( pullDown.attr("class").match("refresh") ){//下拉刷新操作  
+				pullDown.removeClass("refresh").addClass("loading");  
+				$("#p_loadContent").html("正在刷新");
+				$("#loadingToast").css("display","block");
+				loadingStep = 2;  
+				pullDownAction();  
+			}  
+		}  
+	});  
+
+	function pullDownAction(){  
+		setTimeout(function(){  
+			pullDown.attr('class','').hide();
+			loadingStep = 0;
+			pageNo=1;
+			noMoreData=false;
+			searchNetu();
+			$(".pulldown-tips").show(); 
+			$("#loadingToast").css("display","none");
+			$(".pulldown-tips").css("display","none");
+		},500);  
+		setTimeout(function(){myScroll.refresh();},1000);
+	}		
+	function pullUpAction(){  
+		setTimeout(function(){  
+			loadingStep = 0;  
+			searchNetu();
+		},500);  
+		setTimeout(function(){myScroll.refresh();},100);
+	}  
+  
+    document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);  
+	// END Iscorll
+</script>

@@ -1,0 +1,142 @@
+<!--BEGIN ShopCar------------------------------------------------------------------------------------------------------------------------------------------------------>	
+    <div class="listFather">
+    	<div id="div_listUserLogo" class="listUserLogo">
+    		<img src="img/goods.jpg"/>
+        </div>
+        <div id="div_listShopName" class="listShopName">PAPI的小店</div>
+        <img src="ico/ico_del.png" class="listDel" onClick="shopCarDel();" />
+    </div>
+    <label id="lab_carGoods" class="weui_cell weui_check_label" style="padding:5px 0px 5px 10px; background-color:#fff;">
+        <div class="weui_cell_hd">
+            <input type="checkbox" class="weui_check" id="chk_shopCar" onChange="checkChange(this);">
+            <i class="weui_icon_checked"></i>
+        </div>
+        <div class="weui_cell_bd weui_cell_primary" style="margin:0px; padding:0px;">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" height="100">
+              <tr>
+                <td class="listTdGoodsFace" onClick="shopCarDel();"><img src="img/goods.jpg"></td>
+                <td>
+                	<div id="div_goodsName" class="listGoodsName">商品名称商品名称商品名称商品名称</div>
+                    <div class="listGoodsModel">
+                    	<font id="font_goodsModel">黑色</font>×<font id="font_goodsNum">1</font>
+                    </div>
+                    <div style="width:100%; line-height:30px;">
+                    	<font id="font_goodsPrice" style="font-size:18px; color:#1AAD19; font-weight:bold;">2000.00</font><font style="font-size:12px;">碳票</font>
+                    </div>
+                    <div style="width:100%; line-height:30px; font-size:14px;">附送碳:<font id="font_goodsCcer" color="#C03">1.20</font>吨</div>                    
+                </td>
+              </tr>
+            </table>
+        </div>
+    </label>
+    
+    
+	<div style="width:100%; text-align:center; margin-top:100px;">
+    	<img src="ico/ico_shopCar_8a1.png" style="max-height:100px; margin-bottom:10px;" /><br />
+        <font style="font-size:14px; color:#8a8a8a;">你的购物车竟然是空的</font>
+        <div style="margin:0 auto; width:80px; height:30px; line-height:30px; border-radius:3px; text-align:center; color:#1AAD19; border:1px solid #1AAD19; font-size:14px; margin-top:20px;">去逛逛</div>
+    </div>    
+<!--BEGIN ShopCar------------------------------------------------------------------------------------------------------------------------------------------------------>    
+
+
+<!--BEGIN Address------------------------------------------------------------------------------------------------------------------------------------------------------>
+        <div id="div_address" onclick="chooseAddress();" style="width:100%; height:100%; border-bottom:1px solid #bbbbbb;">
+        	<div style="width:100%; height:40px; line-height:46px;"><font id="font_addressName" style="font-size:18px;">AAAAAAA</font><font id="font_addressMobile" style="margin-left:10px;">13333333333</font><img src="../ico/ico_default_g.png" style="max-height:18px; margin-left:10px;" /></div>
+            <div style="width:90%; line-height:24px; word-break:break-all; color:#666;"><font id="font_address" style="font-size:14px;">asdsafasdfsadfsafsadfasdfasdfasdfasfasfafregrgdsfasfasfasfasfd</font></div>
+        </div>
+<!--END Address------------------------------------------------------------------------------------------------------------------------------------------------------>
+
+<!--BEGIN Settle------------------------------------------------------------------------------------------------------------------------------------------------------>
+<div id="div_selltListContent">
+    <div class="div_shopName"><font id="font_shopName" style="margin-left:10px;">PAPI的小店</font></div>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td id="td_goodsFace" class="td_goodsFace">&nbsp;</td>
+        <td>
+            <div id="div_goodsName" class="div_goodsName">2017款带帽超宽T恤 型男必备 I.T.主推款 限量发售</div>
+            <div id="div_goodsModel" class="div_goodsModel">黑色</div>
+            <div class="div_goodsPrice">
+                <font id="font_goodsPrice" style="color:#1AAD19; font-size:18px;">100.00</font><font style="font-size:12px; color:#333;">碳票</font>
+                <font id="font_goodsNum" class="font_goodsNum">×3</font>
+            </div>
+        </td>
+      </tr>
+    </table>
+    <div class="div_goodsFeright">
+        <font style="float:left; margin-left:10px;">运费</font>
+        <font id="font_freight" style="float:right; margin-right:10px;">碳票</font>
+    </div>
+    <div class="div_goodsMemo">
+        <font style="float:left; margin-left:10px;">备注</font>
+        <input id="txt_goodsMemo" type="text" class="txt_memo"/>
+    </div>
+    <div class="div_sum">
+        <font style="font-size:12px; float:right; margin-right:10px;">碳票</font>    
+        <font id="font_goodsPriceSum" class="font_sum">300.00</font>
+        <font style="font-size:14px; float:right;">合计:</font>    
+    </div>
+</div>
+<!--END Settle--------------------------------------------------------------------------------------------------------------------------------------------------------->
+
+<!--BEGIN myShop------------------------------------------------------------------------------------------------------------------------------------------------------->
+<div id="div_goodsId" style="width:100%; background-color:#fff; margin-bottom:5px; border-top:1px solid #ccc; border-bottom:1px solid #ccc;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td style="width:100px;">
+        	<div style="width:80px; height:80px; background-size:cover; background-image:url(img/goods.jpg); margin:10px 10px 10px 10px; position:relative;">
+            </div>
+        </td>
+        <td>
+        	<div style="width:100%; height:30px; line-height:40px; font-size:14px;">春夏季2017新款重磅真丝连衣裙</div>
+            <div style="width:100%; height:40px; line-height:40px; color:#259b24; font-size:16px; font-weight:bold;">3000.00碳票</div>
+            <div style="width:100%; height:30px; line-height:20px; font-size:12px; color:#979797;">积累销售0</div>
+        </td>
+        <td style="width:40px; text-align:center; vertical-align:middle; font-size:12px; color:#8a8a8a;"><img src="ico/ico_edit.png" style="max-width:20px; vertical-align:middle;" /><br />编辑</td>
+      </tr>
+    </table>
+    <div style="margin-left:10px; margin-right:10px; height:1px; border:none; background-color:#e9e9e9;"></div>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:40px;">
+      <tr>
+        <td style="width:60px; vertical-align:middle; text-align:center; font-size:12px; color:#515151;">
+        	<img src="ico/ico_view_2.png" style="max-width:14px; vertical-align:middle; margin-right:5px;" />查看
+        </td>
+        <td>&nbsp;</td>
+        <td style="width:60px; vertical-align:middle; text-align:center; font-size:12px; color:#d81e06;">
+        	<img src="ico/ico_down.png" style="max-width:14px; vertical-align:middle; margin-right:5px;" />下架
+        </td>
+      </tr>
+    </table>
+</div>
+
+<div id="div_goodsId" style="width:100%; background-color:#fff; margin-bottom:5px; border-top:1px solid #ccc; border-bottom:1px solid #ccc;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td style="width:100px;">
+        	<div style="width:80px; height:80px; margin:10px 10px 10px 10px; position:relative;">
+            	<div id="div_goodsFace" class="div_goodsFace" style="width:80px; height:80px; position:absolute; top:0px; left:0px;"><img src="img/goods.jpg" /></div>
+            	<div style="width:80px; height:80px; background-color:#000; opacity:0.6;"></div>
+                <img src="ico/ico_offSale.png" style="max-width:50%; position:absolute; top:3px; left:3px;" />                
+            </div>
+        </td>
+        <td>
+        	<div id="div_goodsName" style="width:100%; height:30px; line-height:40px; font-size:14px;">春夏季2017新款重磅真丝连衣裙</div>
+            <div style="width:100%; height:40px; line-height:40px; color:#259b24; font-size:16px; font-weight:bold;"><font id='font_goodsPrice' style='color:#259b24; font-size:18px; font-weight:bold;'>3000.00</font><font style="font-size:14px;">碳票</font></div>
+            <div style="width:100%; height:30px; line-height:20px; font-size:12px; color:#979797;">积累销售<font id='font_goodsSaleNum'>0</font></div>
+        </td>
+        <td onclick="goodsEdit();" style="width:40px; text-align:center; vertical-align:middle; font-size:12px; color:#8a8a8a;"><img src="ico/ico_edit.png" style="max-width:20px; vertical-align:middle;" /><br />编辑</td>
+      </tr>
+    </table>
+    <div style="margin-left:10px; margin-right:10px; height:1px; border:none; background-color:#e9e9e9;"></div>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:40px;">
+      <tr>
+        <td onclick="goodsOnAsk();" style="width:60px; vertical-align:middle; text-align:center; font-size:12px; color:#259b24;">
+        	<img src="ico/ico_add.png" style="max-width:14px; vertical-align:middle; margin-right:5px;" />上架
+        </td>
+        <td>&nbsp;</td>
+        <td onclick="goodsDelAsk();" style="width:60px; vertical-align:middle; text-align:center; font-size:12px; color:#d81e06;">
+        	<img src="ico/ico_del.png" style="max-width:14px; vertical-align:middle; margin-right:5px;" />删除
+        </td>
+      </tr>
+    </table>
+</div>
+<!--END myShop--------------------------------------------------------------------------------------------------------------------------------------------------------->

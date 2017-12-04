@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>碳市场</title>
+  <link rel="stylesheet" href="https://at.alicdn.com/t/font_440195_fw8hsnrso53wstt9.css
+  ">
+  <script src="iscroll-probe.js"></script>
+  <script src="bscroll.js"></script>
+  <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+  <style>
+
+    .loading {
+      text-align: center;
+      padding-top: 10px;
+      display: none;
+    }
+
+    .loading .iconfont {
+      display: inline-block;
+      animation: 1s rotate linear infinite;
+    }
+
+    @keyframes rotate {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body,
+    main {
+      height: 100%;
+    }
+
+    body {
+      font-size: 12px;
+      line-height: 1.2;
+    }
+    /* ::-webkit-scrollbar {
+      display: none;
+    } */
+
+    main>section {
+      background: #fff;
+      /* overflow: scroll; */
+      /* -webkit-overflow-scrolling: touch; */
+      /*ios 上增加弹性*/
+    }
+
+    .coverImg img {
+      width: 100%;
+      /* height: 100%; */
+    }
+
+    .coverImg {
+      width: 100%;
+      height: 48vw;
+      background-color: #eee;
+    }
+
+    header {
+      text-align: center;
+      background-color: #1AAD17;
+      color: #fff;
+      position: relative;
+    }
+
+    .type {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
+    header>p {
+      font-size: 16px;
+    }
+
+    nav {
+      font-size: 13px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+      height: 20px;
+      text-align: left;
+      /* margin-left: 10px; */
+    }
+
+    a {
+      text-decoration: none;
+      color: #333;
+    }
+
+
+    #product {
+      overflow: hidden;
+      font-size: 0;
+      background-color: #eee;
+    }
+
+    #product>.item {
+      display: inline-block;
+      font-size: 12px;
+      width: 48%;
+      margin: 2px;
+    }
+
+    .item-wrap {
+      position: relative;
+    }
+
+    .detail {
+      width: 100%;
+      height: 30px;
+      font-size: 11px;
+      position: absolute;
+      background-color: rgba(0, 0, 0, 0.6);
+      bottom: 0;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    .deal {
+      width: 100%;
+      height: 30px;
+    }
+
+    #product>.item:nth-child(2n+2) {
+      margin-right: 1%;
+    }
+
+    #product>.item:nth-child(2n+1) {
+      margin-left: 1%;
+    }
+
+    .back-icon {
+      line-height: 48px;
+      float: left;
+      margin-left: 10px;
+      color: #fff;
+    }
+
+    .sale-text {
+      color: #B12D1E;
+    }
+
+    .buy-text {
+      color: #1AAD17;
+    }
+
+    .active {
+      color: #FF9D0A;
+    }
+
+    main {
+      position: relative;
+    }
+
+    .modal {
+      display: flex;
+      flex-wrap: wrap;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100vh;
+      background-color: #fff;
+      visibility: hidden;
+      opacity: 0;
+      transition: all .5s ease-in-out;
+      margin: -1px;
+    }
+
+
+    .modal>.search {
+      text-align: center;
+      vertical-align: middle;
+      flex: 0 1 20%;
+      border: 1px solid black;
+      margin: 2px;
+      height: 30px;
+    }
+
+    .show {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    #wrapper {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    #scroller {
+      position: relative;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+      float: left;
+      width: 100%;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <a href="test.html" class="back-icon" target=_self>
+      <</a>
+        <p>碳市场</p>
+        <span class="type">类型</span>
+  </header>
+  <nav>
+    <span class="nav-btn byAll active" data-tab="1">综合排序</span>
+    <span class="nav-btn byBuy" data-tab="2">成交优先</span>
+    <span class="nav-btn byDeal" data-tab="3">收购优先</span>
+  </nav>
+  <main>
+    <div id="wrapper">
+      <div id="scroller">
+        <section id="product">
+          <!-- <div class="item">
+              <a href="#">
+                <div class="item-wrap">
+                  <div class="title"></div>
+                  <div class="coverImg">
+                    <img src="http://114.55.103.71:9006/ldyimgs/carbonregImgs/10101100/def01768aab54bb09fd76dd1c48db54c.jpg">
+                  </div>
+                  <div class="detail">
+                    <div class="name">鹤壁市生活垃圾卫生填埋</div>
+                    <div class="number">LDY0356</div>
+                  </div>
+                </div>
+                <div class="deal">
+                  <div class="buy">收购93吨</div>
+                  <div class="sale">转让24吨</div>
+                </div>
+              </a>
+            </div> -->
+          <div class="loading">
+            <span class="iconfont icon-loading"></span>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class="modal">
+      <div class="search" data-type="风电">风电</div>
+      <div class="search" data-type="光伏">光伏</div>
+      <div class="search" data-type="水电">水电</div>
+      <div class="search" data-type="沼气">沼气</div>
+      <div class="search" data-type="瓦斯">瓦斯</div>
+      <div class="search" data-type="气电">气电</div>
+      <div class="search" data-type="余热">余热</div>
+      <div class="search" data-type="废电">废电</div>
+      <div class="search" data-type="CCPP">CCPP</div>
+      <div class="search" data-type="生物">生物</div>
+      <div class="search" data-type="改气">改气</div>
+      <div class="search" data-type="冷能">冷能</div>
+      <div class="search" data-type="地热">地热</div>
+      <div class="search" data-type="废处">废处</div>
+      <div class="search" data-type="填埋">填埋</div>
+      <div class="search" data-type="节能">节能</div>
+      <div class="search" data-type="碳汇">碳汇</div>
+      <div class="search" data-type="">全部</div>
+    </div>
+  </main>
+
+  <script>
+    //函数加锁
+    let upFlag = false;
+    let downFlag = false;
+
+    //初始化IScroll
+    let myScroll = new IScroll("#wrapper", {
+      mouseWheel: true,
+      bounch: true
+    });
+    // 滚动绑定事件
+    myScroll.on("scrollEnd", function () {
+      //上拉加载更多
+      console.log(this)
+      if (this.y <= this.maxScrollY && !upFlag) {
+        upFlag = true;
+        setTimeout(function () {
+          jsonp(++pageNo)
+          myScroll.refresh();
+          upFlag = false;
+        }, 500);
+      }
+      //下拉刷新
+      if (this.y <= 0 && !downFlag) {
+        downFlag = true;
+        setTimeout(function () {
+          jsonp(pageNo)
+          myScroll.refresh();
+          downFlag = false;
+        }, 500);
+      }
+    });
+    myScroll.on("scroll", function () {
+      // setTimeout(() => {
+      //   console.log('scroll')
+      // }, 1000);
+    });
+
+
+
+    //模态框
+    $('.modal').on('click', '.search', function () {
+      renderType($(this).attr('data-type'));
+      //模态框消失
+      $('.modal').removeClass('show');
+      //右上角从返回变成类型
+      $('.type').text('类型');
+      window.onmousewheel = null;
+    });
+
+
+    //模态框
+    $('.type').on('click', function () {
+      if ($('.modal').hasClass('show')) {
+        $(this).text('类型');
+        $('.modal').removeClass('show');
+        window.onmousewheel = null;
+      } else {
+        $(this).text('返回');
+        $('.modal').addClass('show');
+        window.onmousewheel = e => e.preventDefault();
+      };
+    })
+
+    //初始化jsonp参数
+    let text = '',
+      pageNo = 1,
+      sortNo = 1,
+      orderNo = 0;
+
+
+    //初始化
+    window.onload = jsonp()
+
+
+    //主页tab切换
+    $('.nav-btn').on('click', function () {
+      // changeTab(this);
+      let index = $(this).index()
+      $(this).addClass('active').siblings().removeClass('active')
+
+      sortHomepage(index + 1)
+    });
+
+
+    //切换过去的初始化方法
+    function init(_sort) {
+      document.querySelector('#product').innerHTML = '';
+      pageNo = 1;
+      sortNo = _sort;
+    }
+
+
+    //首页排序
+    function sortHomepage(sortNo = 1, text = '') {
+      init(sortNo);
+      jsonp(pageNo, text, sortNo);
+    }
+
+
+    //拼接一个产品的图文
+    function renderItem(data) {
+      let _html =
+        ` 
+        <div class="item">
+        <a href="#">
+          <div class="item-wrap">
+            <div class="title"></div>
+            <div class="coverImg">
+              <img src=${data.c_img}>
+            </div>
+            <div class="detail">
+              <div class="name">${data.c_title}</div>
+              <div class="number">${data.c_number}</div>
+            </div>
+          </div>
+          <div class="deal">
+            <div class="sale">转让:<span class="sale-text">${data.sale_count}</span>吨</div>
+            <div class="buy">收购:<span class="buy-text">${data.buy_count}</span>吨</div>
+          </div>
+        </a>
+      </div>
+      `;
+
+      document.querySelector('#product').innerHTML += _html;
+    }
+
+    //按照类型渲染
+    function renderType(text) {
+      setTimeout(function () {
+        myScroll.refresh();
+      }, 0);
+      sortHomepage(1, text);
+    }
+
+    //jsonp请求后的数据分析
+    // function renderData(data) {
+    //   // console.log(data);
+    //   // const dataArray = data.data;
+    //   // dataArray.forEach(info => renderItem(info));
+    //   console.log('callback');
+    //   return 123;
+    // }
+
+
+    //jsonp的一些回掉方法
+
+    // function getData(keyword, callback) {
+    //   var _this = this
+    //   _this.$container.find('.loading').show()
+    //   $.ajax({
+    //     url: 'http://api.douban.com/v2/movie/search',
+    //     data: {
+    //       q: keyword
+    //     },
+    //     dataType: 'jsonp'
+    //   }).done(function (ret) {
+    //     callback && callback(ret)
+    //   }).fail(function () {
+    //     console.log('数据异常')
+    //   }).always(function () {
+    //     _this.$container.find('.loading').hide()
+    //   })
+    // }
+
+
+    function timeCtrl(times = 5) {
+      let _times = times;
+      return {
+        times: () => --times
+      }
+    }
+
+
+    function jsonp(pageNo = 1, text = '', sortNo = 1, orderNo = 0) {
+      console.log([...arguments]);
+      const _args = arguments;
+      let $wrapper = $('#wrapper');
+      $wrapper.find('.loading').show();
+      $.ajax({
+        type: 'POST',
+        url: `http://114.55.103.71:9006/ldy/cshop/searchCcer?searchText=${text}&pageNo=${pageNo}&sort=${sortNo}&order=${orderNo}`,
+        data: {},
+        dataType: 'jsonp'
+      }).success(function(data) {
+        data.data.forEach(item => renderItem(item))
+      }).fail(function (data) {
+        jsonp(..._args);
+      }).complete(function(data) {
+        $wrapper.find('.loading').hide();
+      })
+
+    }
+  </script>
+
+
+</body>
+
+</html>

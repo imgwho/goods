@@ -1,0 +1,355 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<title>goodslist </title>
+<style>
+body
+{
+	margin:0;
+	background-color:#f0f0f2;
+	font-family: sans-serif;
+	overflow:hidden;    
+}
+
+.div_goodsListImg
+{
+	position:relative;
+}
+.div_goodsListImg img
+{
+	vertical-align:middle;
+}
+.td_goodsList
+{
+	background-color:#036;
+}
+.div_saleAmount
+{
+	background-color:#000; opacity:0.8; line-height:14px; font-size:10px; position:absolute; top:5px; right:5px; color:#fff; border-radius:3px; padding:2px;
+}
+
+/*iScorll*/
+#wrapper {  
+    position: absolute;  
+    z-index: 1;  
+    top: 85px;  
+    bottom: 0px;  
+    left: 0;  
+    width: 100%;  
+    background: #f0f0f2;  
+    /*overflow: hidden; */ 
+}  
+  
+#scroller {  
+    position: absolute;  
+    z-index: 1;  
+    -webkit-tap-highlight-color: rgba(0,0,0,0);  
+    width: 100%;  
+    -webkit-transform: translateZ(0);  
+    -moz-transform: translateZ(0);  
+    -ms-transform: translateZ(0);  
+    -o-transform: translateZ(0);  
+    transform: translateZ(0);  
+    -webkit-touch-callout: none;  
+    -webkit-user-select: none;  
+    -moz-user-select: none;  
+    -ms-user-select: none;  
+    user-select: none;  
+    -webkit-text-size-adjust: none;  
+    -moz-text-size-adjust: none;  
+    -ms-text-size-adjust: none;  
+    -o-text-size-adjust: none;  
+    text-size-adjust: none;  
+}  
+  
+#pullDown,#pullUp,.pulldown-tips{  
+    height:40px;  
+    line-height:40px;  
+    text-align:center; 
+	background-color:#fff; 
+	color:#979797;
+	font-size:12px;
+}  
+.pulldown-tips{  
+	position:absolute;  
+	top:-40px;  
+	left:0;  
+	width:100%;  
+} 
+/*END iScorll*/
+</style>
+</head>
+<link rel="stylesheet" type="text/css" href="css/weui.css">
+<script type="text/javascript" src="js/jquery-3.1.1.min.js" ></script>
+<script type="text/javascript" src="js/iscroll-probe.js"></script>
+<script src="js/functionPublic.js"></script>
+<body onload="init();">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; background-color:#1AAD19; position:fixed; top:0px; z-index:8888;">
+  <tr>
+    <td style="width:40px; text-align:center; vertical-align:middle;" onclick="closeCurrent();"><img src="ico/ico_back.png" style="max-width:26px;" /></td>
+    <td id="td_shopName" style="text-align:center; font-size:16px; color:#fff;">低碳商品</td>
+    <td id="td_shopShare" style="width:40px; vertical-align:middle; text-align:center;">&nbsp;</td>
+  </tr>
+</table>
+<div style="width:100%; height:40px; background-color:#fff; vertical-align:middle; position:fixed; top:45px; z-index:8888; border-bottom:1px solid #bbbbbb;">
+	<div id="div_sortSale" onclick="saleNumFirst();" style="line-height:40px; font-size:14px; color:#1AAD19; float:left; margin-left:10px;">销量优先</div>
+    <div id="div_sortTime" onclick="timeFirst();" style="line-height:40px; font-size:14px; color:#333333; float:left; margin-left:14px;">时间优先</div>
+	<!--<img src="ico/ico_type_8a.png" style="max-height:22px; float:right; margin-right:10px; vertical-align:middle; margin-top:9px;" />-->
+    <img onclick="go_search();" src="ico/ico_search_8a.png" style="max-height:22px; float:right; margin-right:10px; vertical-align:middle; margin-top:9px;" />
+</div>
+
+<div id="wrapper"> 
+<div id="scroller">
+<div id="pullDown" class=""><div class="pullDownLabel"></div></div>
+<div class="pulldown-tips" style="display:none;">下拉刷新</div>
+	<div id="div_goodsListContent1"></div>
+</div><!--scroller-->
+</div><!--wrapper-->
+
+</body>
+</html>
+
+<!--BEGIN ==================================================================================================================================================-->
+<input id="hid_seletedBigTypeId" type="hidden" value="" />
+<div id="toast" style="display: none;">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui_toast">
+        <i class="weui_icon_toast"></i>
+        <p id="toastContent" class="weui_toast_content">保存成功</p>
+    </div>
+</div>
+
+<div id="loadingToast" class="weui_loading_toast" style="display:none; z-index:999999;">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui_toast">
+        <div class="weui_loading">
+            <div class="weui_loading_leaf weui_loading_leaf_0"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_1"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_2"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_3"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_4"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_5"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_6"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_7"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_8"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_9"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_10"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_11"></div>
+        </div>
+        <p id="p_loadContent" class="weui_toast_content">正在加载</p>
+    </div>
+</div>
+
+<div class="weui_dialog_confirm" id="dialogAskGoodsOff" style="display: none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title" id="dialogTitle"></strong>询问</div>
+        <div id="dialogContent" class="weui_dialog_bd">是否下架该商品？</div>
+      <div class="weui_dialog_ft">
+            <a id="dialogCancle" href="javascript:$('#dialogAskGoodsOff').css('display','none');" class="weui_btn_dialog default">取消</a>
+            <a id="dialogConfirm" href="javascript:goodsOff();" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+
+<div class="weui_dialog_alert" id="notice" style="display:none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
+        <div class="weui_dialog_bd" id="noticeContent">&nbsp;</div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:$('#notice').css('display','none');" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+<!--END ==================================================================================================================================================-->
+
+<script>
+var token=GetUrlParam("token");
+var pageNo=1;
+var sortName="count";
+
+function init()
+{
+	url=window.location.href;
+	saveFootprint(url);
+	saleNumFirst();
+}
+
+function saleNumFirst()
+{
+	$("#div_sortSale").css("color","#1AAD19");
+	$("#div_sortTime").css("color","#333333");
+	pageNo=1;
+	sortName="count";
+	loadGoodsList();	
+}
+
+function timeFirst()
+{
+	$("#div_sortSale").css("color","#333333");
+	$("#div_sortTime").css("color","#1AAD19");	
+	pageNo=1;
+	sortName="createTime";
+	loadGoodsList();
+}
+
+function loadGoodsList()
+{
+	$("#loadingToast").css("display","block");
+	$.ajax	
+	({
+		type : "POST",url:"http://114.55.103.71:9006/ldy/goods/searchGoods?callback=?&token="+token+"&pageNo="+pageNo+"&sort="+sortName+"&order=0",data: {},dataType : "jsonp",
+		success : function(data) 
+		{   
+			var json = eval(data); 	
+			if (json.code==200){
+				var result="";
+				for (var i=0; i<json.data.length; i++){
+					if (i==json.data.length-1){
+						goodsTitle=json.data[i].title;
+						goodsPrice=parseFloat(json.data[i].normsJson[0].price).toFixed(2);
+						goodsCcer=json.data[i].normsJson[0].zSccerZhi;
+						goodsId=json.data[i].spId;
+						goodsCount=json.data[i].count;
+						result+="<div class='div_goodsListFather'><div id='"+goodsId+"' onclick='go_goods(&apos;"+goodsId+"&apos;);' style='float:left; width:49.5%; background-color:#bbbbbb; vertical-align:middle;'><div class='div_goodsListImg'>"+json.data[i].coverImg+"<div class='div_saleAmount'>已销"+goodsCount+"</div></div><div style='border:1px solid #bbbbbb; background-color:#fff; border-top:none;'><div style='line-height:20px; font-size:14px; margin-left:5px; width:100%; overflow:hidden; height:20px;'>"+goodsTitle+"</div><div style='line-height:20px; color:#1AAD19; font-size:18px; font-weight:bold; margin-left:5px;'>"+goodsPrice+"<font style='font-size:14px; color:#333;'>碳票</font></div><div style='line-height:20px; font-size:12px; margin-left:5px;'>附送碳:<font style='color:#C03;'>"+goodsCcer+"</font>吨</div></div></div><div style='float:right; width:49.5%;'></div></div>";											
+					}
+					else{			
+						goodsTitleLeft=json.data[i].title;
+						goodsPriceLeft=parseFloat(json.data[i].normsJson[0].price).toFixed(2);
+						goodsCcerLeft=json.data[i].normsJson[0].zSccerZhi;
+						goodsIdLeft=json.data[i].spId;
+						goodsCountLeft=json.data[i].count;
+						
+						goodsTitleRight=json.data[i+1].title;
+						goodsPriceRight=parseFloat(json.data[i+1].normsJson[0].price).toFixed(2);
+						goodsCcerRight=json.data[i+1].normsJson[0].zSccerZhi;			
+						goodsIdRight=json.data[i+1].spId;
+						goodsCountRight=json.data[i+1].count;
+						
+						result+="<div class='div_goodsListFather'><div id='"+goodsIdLeft+"' onclick='go_goods(&apos;"+goodsIdLeft+"&apos;);' style='float:left; width:49.5%;'><div class='div_goodsListImg'>"+json.data[i].coverImg+"<div class='div_saleAmount'>已销"+goodsCountLeft+"</div></div><div style='border:1px solid #bbbbbb; background-color:#fff; border-top:none; margin-bottom:5px;'><div style='height:20px; line-height:20px; width:100%; overflow:hidden; font-size:14px; margin-left:5px;'>"+goodsTitleLeft+"</div><div style='line-height:20px; color:#1AAD19; font-size:18px; font-weight:bold; margin-left:5px;'>"+goodsPriceLeft+"<font style='font-size:14px; color:#333;'>碳票</font></div><div style='line-height:20px; font-size:12px; margin-left:5px;'>附送碳:<font style='color:#C03;'>"+goodsCcerLeft+"</font>吨</div></div></div><div id='"+goodsIdRight+"' onclick='go_goods(&apos;"+goodsIdRight+"&apos;);' style='float:right; width:49.5%;'><div class='div_goodsListImg'>"+json.data[i+1].coverImg+"<div class='div_saleAmount'>已销"+goodsCountRight+"</div></div><div style='border:1px solid #bbbbbb; background-color:#fff; border-top:none; margin-bottom:5px;'><div style='height:20px; line-height:20px; font-size:14px; margin-left:5px; overflow:hidden;'>"+goodsTitleRight+"</div><div style='line-height:20px; color:#1AAD19; font-size:18px; font-weight:bold; margin-left:5px;'>"+goodsPriceRight+"<font style='font-size:14px; color:#333;'>碳票</font></div><div style='line-height:20px; font-size:12px; margin-left:5px;'>附送碳:<font style='color:#C03;'>"+goodsCcerRight+"</font>吨</div></div></div></div>";	
+										
+						i++;
+					}
+				}
+				var pageNextNo=parseInt(pageNo)+1;
+				$("#div_goodsListContent"+pageNo).html(result+"<div id='div_goodsListContent"+pageNextNo+"' style='background-color:#fff;'></div>");	//载入商品HTML	
+
+				pageNo++;		
+				//设置载入后UI
+				var faceWidth=$(window).width()*0.495;
+				$(".img_goodsFace").css("width",faceWidth+"px");
+				$(".img_goodsFace").css("height",faceWidth+"px");
+				//$(".div_goodsListFather").css("height",parseInt(faceWidth)+65+"px");
+				//END 设置载入后UI
+				$("#loadingToast").css("display","none");
+				
+				setTimeout(function(){
+					myScroll.refresh(); 
+				},500);			
+			}
+			else
+			{
+				$("#loadingToast").css("display","none");
+				jectNotice(json.msg);
+			}
+		},
+		error : function(textStatus) 
+		{
+			$("#loadingToast").css("display","none");
+		}
+	});		
+}
+
+function go_search()
+{
+	var newUrl="http://www.lvdoya.com/H5/mall_search.html?token="+token;
+	aif.javaOpenNewWindow(newUrl);
+}
+
+function go_goods(goodsId)
+{
+	var newUrl="http://www.lvdoya.com/H5/mall_goods.html?token="+token+"&goodsId="+goodsId;
+	aif.javaOpenNewWindow(newUrl);
+}
+
+function closeCurrent(){
+	aif.javaCloseActivity();
+}
+
+
+// Iscorll  ------------------------------------------------------------------------------------------------------------------------
+var myScroll,  
+pullDown = $("#pullDown"),  
+pullDownLabel = $(".pullDownLabel"),  
+
+loadingStep = 0;//加载状态0默认，1显示加载状态，2执行加载数据，只有当为0时才能再次加载，这是防止过快拉动刷新  
+
+pullDown.hide();  
+
+myScroll = new IScroll("#wrapper", {  
+	preventDefault:false,
+	scrollbars: false,  
+	mouseWheel: true,  
+	//interactiveScrollbars: true,  
+	//shrinkScrollbars: 'scale',  
+	//fadeScrollbars: true,  
+	scrollY:true,  
+	probeType: 2,  
+	checkDOMChanges:true,
+	bindToWrapper:true  
+});  
+myScroll.on("scroll",function(){  
+	if(loadingStep == 0 && !pullDown.attr("class").match('refresh|loading')){  
+		if(this.y > 40){//下拉刷新操作  
+			$(".pulldown-tips").hide();  
+			pullDown.addClass("refresh").show();  
+			pullDownLabel.text("松手刷新数据");  
+			loadingStep = 1;  
+			myScroll.refresh();  				
+		}else if(this.y < (this.maxScrollY - 5)){//上拉加载更多  
+			loadingStep = 1;  
+			$("#p_loadContent").html("正在加载");
+			$("#loadingToast").css("display","block");
+			pullUpAction();  
+		}  
+	}  
+});  
+myScroll.on("scrollEnd",function(){  
+	if(loadingStep == 1){  
+		if( pullDown.attr("class").match("refresh") ){//下拉刷新操作  
+			pullDown.removeClass("refresh").addClass("loading");  
+			$("#p_loadContent").html("正在刷新");
+			$("#loadingToast").css("display","block");
+			loadingStep = 2;  
+			pullDownAction();  
+		}  
+	}  
+});  
+
+function pullDownAction(){  
+	setTimeout(function(){  
+		pageNo=1;
+		loadGoodsList();
+		pullDown.attr('class','').hide();  
+		loadingStep = 0;  
+		$(".pulldown-tips").show(); 
+		$("#loadingToast").css("display","none");
+	},500);  
+	setTimeout(function(){myScroll.refresh();},1000);
+}		
+function pullUpAction(){
+	setTimeout(function(){  
+		loadingStep = 0;  
+		loadGoodsList();			
+	},500);  	
+	
+	setTimeout(function(){myScroll.refresh();},1000);
+}  
+
+document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);  
+// END Iscorll  --------------------------------------------------------------------------------------------------------------------
+</script>

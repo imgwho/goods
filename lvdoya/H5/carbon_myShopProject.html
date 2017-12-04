@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+		<meta http-equiv="Access-Control-Allow-Origin" content="*">
+		<title>碳项目</title>		
+		<style>
+			body {
+				margin: 0;
+				background-color: #f0f0f2;
+				font-family: sans-serif;
+				overflow: hidden; /* this is important to prevent the whole page to bounce FOR iScorll */
+			}
+			.font_carbonMarketSort{
+				font-size: 14px; float: left; margin-left: 10px;
+			}
+			.table_carbonProjectTag{
+				height: 40px; border-top: 1px solid #EBEBEB; background-color: #FFFFFF;
+			}
+			.table_carbonProjectTag td {
+				vertical-align: middle; text-align: center;
+			}
+			/*挂单列表*/
+			.table_carbonProjectSaleBuyList{
+				height: 50px; background-color: #FFFFFF; margin-bottom: 1px;
+			}
+			.table_carbonProjectSaleBuyList td {
+				width: 25%; vertical-align: middle; text-align: center; font-size: 14px;
+			}
+			.table_carbonProjectSaleBuyList td img {   /*用户头像*/
+				width:40px; height: 40px; border-radius: 50%; vertical-align: middle;
+			}
+			.table_carbonProjectSaleBuyList td div {   /*买卖按钮*/
+				width: 60%; height: 24px; line-height: 24px; text-align: center; font-size: 12px; border: 1px solid #CCCCCC; border-radius: 5px; margin: 0 auto;
+			}
+			/*END 挂单列表*/	
+			
+			.txt_carbonProjectSheet{
+				width: 100%; height: 35px; -webkit-appearance: none; border: none; border-bottom: 1px solid #CCCCCC; padding: 0px; border-radius: 0px; font-size: 20px;
+			}
+			
+			/*iScorll*/
+			
+			#wrapper {  
+			    position: absolute;  
+			    z-index: -1;  
+			    top: 45px;  
+			    bottom: 0px;  
+			    left: 0;  
+			    width: 100%;   
+			    /*overflow: hidden; */ 
+			}  
+			  
+			#scroller {  
+			    position: absolute;  
+			    z-index: 1;  
+			    -webkit-tap-highlight-color: rgba(0,0,0,0);  
+				-webkit-transform:translate3d(0,0,0);
+			    width: 100%;  
+				min-height:100.25%;
+			    -webkit-transform: translateZ(0);  
+			    -moz-transform: translateZ(0);  
+			    -ms-transform: translateZ(0);  
+			    -o-transform: translateZ(0);  
+			    transform: translateZ(0);  
+			    -webkit-touch-callout: none;  
+			    -webkit-user-select: none;  
+			    -moz-user-select: none;  
+			    -ms-user-select: none;  
+			    user-select: none;  
+			    -webkit-text-size-adjust: none;  
+			    -moz-text-size-adjust: none;  
+			    -ms-text-size-adjust: none;  
+			    -o-text-size-adjust: none;  
+			    text-size-adjust: none;  
+			}  
+			  
+			#pullDown,#pullUp,.pulldown-tips{  
+			    height:40px;  
+			    line-height:40px;  
+			    text-align:center; 
+				background-color:#fff; 
+				color:#979797;
+				font-size:12px;
+			}  
+			.pulldown-tips{  
+				position:absolute;  
+				top:-40px;  
+				left:0;  
+				width:100%;
+				display:none;
+			}
+			/*END iScorll*/
+			
+			.tableBottom {
+				position:fixed;
+				bottom:0px;
+				border-top:1px solid #ccc;
+				background-color:#f8f8f8;
+				z-index:0;
+			}
+			.tableBottom td {
+				width:50%;
+				height:50px;
+				vertical-align:middle;
+				text-align:center;
+				font-size:14px;
+				color:#333;
+			}
+			.tableBottom img {
+				max-width:20px;
+				vertical-align:middle;
+				margin-right:10px;
+			}			
+		</style>
+	</head>
+	<link rel="stylesheet" type="text/css" href="css/weui.css">
+	<script type="text/javascript" src="js/jquery-3.1.1.min.js" ></script>
+	<script type="text/javascript" src="js/iscroll-probe.js"></script>
+	<script src="js/functionPublic.js"></script>
+	<script type="text/javascript" src="js/fastclick.js"></script>
+	<body onload="init();">
+<!--		<div style="width: 100%; position: fixed; top: 0px; z-index: 8888;">-->
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; background-color:#1AAD19; z-index: 8888; position: fixed; top: 0px;">
+				<tr>
+					<td style="width:40px; text-align:center; vertical-align:middle;" onclick="go_back()"><img src="ico/ico_back.png" style="max-width:26px;" /></td>
+					<td style="text-align:center; font-size:16px; color:#fff;">我的碳项目</td>
+					<td onclick="goProjectRecord();" style="width:40px; vertical-align:middle; text-align:center; color: #FFFFFF; font-size: 12px; color: #FFFFFF; line-height: 14px;">
+						<img src="ico/ico_record.png" style="max-height: 24px;" /><br>
+						明细
+					</td>
+				</tr>
+			</table>
+			
+			<div id="wrapper"> 
+			<div id="scroller">
+			<div id="pullDown" class=""><div class="pullDownLabel"></div></div>
+			<div class="pulldown-tips">下拉刷新</div>
+		
+			<div style="width:100%; background-color: #fff; height: 40px; line-height: 40px; overflow: hidden;" onclick="goCarbonInfo();">
+				<font style="margin-left: 10px; font-size: 16px;" id="font_ccerName">&nbsp;</font>			
+			</div>
+			
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table_carbonProjectTag">
+				<tr>
+					<td onclick="tagSale();" id="td_carbonProjectTagSale">转让</td>
+					<td onclick="tagBuy();" id="td_carbonProjectTagBuy">收购</td>
+				</tr>
+			</table>
+			<div id="div_projectListHead" style="background-color: #F2F2F2;"></div>
+<!--		</div>-->
+
+
+			<!--转让列表-->
+				<div id="div_dealListContent">
+					<div id="div_dealListContent1"></div>
+				</div>
+				<div style="width: 100%; height: 60px;"></div>
+			</div><!--scroller-->
+			</div><!--wrapper-->	
+			
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="tableBottom">
+		  <tr>
+		    <td style="border-right:1px solid #ccc;" onclick="go_wantSale();"><img src="ico/ico_sale.png" />转让</td>
+		    <td style="border-right:1px solid #ccc;" onclick="go_wantBuy();"><img src="ico/ico_buy.png" />收购</td>		    
+		  </tr>
+		</table>
+	</body>
+</html>
+
+
+<!--============================================================================================================-->
+<div id="toastSuccess" style="display: none;">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui_toast">
+        <i class="weui_icon_toast"></i>
+        <p class="weui_toast_content">操作成功</p>
+    </div>
+</div>
+
+<div class="weui_dialog_alert" id="notice" style="display:none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
+        <div class="weui_dialog_bd" id="noticeContent">&nbsp;</div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:$('#notice').css('display','none');" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+
+<div id="loadingToast" class="weui_loading_toast" style="display:none; z-index:999999;">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui_toast">
+        <div class="weui_loading">
+            <div class="weui_loading_leaf weui_loading_leaf_0"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_1"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_2"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_3"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_4"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_5"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_6"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_7"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_8"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_9"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_10"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_11"></div>
+        </div>
+        <p id="p_loadContent" class="weui_toast_content">正在加载</p>
+    </div>
+</div>
+
+<div class="weui_dialog_confirm" id="dialogAsk" style="display: none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title" id="dialogTitle"></strong></div>
+        <div id="dialogContent" class="weui_dialog_bd"></div>
+      <div class="weui_dialog_ft">
+            <a id="dialogCancle" href="javascript:$('#dialogAsk').css('display','none');" class="weui_btn_dialog default">取消</a>
+            <a id="dialogConfirm" href="javascript:orderDelete();" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+
+<div class="weui_dialog_confirm" id="dialogAskDel" style="display: none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title" id="dialogTitle">询问</strong></div>
+        <div id="dialogContent" class="weui_dialog_bd" style="font-weight: bold; color: #000000;">是否确认删除？</div>
+      <div class="weui_dialog_ft">
+            <a id="dialogCancle" href="javascript:delCancle();" class="weui_btn_dialog default">取消</a>
+            <a id="dialogConfirm" href="javascript:dealDeleteSubmit();" class="weui_btn_dialog primary">确认</a>
+        </div>
+    </div>
+</div>
+
+<!--BEGIN actionSheetPassword-->
+<style>
+	.txt_password
+	{
+		width:100%;	height:50px; border-radius:0px;	border:none; color:#000; font-size:40px; padding:0px; -webkit-appearance: none; margin-top:5px; margin-bottom:10px; text-align:center; margin-top:5px;
+	}
+	.tablePassword
+	{
+		background-color:#fff;
+	}
+	.tablePassword td
+	{
+		width:33%; height:50px; vertical-align:middle; text-align:center; font-size:20px; border-bottom:1px solid #f2f2f2; border-right:1px solid #f2f2f2;
+	}
+</style>
+
+<div id="actionSheet_wrapPassword" style="z-index:9999;">
+    <div class="weui_mask_transition" id="maskPassword"></div>
+    <div class="weui_actionsheet" id="weui_actionsheetPassword">
+    <div style="width:100%; height:50px; line-height:50px; font-size:16px; color:#1AAD19; text-align:center; font-weight:bold;">请输入安全密码</div>
+    <div style="width:100%; height:60px; text-align:center;"><input id="txt_password" type="password" class="txt_password" readonly="true" /></div>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tablePassword">
+      <tr>
+        <td onclick="typePassword(this);">1</td>
+        <td onclick="typePassword(this);">2</td>
+        <td onclick="typePassword(this);">3</td>
+      </tr>
+      <tr>
+        <td onclick="typePassword(this);">4</td>
+        <td onclick="typePassword(this);">5</td>
+        <td onclick="typePassword(this);">6</td>
+      </tr>
+      <tr>
+        <td onclick="typePassword(this);">7</td>
+        <td onclick="typePassword(this);">8</td>
+        <td onclick="typePassword(this);">9</td>
+      </tr>    
+      <tr>
+        <td onclick="" style="font-size:10px; color:#8a8a8a;">&nbsp;</td>
+        <td onclick="typePassword(this);">0</td>
+        <td onclick="typePassword(this);">×</td>
+      </tr>         
+    </table>	       
+    </div>
+</div>
+
+<script src="js/tripledes.js"></script>
+<script src="js/mode-ecb.js"></script>
+<script>
+var key = CryptoJS.enc.Utf8.parse("huangkaishitemegedahaoren");  
+var iv  = CryptoJS.enc.Utf8.parse("BrTc2404");
+
+function showActionSheetPassword() {
+	$("#txt_password").val("");	
+	var maskPassword = $('#maskPassword');
+	var weuiActionsheetPassword = $('#weui_actionsheetPassword');
+	weuiActionsheetPassword.addClass('weui_actionsheet_toggle');
+	maskPassword.show().addClass('weui_fade_toggle').click(function() {
+		hideActionSheetPassword(weuiActionsheetPassword, maskPassword);
+	});
+	weuiActionsheetPassword.unbind('transitionend').unbind('webkitTransitionEnd');
+}
+
+function hideActionSheetPassword() {
+	$("#loadingToast").css("display", "none");
+	var maskPassword = $('#maskPassword');
+	var weuiActionsheetPassword = $('#weui_actionsheetPassword');
+
+	weuiActionsheetPassword.removeClass('weui_actionsheet_toggle');
+	maskPassword.removeClass('weui_fade_toggle');
+	weuiActionsheetPassword.on('transitionend', function() {
+		maskPassword.hide();
+	}).on('webkitTransitionEnd',
+		function() {
+			maskPassword.hide();
+		})
+}
+
+function typePassword(obj) {
+	if($(obj).html() != "×") {
+		typeNumber = $(obj).html();
+		typed = $("#txt_password").val();
+		$("#txt_password").val(typed + typeNumber);
+		if($("#txt_password").val().length == 6) {
+			dealCancelSubmit();
+		}
+	} else {
+		typeLength = $("#txt_password").val().length;
+		typeed = $("#txt_password").val();
+		$("#txt_password").val(typed.substring(0, typeLength - 1));
+	}
+}
+
+function Encrypt(word) {
+	srcs = CryptoJS.enc.Utf8.parse(word);
+	var encrypted = CryptoJS.TripleDES.encrypt(srcs, key, {
+		iv: iv,
+		mode: CryptoJS.mode.CBC,
+		padding: CryptoJS.pad.Pkcs7
+	});
+	return encrypted;
+}
+</script>
+<!--END actionSheetPassword-->
+<!--============================================================================================================-->
+<script>
+	var ccerNumber=GetUrlParam("ccerNumber");
+	var ccerName=unescape(GetUrlParam("ccerName"));
+//	var ccerName=GetUrlParam("ccerName");
+	var token=GetUrlParam("token");
+	var myAction=""; //用于记录用户点击的“我要转让”还是”我要收购“
+	var orderNumber="";  //用于存放点击”买进“或”卖出“时对应的挂单编号
+	var pageNo=1;
+	var dealType="sale";  //记录当前状态   用于iscorll刷新时判断调用哪个函数
+	var noMoreData=false;  //用于记录是否还有加载更多的数据，当json.data.lenth=0时设为true,在上拉加载时使用
+	var cancleOrDelAction=""; //用于记录撤单或删除单操作,value:cancel||delete
+	var actionOrderId=""; //用于记录操作中的单子ID号
+	var result="";
+	var saleList=-1;
+	var buyList=-1;
+	
+	$(function() {    
+	    FastClick.attach(document.body); 		//FastClick插件，提高点击速度   
+	}); 	
+	
+	function init(){
+		getCcerInfo();
+		tagSale();	//初始化切换标签样式
+	}
+	
+	function go_back(){
+//		history.go(-1);
+		aif.javaCloseActivity();
+	}
+	
+	function go_wantSale(){
+		var newUrl="http://www.lvdoya.com/H5/carbon_projectWantSale.html?token="+token+"&ccerNumber="+ccerNumber+"&ccerName="+escape(ccerName);
+		aif.javaOpenNewWindow(newUrl);
+	}
+	
+	function go_wantBuy(){
+		var newUrl="http://www.lvdoya.com/H5/carbon_projectWantBuy.html?token="+token+"&ccerNumber="+ccerNumber+"&ccerName="+escape(ccerName);
+		aif.javaOpenNewWindow(newUrl);
+	}		
+	
+	function goCarbonInfo(){
+		window.location="carbon_info.html?ccerNumber="+ccerNumber;
+	}
+	
+	function goProjectRecord(){
+		window.location="accountCarbon_recordProject.html?token="+token+"&ccerNumber="+ccerNumber+"&fromPage=shop";
+	}
+	
+	function showWantSale(){
+		window.location="carbon_projectWantSale.html?ccerNumber="+ccerNumber+"&ccerName="+ccerName+"&token="+token;
+	}
+	
+	function showWantBuy(){
+		window.location="carbon_projectWantBuy.html?ccerNumber="+ccerNumber+"&ccerName="+ccerName+"&token="+token;
+	}	
+	
+	function tagSale(){
+		$("#loadingToast").css("display","block");
+		$("#td_carbonProjectTagSale").css("color","#1AAD19");
+		$("#td_carbonProjectTagBuy").css("color","#000000");
+		$("#div_IWantSale").css("display","block");
+		$("#div_IWantBuy").css("display","none");
+		$("#div_projectListHead").html("<table width='100%' border='0' cellspacing='0' cellpadding='0' style='height: 40px;'><tr><td style='width: 25%; text-align: center; font-size: 12px; vertical-align: middle;'>单价(碳票)</td><td style='width: 25%; text-align: center; font-size: 12px; vertical-align: middle;'>已售量(吨)</td><td style='width: 25%; text-align: center; font-size: 12px; vertical-align: middle;'>剩余量(吨)</td><td>&nbsp;</td></tr></table>");
+		pageNo=1;
+		dealType="sale";
+		$("#div_IWantSale").css("display","block");
+		$("#div_IWantBuy").css("display","none");
+		$("#div_dealListContent").html("<div id='div_dealListContent1'></div>");
+		noMoreData=false;
+		loadSaleList();
+		setTimeout(function(){myScroll.refresh();},1000);
+	}
+	
+	function tagBuy(){
+		$("#loadingToast").css("display","block");
+		$("#td_carbonProjectTagSale").css("color","#000000");
+		$("#td_carbonProjectTagBuy").css("color","#1AAD19");
+		$("#div_IWantSale").css("display","none");
+		$("#div_IWantBuy").css("display","block");
+		$("#div_projectListHead").html("<table width='100%' border='0' cellspacing='0' cellpadding='0' style='height: 40px;'><tr><td style='width: 25%; text-align: center; font-size: 12px; vertical-align: middle;'>单价(碳票)</td><td style='width: 25%; text-align: center; font-size: 12px; vertical-align: middle;'>需购量(吨)</td><td style='width: 25%; text-align: center; font-size: 12px; vertical-align: middle;'>已购量(吨)</td><td>&nbsp;</td></tr></table>");
+		pageNo=1;
+		dealType="buy";
+		noMoreData=false;
+		$("#div_IWantBuy").css("display","block");
+		$("#div_IWantSale").css("display","none");		
+		$("#div_dealListContent").html("<div id='div_dealListContent1'></div>");		
+		loadBuyList();
+		setTimeout(function(){myScroll.refresh();},1000);
+	}	
+	
+	function sheetSale()
+	{
+		orderNumber="";
+		showSheetSale();
+	}
+	
+	function delCancle(){
+		$("#dialogAskDel").css("display","none");
+	}
+	
+	function getCcerInfo(){
+		$.ajax	
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/cshop/getCcerByCnumberToJSON?callback=?&cnumber="+ccerNumber,data: {},dataType : "jsonp",
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+					$("#font_ccerName").html(json.data.c_title);
+				}
+				else
+				{
+					$("#loadingToast").css("display","none");
+					jectNotice(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});		
+	}
+	
+	function loadSaleList(){
+		result="";
+		saleList=-1;
+		
+		$.ajax	
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/cshop/getMySaleListByCnumber?callback=?&cnumber="+ccerNumber+"&token="+token+"&status=0",data: {},dataType : "jsonp",
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+					
+					if (json.data.length==0){
+						noMoreData=true;
+					}
+
+					if (json.data.length==0 && pageNo==1){
+						saleList=0;	
+//						$("#div_dealListContent"+pageNo).html("<div style='width: 100%; margin-top: 30px; text-align: center;'><img src='ico/ico_noContent.png' style='max-height: 50px;'><br><font style='color: #8A8A8A; font-size: 14px;'>没有相关挂单</font></div>");
+//						$("#loadingToast").css("display","none");
+//						return;						
+					}					
+					for (var i=0; i<json.data.length; i++){
+						result+="<table width='100%' border='0' cellspacing='0' cellpadding='0' class='table_carbonProjectSaleBuyList' id='tb"+json.data[i].ccerId+"'><tr>";
+						result+="<td>"+json.data[i].price+"</td><td>"+json.data[i].deal_num+"</td>";
+						result+="<td style='font-weight: bold;'>"+json.data[i].yl+"</td><td>";						
+						if (json.data[i].yl==0){
+							result+="<div id='div_carbonProjectOrderList"+json.data[i].ccerId+"' onclick='dealDelete(&apos;"+json.data[i].ccerId+"&apos;);'>";
+							result+="<font style='color: red;'>删除</font>";
+						} else {
+							result+="<div id='div_carbonProjectOrderList"+json.data[i].ccerId+"' onclick='dealCancle(&apos;"+json.data[i].ccerId+"&apos;);'>";
+							result+="<font style='color: #333;'>撤单</font>";
+						}
+						result+="</div></td></tr></table>";
+					}					
+//					$("#div_dealListContent"+pageNo).html(result);
+//					$("#div_dealListContent"+pageNo).append("<div id='div_dealListContent"+parseInt(pageNo+1)+"'></div>");
+					loadSaleListDel();
+//					$("#loadingToast").css("display","none");
+//					pageNo++;
+				}
+				else
+				{
+					$("#loadingToast").css("display","none");
+					jectNotice(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});				
+	}
+	
+	function loadSaleListDel(){
+		$.ajax	
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/cshop/getMySaleListByCnumber?callback=?&cnumber="+ccerNumber+"&token="+token+"&status=1",data: {},dataType : "jsonp",
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+					if (json.data.length==0 && pageNo==1 && saleList==0){
+						$("#div_dealListContent"+pageNo).html("<div style='width: 100%; margin-top: 30px; text-align: center;'><img src='ico/ico_noContent.png' style='max-height: 50px;'><br><font style='color: #8A8A8A; font-size: 14px;'>没有相关挂单</font></div>");
+						$("#loadingToast").css("display","none");
+						return;						
+					}
+					for (var i=0; i<json.data.length; i++){
+						result+="<table width='100%' border='0' cellspacing='0' cellpadding='0' class='table_carbonProjectSaleBuyList' id='tb"+json.data[i].ccerId+"'><tr>";
+						result+="<td>"+json.data[i].price+"</td><td>"+json.data[i].deal_num+"</td>";
+						result+="<td style='font-weight: bold;'>"+json.data[i].yl+"</td><td>";						
+						if (json.data[i].yl==0){
+							result+="<div id='div_carbonProjectOrderList"+json.data[i].ccerId+"' onclick='dealDelete(&apos;"+json.data[i].ccerId+"&apos;);'>";
+							result+="<font style='color: red;'>删除</font>";
+						} else {
+							result+="<div id='div_carbonProjectOrderList"+json.data[i].ccerId+"' onclick='dealCancle(&apos;"+json.data[i].ccerId+"&apos;);'>";
+							result+="<font style='color: #333;'>撤单</font>";
+						}
+						result+="</div></td></tr></table>";
+					}
+					$("#div_dealListContent"+pageNo).html(result);
+					$("#div_dealListContent"+pageNo).append("<div id='div_dealListContent"+parseInt(pageNo+1)+"'></div>");					
+					$("#loadingToast").css("display","none");
+				}
+				else
+				{
+					$("#loadingToast").css("display","none");
+					jectNotice(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});				
+	}	
+	
+	
+	function loadBuyList(){
+		result="";
+		buyList=-1;
+		
+		$.ajax	
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/cshop/getMyBuyListByCnumber?callback=?&cnumber="+ccerNumber+"&token="+token+"&status=0",data: {},dataType : "jsonp",
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+//					var result="";
+					if (json.data.length==0){
+						noMoreData=true;
+					}
+					if (json.data.length==0 && pageNo==1){
+						buyList=0;
+//						$("#div_dealListContent"+pageNo).html("<div style='width: 100%; margin-top: 30px; text-align: center;'><img src='ico/ico_noContent.png' style='max-height: 50px;'><br><font style='color: #8A8A8A; font-size: 14px;'>没有相关挂单</font></div>");
+//						$("#loadingToast").css("display","none");
+//						return;
+					}			
+
+					for (var i=0; i<json.data.length; i++){
+						result+="<table width='100%' border='0' cellspacing='0' cellpadding='0' class='table_carbonProjectSaleBuyList' id='tb"+json.data[i].ccerId+"'><tr>";
+						result+="<td>"+json.data[i].price+"</td><td>"+json.data[i].yl+"</td>";
+						result+="<td style='font-weight: bold;'>"+json.data[i].deal_num+"</td><td>";
+						
+						if (json.data[i].yl==0){
+							result+="<div id='div_carbonProjectOrderList"+json.data[i].ccerId+"' onclick='dealDelete(&apos;"+json.data[i].ccerId+"&apos;);'>";							
+							result+="<font style='color: red;'>删除</font>";
+						} else {
+							result+="<div id='div_carbonProjectOrderList"+json.data[i].ccerId+"' onclick='dealCancle(&apos;"+json.data[i].ccerId+"&apos;);'>";
+							result+="<font style='color: #333;'>撤单</font>";
+						}
+						result+="</div></td></tr></table>";						
+					}					
+//					$("#div_dealListContent"+pageNo).html(result);
+//					$("#div_dealListContent"+pageNo).append("<div id='div_dealListContent"+parseInt(pageNo+1)+"'></div>");
+//					
+//					$("#loadingToast").css("display","none");
+//					pageNo++;
+					loadBuyListDel();
+				}
+				else
+				{
+					$("#loadingToast").css("display","none");
+					jectNotice(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});				
+	}
+	
+	function loadBuyListDel(){
+		$.ajax	
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/cshop/getMyBuyListByCnumber?callback=?&cnumber="+ccerNumber+"&token="+token+"&status=1",data: {},dataType : "jsonp",
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+//					var result="";
+					if (json.data.length==0){
+						noMoreData=true;
+					}
+					console.log(buyList);
+					if (json.data.length==0 && pageNo==1 && buyList==0){
+						$("#div_dealListContent"+pageNo).html("<div style='width: 100%; margin-top: 30px; text-align: center;'><img src='ico/ico_noContent.png' style='max-height: 50px;'><br><font style='color: #8A8A8A; font-size: 14px;'>没有相关挂单</font></div>");
+						$("#loadingToast").css("display","none");
+						return;
+					}			
+
+					for (var i=0; i<json.data.length; i++){
+						result+="<table width='100%' border='0' cellspacing='0' cellpadding='0' class='table_carbonProjectSaleBuyList' id='tb"+json.data[i].ccerId+"'><tr>";
+						result+="<td>"+json.data[i].price+"</td><td>"+json.data[i].yl+"</td>";
+						result+="<td style='font-weight: bold;'>"+json.data[i].deal_num+"</td><td>";
+						
+						if (json.data[i].yl==0){
+							result+="<div id='div_carbonProjectOrderList"+json.data[i].ccerId+"' onclick='dealDelete(&apos;"+json.data[i].ccerId+"&apos;);'>";							
+							result+="<font style='color: red;'>删除</font>";
+						} else {
+							result+="<div id='div_carbonProjectOrderList"+json.data[i].ccerId+"' onclick='dealCancle(&apos;"+json.data[i].ccerId+"&apos;);'>";
+							result+="<font style='color: #333;'>撤单</font>";
+						}
+						result+="</div></td></tr></table>";						
+					}
+					$("#div_dealListContent"+pageNo).html(result);
+					$("#div_dealListContent"+pageNo).append("<div id='div_dealListContent"+parseInt(pageNo+1)+"'></div>");
+					
+					$("#loadingToast").css("display","none");
+//					pageNo++;
+				}
+				else
+				{
+					$("#loadingToast").css("display","none");
+					jectNotice(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});				
+	}	
+	
+	function dealCancle(orderId){
+		actionOrderId=orderId;
+		showActionSheetPassword();
+	}
+	
+	function dealDelete(orderId){
+		actionOrderId=orderId;
+		$("#dialogAskDel").css("display","block");
+	}
+	
+	function dealCancelSubmit(){
+		$("#loadingToast").css("display","block");
+
+		var payPwd="";
+		payPwd=$("#txt_password").val();
+		payPwd=Encrypt(payPwd)+"";
+		
+		//必须对+和&进行转义替换，否则服务端接收后会变成空格
+	    payPwd = payPwd.replace(/\+/g,"%2B");
+	    payPwd = payPwd.replace(/\&/g,"%26"); 
+		//END //必须对+和&进行转义替换，否则服务端接收后会变成空格		
+		
+		$.ajax	
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/cshop/SetCcerSoldout?callback=?&ccerId="+actionOrderId+"&token="+token+"&payPwd="+payPwd,data: {},dataType : "jsonp",
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+					$("#loadingToast").css("display","none");
+					$("#tb"+actionOrderId).remove();					
+					hideActionSheetPassword();
+					$("#toastSuccess").css("display","block");
+					setTimeout(function(){$("#toastSuccess").css("display","none");},1000);
+				}
+				else
+				{
+					hideActionSheetPassword();
+					$("#loadingToast").css("display","none");
+					jectNotice(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});	
+	}	
+	
+	function dealDeleteSubmit(){
+		$("#loadingToast").css("display","block");
+		$.ajax	
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/cshop/DeleteCCerOrder?callback=?&ccerId="+actionOrderId+"&token="+token,data: {},dataType : "jsonp",
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+					$("#loadingToast").css("display","none");
+					$("#dialogAskDel").css("display","none");
+					$("#tb"+actionOrderId).remove();			
+					
+					$("#toastSuccess").css("display","block");
+					setTimeout(function(){$("#toastSuccess").css("display","none");},1000);
+				}
+				else
+				{					
+					$("#loadingToast").css("display","none");
+					$("#dialogAskDel").css("display","none");
+					jectNotice(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});		
+	}
+	
+	// Iscorll
+	var myScroll,  
+	pullDown = $("#pullDown"),  
+	pullDownLabel = $(".pullDownLabel"),  
+
+	loadingStep = 0;//加载状态0默认，1显示加载状态，2执行加载数据，只有当为0时才能再次加载，这是防止过快拉动刷新  
+	pullDown.hide();  
+  
+	myScroll = new IScroll("#wrapper", {  
+		preventDefault:false,
+		scrollbars: false,  
+		mouseWheel: false,  
+		interactiveScrollbars: true,  
+		shrinkScrollbars: 'scale',  
+		fadeScrollbars: true,  
+		scrollY:true,  
+		probeType: 2,  
+		bindToWrapper:true  
+	});  
+
+	myScroll.on("scroll",function(){  
+		if(loadingStep == 0 && !pullDown.attr("class").match('refresh|loading')){  
+			if(this.y > 40){//下拉刷新操作  
+				$(".pulldown-tips").hide();  
+				pullDown.addClass("refresh").show();  
+				pullDownLabel.text("松手刷新数据");  
+				loadingStep = 1; 
+				
+				myScroll.refresh();  				
+			}else if(this.y <= (this.maxScrollY)  && this.directionY == 1){//上拉加载更多
+				if (noMoreData==false){
+					loadingStep = 1;  
+//					$("#p_loadContent").html("正在加载");
+//					$("#loadingToast").css("display","block");
+//					pullUpAction();					
+				} else {
+					setTimeout(function(){myScroll.refresh();},1000);
+				}
+			}  
+		}  
+	});  
+	myScroll.on("scrollEnd",function(){  
+		if(loadingStep == 1){  
+			if( pullDown.attr("class").match("refresh") ){//下拉刷新操作  
+				pullDown.removeClass("refresh").addClass("loading");  
+				$("#p_loadContent").html("正在刷新");
+				$("#loadingToast").css("display","block");
+				loadingStep = 2;  
+				pullDownAction();
+			}  
+		}  
+	});  
+
+	function pullDownAction(){  
+		setTimeout(function(){  
+			pullDown.attr('class','').hide();
+			loadingStep = 0;
+			if (dealType=="sale"){
+				tagSale();				
+			} else if (dealType=="buy") {
+				tagBuy();
+			}
+			$(".pulldown-tips").show(); 
+			$("#loadingToast").css("display","none");
+			$(".pulldown-tips").css("display","none");
+		},500);  
+		setTimeout(function(){
+			myScroll.refresh();
+			$("#wrapper").css("top",wrapperTop+"px");			
+		},1);
+	}		
+	function pullUpAction(){  
+		setTimeout(function(){  
+			loadingStep = 0;
+//			if (dealType=="sale"){
+//				loadSaleList();
+//			} else if (dealType=="buy"){
+//				loadBuyList();
+//			}
+//			$("#loadingToast").css("display","none");
+		},100);  
+		setTimeout(function(){myScroll.refresh();},1);
+	}  
+  
+    document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);  
+	// END Iscorll
+	
+</script>

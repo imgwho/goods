@@ -1,0 +1,1187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<title>我的订单</title>
+<style>
+body
+{
+	margin:0;
+	background-color:#f0f0f2;
+	font-family: sans-serif; 
+	
+}
+
+.scrollFix{
+　　height: 100%;
+　　overflow: hidden;
+　　position: relative;
+}
+.scrollFix body{
+　　height: 100%;
+　　overflow: hidden;
+}
+.txt_password
+{
+	width:100%;	height:50px; border-radius:0px;	border:none; color:#000; font-size:40px; padding:0px; -webkit-appearance: none; margin-top:5px; margin-bottom:10px; text-align:center; margin-top:5px;
+}
+.tablePassword
+{
+	background-color:#fff;
+}
+.tablePassword td
+{
+	width:33%; height:50px; vertical-align:middle; text-align:center; font-size:20px; border-bottom:1px solid #f2f2f2; border-right:1px solid #f2f2f2;
+}
+.td_userLogo img {
+	margin:5px auto 5px 10px;	width:40px;	height:40px;	border-radius:50%; vertical-align:middle;}
+.table_menu{
+	background-color:#fff; height:50px; margin-bottom:5px; z-index:2;position:fixed; 
+}
+.table_menu td
+{
+	width:25%; height:40px; vertical-align:middle; text-align:center; font-size:12px; background-color:#fff;
+}
+.div_money{
+	color:#1AAD19; font-weight:bold; font-size:16px; 
+}
+.nowclick{
+	color:#1AAD19; border-bottom:1px solid #1AAD19;
+}
+/* LIST */
+.orderGoodsFace
+{
+	width:100px; text-align:center; vertical-align:middle;
+}
+.orderGoodsFace img
+{
+	width:80px; height:80px;
+}
+.orderGoodsModel
+{
+	width:100%; line-height:12px; overflow:hidden; font-size:12px; color:#979797;
+}
+.orderGoodsName
+{
+	width:100%; height:40px; line-height:40px; overflow:hidden; font-size:16px;
+}
+.txt_expressId
+{
+	padding:0px; height:30px; border-radius:0px; font-size:18px; -webkit-appearance: none; border:1px solid #bbbbbb; width:100%;
+}
+.div_btnSendConfirm
+{
+	width:80px; font-size:14px; background-color:#1AAD19; color:#fff; height:30px; line-height:30px; border-radius:3px; text-align:center; float:right; margin-right:10px; margin-top:10px;
+}
+/* END LIST */
+
+/*iScorll*/
+
+#wrapper {  
+    position: absolute;  
+    z-index: 1;  
+    top: 95px;  
+    bottom: 0px;  
+    left: 0;  
+    width: 100%;  
+    background: #f0f0f2;  
+    /*overflow: hidden; */ 
+}  
+  
+#scroller {  
+    position: absolute;  
+    z-index: 1;  
+    -webkit-tap-highlight-color: rgba(0,0,0,0);  
+    width: 100%;  
+	min-height:100.25%;
+    -webkit-transform: translateZ(0);  
+    -moz-transform: translateZ(0);  
+    -ms-transform: translateZ(0);  
+    -o-transform: translateZ(0);  
+    transform: translateZ(0);  
+    -webkit-touch-callout: none;  
+    -webkit-user-select: none;  
+    -moz-user-select: none;  
+    -ms-user-select: none;  
+    user-select: none;  
+    -webkit-text-size-adjust: none;  
+    -moz-text-size-adjust: none;  
+    -ms-text-size-adjust: none;  
+    -o-text-size-adjust: none;  
+    text-size-adjust: none;  
+}  
+  
+#pullDown,#pullUp,.pulldown-tips{  
+    height:40px;  
+    line-height:40px;  
+    text-align:center; 
+	background-color:#fff; 
+	color:#979797;
+	font-size:12px;
+}  
+.pulldown-tips{  
+	position:absolute;  
+	top:-80px;  
+	left:0;  
+	width:100%;  
+} 
+</style>
+</head>
+<link rel="stylesheet" type="text/css" href="css/weui.css">
+<script type="text/javascript" src="js/jquery-3.1.1.min.js" ></script>
+<script type="text/javascript" src="js/iscroll-probe.js"></script>
+<script src="js/functionPublic.js"></script>
+<script src="js/tripledes.js"></script>
+<script src="js/mode-ecb.js"></script>
+<script type="text/javascript" src="js/fastclick.js"></script>
+
+<body onload="init();">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; background-color:#1AAD19; position:fixed; top:0px; z-index:8888;">
+  <tr>
+    <td style="width:40px; text-align:center; vertical-align:middle;" onclick="closeCurrent()"><img src="ico/ico_back.png" style="max-width:26px;" /></td>
+    <td id="td_shopName" style="text-align:center; font-size:16px; color:#fff;">我的订单</td>
+    <td id="td_shopShare" style="width:40px; vertical-align:middle; text-align:center;">&nbsp;</td>
+  </tr>
+</table>
+<div style="width:100%; height:45px;"></div>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table_menu">
+  <tr>  
+    <td onclick="clickWaitPay();" id="td1"><!--<font id="font_orderWaitPay" class="font_orderNum"></font><br />-->待付款</td>
+    <td onclick="clickWaitSend();" id="td2"><!--<font id="font_orderWaitSend" class="font_orderNum"></font><br />-->待发货</td>
+    <td onclick="clickHasSend();" id="td3"><!--<font id="font_orderHasSend" class="font_orderNum"></font><br />-->已发货</td>
+    <td onclick="clickHasRecive();" id="td4" style="border-right:none;"><!--<font id="font_orderHasRecive" class="font_orderNum"></font><br />-->已收货</td>
+  </tr>
+</table>
+<div id="wrapper"> 
+<div id="scroller">
+<div id="pullDown" class=""><div class="pullDownLabel"></div></div>
+<div class="pulldown-tips">下拉刷新</div>
+
+<div id="div_orderContent1" style="margin-top:5px;">
+  <div id="div_waitpay1"></div> 
+  <div id="div_waitsend1"></div> 
+  <div id="div_hassend1"></div> 
+  <div id="div_hasrecive1"></div> 
+</div>
+</div><!--scroller-->
+</div><!--wrapper-->
+
+</body>
+</html>
+<!--==================================================================================================================================================-->
+<div id="loadingToast" class="weui_loading_toast" style="display:none; z-index:999999;">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui_toast">
+        <div class="weui_loading">
+            <div class="weui_loading_leaf weui_loading_leaf_0"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_1"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_2"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_3"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_4"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_5"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_6"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_7"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_8"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_9"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_10"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_11"></div>
+        </div>
+        <p id="p_loadContent" class="weui_toast_content">正在加载</p>
+    </div>
+</div>
+
+<div id="toast" style="display: none;">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui_toast">
+        <i class="weui_icon_toast"></i>
+        <p id="toastContent" class="weui_toast_content">保存成功</p>
+    </div>
+</div>
+<div id="toast_success" style="display: none;">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui_toast">
+        <img src="ico/ico_success.png" style="max-width:60px; margin-top:10px; margin-bottom:20px;"></img>
+        <p id="toastfsuccessContent" class="weui_toast_content"></p>
+    </div>
+</div>
+<div id="toast_fail" style="display: none;">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui_toast">
+        <img src="ico/ico_fail.png" style="max-width:60px; margin-top:10px; margin-bottom:20px;"></img>
+        <p id="toastfailContent" class="weui_toast_content"></p>
+    </div>
+</div>
+
+<div class="weui_dialog_confirm" id="dialogAsk" style="display: none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title" id="dialogTitle"></strong></div>
+        <div id="dialogContent" class="weui_dialog_bd"></div>
+      <div class="weui_dialog_ft">
+            <a id="dialogCancle" href="javascript:$('#dialogAsk').css('display','none');" class="weui_btn_dialog default">取消</a>
+            <a id="dialogConfirm" href="javascript:shopCarDel();" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="weui_dialog_confirm" id="dialogOrderDel" style="display: none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title" id="dialogTitle">询问</strong></div>
+        <div id="dialogContent" class="weui_dialog_bd"></div>
+      <div class="weui_dialog_ft">
+            <a id="dialogCancle" href="javascript:$('#dialogOrderDel').css('display','none');" class="weui_btn_dialog default">取消</a>
+            <a id="dialogConfirm" href="javascript:delConfirm();" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+
+<div class="weui_dialog_confirm" id="dialogPwd" style="display: none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title" id="dialogTitle">安全密码提示</strong></div>
+        <div id="dialogContent" class="weui_dialog_bd">你还未设置安全密码，请先设置！</div>
+      <div class="weui_dialog_ft">
+            <a id="dialogCancle" href="javascript:$('#dialogPwd').css('display','none');" class="weui_btn_dialog default">取消</a>
+            <a id="dialogConfirm" href="javascript:goSetPwd();" class="weui_btn_dialog primary">去设置</a>
+        </div>
+    </div>
+</div>
+
+<div class="weui_dialog_confirm" id="dialogMoney" style="display: none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title" id="dialogTitle">碳票余额不足</strong></div>
+        <div id="dialogContent" class="weui_dialog_bd">当前账户碳票余额为：<font id="div_nomoney" style="font-size:14px; color:#F60;"></font>碳票，如需支付该订单，请先充值！</div>
+      <div class="weui_dialog_ft">
+            <a id="dialogCancle" href="javascript:$('#dialogMoney').css('display','none');" class="weui_btn_dialog default">取消</a>
+            <a id="dialogConfirm" href="javascript:goSetPay();" class="weui_btn_dialog primary">去充值</a>
+        </div>
+    </div>
+</div>
+
+<div class="weui_dialog_alert" id="notice" style="display:none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
+        <div class="weui_dialog_bd" id="noticeContent">&nbsp;</div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:$('#notice').css('display','none');" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+
+<div id="actionSheet_wrap" style="z-index:9999;">
+    <div class="weui_mask_transition" id="maskReturn"></div>
+    <div class="weui_actionsheet" id="weui_actionsheetReturn">
+        <div class="weui_actionsheet_menu">
+            <div class="weui_actionsheet_cell" onclick="returnReson(this);">我不想买了</div>
+            <div class="weui_actionsheet_cell" onclick="returnReson(this);">信息填错，重新拍</div>
+            <div class="weui_actionsheet_cell" onclick="returnReson(this);">卖家缺货</div>
+            <div class="weui_actionsheet_cell" onclick="returnReson(this);">其他原因</div>
+        </div>
+        <div class="weui_actionsheet_action">
+            <div class="weui_actionsheet_cell" id="actionsheetReturn_cancel" onclick="hideActionSheetReturn();">取消</div>
+        </div>
+    </div>
+</div>
+<!--BEGIN actionSheetPassword-->
+<div id="actionSheet_wrapPassword" style="z-index:9999;">
+    <div class="weui_mask_transition" id="maskPassword"></div>
+    <div class="weui_actionsheet" id="weui_actionsheetPassword">
+    <div style="width:100%; height:40px; line-height:40px; font-size:16px; color:#1AAD19; text-align:center; font-weight:bold;">输入安全密码支付</div>
+    <div style="width:100%; height:20px; line-height:20px; font-size:14px; color:#ff7043; text-align:center; display:none;" id="div_nomony"></div>
+    <div style="width:100%; height:60px; text-align:center;"><input id="txt_password" type="password" class="txt_password" /></div>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tablePassword">
+      <tr>
+        <td onclick="typePassword(this);">1</td>
+        <td onclick="typePassword(this);">2</td>
+        <td onclick="typePassword(this);">3</td>
+      </tr>
+      <tr>
+        <td onclick="typePassword(this);">4</td>
+        <td onclick="typePassword(this);">5</td>
+        <td onclick="typePassword(this);">6</td>
+      </tr>
+      <tr>
+        <td onclick="typePassword(this);">7</td>
+        <td onclick="typePassword(this);">8</td>
+        <td onclick="typePassword(this);">9</td>
+      </tr>    
+      <tr>
+        <td onclick="" style="font-size:10px; color:#8a8a8a;">&nbsp;</td>
+        <td onclick="typePassword(this);">0</td>
+        <td onclick="typePassword(this);">×</td>
+      </tr>         
+    </table>	       
+    </div>
+</div>
+<!--END actionSheetPassword-->
+<!--BEGIN actionSheetExpress-->
+<div id="actionSheet_wrapExpress" style="z-index:9999; background-color:#fff; overflow:hidden;">
+    <div class="weui_mask_transition" id="maskExpress"></div>
+    <div class="weui_actionsheet" id="weui_actionsheetExpress" style="margin-top:60px; background-color:#fff; height:100%;overflow:auto;">
+    <div style="width:100%; height:50px;"></div>
+    <div style="width:100%; background-color:#fff;">
+        <div style="margin:0px 10px 0px 10px;">
+            <div id="div_expName" style="font-size:20px; line-height:40px;"></div>
+            <div id="div_expId" style="font-size:16px; line-height:30px; border-bottom:1px solid #bbbbbb;"></div>
+            <div id="div_expContent">
+           
+            </div>
+        </div>
+        <!--<div onclick="hideExpress();" style="position:fixed; bottom:5px; width:80%; margin:0 auto; height:40px; line-height:40px; color:#333; text-align:center; font-size:14px;">关闭</div>-->
+    </div>       
+    </div>
+</div>
+<!--END actionSheetPassword-->
+<!--==================================================================================================================================================-->
+<script type="text/javascript">
+var token=GetUrlParam("token");
+var goto=GetUrlParam("goto");
+var result="";
+var pageNo=1;
+var orderId="";
+var orderType=0;
+var key = CryptoJS.enc.Utf8.parse("huangkaishitemegedahaoren");  
+var iv  = CryptoJS.enc.Utf8.parse("BrTc2404"); 
+var url=window.location.href;
+
+$(function() {    
+    FastClick.attach(document.body); 		//FastClick插件，提高点击速度   
+}); 
+
+
+
+function go_back(index)	
+{
+	backurl=getFootprint(url,index);
+	
+	if(backurl.indexOf("mall.html")>0){
+		aif.javaCloseActivity();
+	}else{
+		window.location=backurl;
+	}
+	
+}
+
+function closeCurrent(){
+	aif.javaCloseActivity();
+}
+
+
+function init()
+{
+	$("#loadingToast").css("display","block");
+	$("#pullDown").hide();
+	if(goto==1){
+		clickWaitPay();
+	}else if(goto==2){
+		clickWaitSend();
+	}else if(goto==3){
+		clickHasSend();
+	}else if(goto==4){
+		clickHasRecive();
+	}
+	//setTimeout(function(){myScroll.refresh();},1000);
+		
+}
+
+function clickWaitPay()
+{
+	getFootprint(url,1);
+
+	url=changeURLArg(url,"goto",1);
+	saveFootprint(url);
+
+	$("#div_orderContent1").html('<div id="div_waitpay1"></div><div id="div_waitsend1"></div> <div id="div_hassend1"></div> <div id="div_hasrecive1"></div>');
+	pageNo=1;
+	orderType=0;
+	$(".table_menu td").removeClass("nowclick");
+	$("#td1").addClass("nowclick");
+	loadOrderWaitPay();
+	
+}
+
+function clickWaitSend()
+{
+	getFootprint(url,1);
+	url=changeURLArg(url,"goto",2);
+	saveFootprint(url);
+	$("#div_orderContent1").html('<div id="div_waitpay1"></div><div id="div_waitsend1"></div> <div id="div_hassend1"></div> <div id="div_hasrecive1"></div>');
+	pageNo=1;
+	orderType=1;
+	$(".table_menu td").removeClass("nowclick");
+	$("#td2").addClass("nowclick");
+	loadOrderWaitSend();
+	//setTimeout(function(){myScroll.refresh();},1000);
+}
+
+function clickHasSend()
+{
+	url=getFootprint(url,1);
+	url=changeURLArg(url,"goto",3);
+	saveFootprint(url);
+	$("#div_orderContent1").html('<div id="div_waitpay1"></div><div id="div_waitsend1"></div> <div id="div_hassend1"></div> <div id="div_hasrecive1"></div>');
+	pageNo=1;
+	orderType=2;
+	$(".table_menu td").removeClass("nowclick");
+	$("#td3").addClass("nowclick");
+	loadOrderHasSend();
+	//setTimeout(function(){myScroll.refresh();},1000);
+}
+
+function clickHasRecive()
+{
+	getFootprint(url,1);
+	url=changeURLArg(url,"goto",4);
+	saveFootprint(url);
+	$("#div_orderContent1").html('<div id="div_waitpay1"></div><div id="div_waitsend1"></div> <div id="div_hassend1"></div> <div id="div_hasrecive1"></div>');
+	pageNo=1;
+	orderType=3;
+	$(".table_menu td").removeClass("nowclick");
+	$("#td4").addClass("nowclick");
+	loadOrderHasRecive();
+	//setTimeout(function(){myScroll.refresh();},1000);
+}
+
+function loadOrderWaitPay()
+{	
+	
+	$("#loadingToast").css("display","block");
+	result="";
+	$.ajax	
+	({
+		type : "POST",url:"http://114.55.103.71:9006/ldy/order/getOrdersToJSON?callback=?&token="+token+"&type=1&status=0&pageNo="+pageNo,data: {},dataType : "jsonp",
+		success : function(data) 
+		{   
+			var json = eval(data); 	
+			if (json.code==200){
+				
+				if (json.data.length==0 && pageNo==1) {
+					$("#div_waitpay1").html("<div style='width:100%; text-align:center; margin-top:100px;'><img src='ico/ico_orderEmpty.png' style='max-height:100px; margin-bottom:10px;' /><br /><font style='font-size:14px; color:#8a8a8a;'>没有相关订单</font></div>");
+				} else if (json.data.length>0) {
+					for (var i=0; i<json.data.length; i++) {
+						
+						price=parseFloat(json.data[i].price).toFixed(2);					
+						ccer=parseFloat(json.data[i].zsccer).toFixed(2);
+						freight=parseFloat(json.data[i].freight).toFixed(2);
+						number=parseInt(json.data[i].sl);			
+						priceSum=(parseFloat(price*number)+parseFloat(freight)).toFixed(2);			
+						sp_img="";
+						if(json.data[i].sp_img.indexOf("img_goodsFace")==-1){
+							sp_img="<img class='img_goodsFace' src='"+json.data[i].sp_img+"'/>";	
+						}else{
+							
+							sp_img=json.data[i].sp_img;
+						}	
+						result+="<div id='orderId"+json.data[i].orderId+"' style='margin-bottom:5px;'><div style='width:100%; height:50px; line-height:50px; background-color:#fff; font-size:14px; color:#333; border-bottom:1px solid #f2f2f2;' class='td_userLogo' onclick='go_store(\""+json.data[i].saleUserId+"\");'><img src='"+json.data[i].saleUserLogo+"'/><font id='font_orderId' style='margin-left:10px;'>"+json.data[i].storeName+" ></font></div><table width='100%' border='0' cellspacing='0' cellpadding='0' height='100' bgcolor='#FFFFFF' style=' border-bottom:1px solid #f2f2f2;'><tr><td class='orderGoodsFace'>"+sp_img+"</td><td><div id='div_goodsName' class='orderGoodsName'>"+json.data[i].title+"</div><div class='orderGoodsModel'><font id='font_goodsModel'>型号："+json.data[i].gg+"</font></div><div style='width:100%; line-height:30px;'><font class='div_money'>"+price+"</font><font style='font-size:12px;'>碳票</font><div style='float:right; margin-right:15px;'>×<font style=' font-size:18px;'>"+number+"</font></div></div><div style='width:100%; line-height:10px; font-size:12px;' class='orderGoodsModel'>附送碳("+json.data[i].zsCcerCnumber+"): <font color='#F60'>"+ccer+"</font>吨</div></td></tr></table><div style='width:100%; height:50px; line-height:50px; font-size:14px; background-color:#fff; border-bottom:1px solid #f2f2f2;'><div style='float:right; margin-right:5px;'>合计:<font class='div_money'>"+priceSum+"</font>碳票（含运费:"+freight+"碳票）</div></div> <div style='width:100%; height:50px; line-height:50px; font-size:14px; background-color:#fff;  border-bottom:1px solid #f2f2f2;'><span style='float:right;background-color:#1AAD19; color:#fff; border-radius:3px; width:80px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:10px; border:1px solid #1AAD19;' onclick='checkPwd(&apos;"+json.data[i].orderId+"&apos;,&apos;"+priceSum+"&apos;);'>付款</span><span style='background-color:#f9f9f9; color:#333; border-radius:3px;width:80px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:10px; float:right; border:1px solid #bbbbbb;' onclick='orderDelAsk(&apos;"+json.data[i].orderId+"&apos;);'>取消订单</span></div></div>";	
+					}
+					var pageNextNo=parseInt(pageNo)+1;
+					result+="<div id='div_waitpay"+pageNextNo+"'></div>";
+					
+					$("#div_waitpay"+pageNo).html(result);
+					pageNo++;
+				}
+				$("#loadingToast").css("display","none");		
+			}
+			else
+			{
+				$("#loadingToast").css("display","none");
+				jectNotice(json.msg);	
+			}
+			myScroll.refresh();
+		},
+		error : function(textStatus) 
+		{
+			$("#loadingToast").css("display","none");
+			myScroll.refresh();
+		}
+	});		
+}
+
+function loadOrderWaitSend()
+{	
+	$("#loadingToast").css("display","block");
+	result="";
+	$.ajax	
+	({
+		type : "POST",url:"http://114.55.103.71:9006/ldy/order/getOrdersToJSON?callback=?&token="+token+"&type=1&status=1&pageNo="+pageNo,data: {},dataType : "jsonp",
+		success : function(data) 
+		{   
+			var json = eval(data); 	
+			if (json.code==200){
+				if (json.data.length==0 && pageNo==1) {
+					$("#div_waitsend1").html("<div style='width:100%; text-align:center; margin-top:100px;'><img src='ico/ico_orderEmpty.png' style='max-height:100px; margin-bottom:10px;' /><br /><font style='font-size:14px; color:#8a8a8a;'>没有相关订单</font></div>");
+				} else if (json.data.length>0) {
+					for (var i=0; i<json.data.length; i++) {
+						
+						price=parseFloat(json.data[i].price).toFixed(2);					
+						ccer=parseFloat(json.data[i].zsccer).toFixed(2);
+						freight=parseFloat(json.data[i].freight).toFixed(2);
+						number=parseInt(json.data[i].sl);			
+						priceSum=(parseFloat(price*number)+parseFloat(freight)).toFixed(2);			
+						sp_img="";
+						if(json.data[i].sp_img.indexOf("img_goodsFace")==-1){
+							sp_img="<img class='img_goodsFace' src='"+json.data[i].sp_img+"'/>";	
+						}else{
+							
+							sp_img=json.data[i].sp_img;
+						}	
+						result+="<div id='orderId' style='margin-bottom:5px;'><div style='width:100%; height:50px; line-height:50px; background-color:#fff; font-size:14px; color:#333; border-bottom:1px solid #f2f2f2;' class='td_userLogo' onclick='go_store(\""+json.data[i].saleUserId+"\");'><img src='"+json.data[i].saleUserLogo+"'/><font id='font_orderId' style='margin-left:10px;'>"+json.data[i].storeName+" ></font></div><table width='100%' border='0' cellspacing='0' cellpadding='0' height='100' bgcolor='#FFFFFF' style=' border-bottom:1px solid #f2f2f2;'><tr><td class='orderGoodsFace'>"+sp_img+"</td><td><div id='div_goodsName' class='orderGoodsName'>"+json.data[i].title+"</div><div class='orderGoodsModel'><font id='font_goodsModel'>型号："+json.data[i].gg+"</font></div><div style='width:100%; line-height:30px;'><font class='div_money'>"+price+"</font><font style='font-size:12px;'>碳票</font><div style='float:right; margin-right:15px;'>×<font style=' font-size:18px;'>"+number+"</font></div></div><div style='width:100%; line-height:10px; font-size:12px;' class='orderGoodsModel'>附送碳("+json.data[i].zsCcerCnumber+"): <font color='#F60'>"+ccer+"</font>吨</div></td></tr></table><div style='width:100%; height:50px; line-height:50px; font-size:14px; background-color:#fff; border-bottom:1px solid #f2f2f2;'><div style='float:right; margin-right:5px;'>合计:<font class='div_money'>"+priceSum+"</font>碳票（含运费:"+freight+"碳票）</div></div>";
+						if(json.data[i].return_status==0){
+							result+="<div style='width:100%; height:50px; line-height:50px; font-size:14px; background-color:#fff;  border-bottom:1px solid #f2f2f2;' id='return"+json.data[i].orderId+"'><span style='float:right;background-color:#1AAD19; color:#fff; border-radius:3px; width:80px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:10px; border:1px solid #1AAD19;' onclick='showReturnPanel(&apos;"+json.data[i].orderId+"&apos;);'>申请退款</span></div>";
+						}else if(json.data[i].return_status==1){
+							result+="<div style='width:100%; height:50px; line-height:50px; font-size:14px; background-color:#fff; border-bottom:1px solid #f2f2f2;' id='return"+json.data[i].orderId+"'><span style='background-color:#f9f9f9; color:#333; border-radius:3px;width:80px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:10px; float:right; border:1px solid #bbbbbb;'>已申请退款</span></div>";
+						}
+						result+="</div>";	
+					}
+					var pageNextNo=parseInt(pageNo)+1;
+					result+="<div id='div_waitsend"+pageNextNo+"'></div>";
+					$("#div_waitsend"+pageNo).html(result);
+					pageNo++;
+				}
+				$("#loadingToast").css("display","none");				
+			}
+			else
+			{
+				$("#loadingToast").css("display","none");
+				jectNotice(json.msg);
+			}
+			myScroll.refresh();
+		},
+		error : function(textStatus) 
+		{
+			$("#loadingToast").css("display","none");
+			myScroll.refresh();
+		}
+	});		
+}
+
+function loadOrderHasSend()
+{	
+	$("#loadingToast").css("display","block");
+	result="";
+	$.ajax	
+	({
+		type : "POST",url:"http://114.55.103.71:9006/ldy/order/getOrdersToJSON?callback=?&token="+token+"&type=1&status=2&pageNo="+pageNo,data: {},dataType : "jsonp",
+		success : function(data) 
+		{   
+			var json = eval(data); 	
+			if (json.code==200){
+				if (json.data.length==0 && pageNo==1) {
+					$("#div_hassend1").html("<div style='width:100%; text-align:center; margin-top:100px;'><img src='ico/ico_orderEmpty.png' style='max-height:100px; margin-bottom:10px;' /><br /><font style='font-size:14px; color:#8a8a8a;'>没有相关订单</font></div>");
+				} else if (json.data.length>0) {
+					for (var i=0; i<json.data.length; i++) {
+						
+						price=parseFloat(json.data[i].price).toFixed(2);					
+						ccer=parseFloat(json.data[i].zsccer).toFixed(2);
+						freight=parseFloat(json.data[i].freight).toFixed(2);
+						number=parseInt(json.data[i].sl);			
+						priceSum=(parseFloat(price*number)+parseFloat(freight)).toFixed(2);			
+						sp_img="";
+						if(json.data[i].sp_img.indexOf("img_goodsFace")==-1){
+							sp_img="<img class='img_goodsFace' src='"+json.data[i].sp_img+"'/>";	
+						}else{
+							
+							sp_img=json.data[i].sp_img;
+						}	
+						result+="<div id='orderId' style='margin-bottom:5px;'><div style='width:100%; height:50px; line-height:50px; background-color:#fff; font-size:14px; color:#333; border-bottom:1px solid #f2f2f2;' class='td_userLogo' onclick='go_store(\""+json.data[i].saleUserId+"\");'><img src='"+json.data[i].saleUserLogo+"'/><font id='font_orderId' style='margin-left:10px;'>"+json.data[i].storeName+" ></font></div><table width='100%' border='0' cellspacing='0' cellpadding='0' height='100' bgcolor='#FFFFFF' style=' border-bottom:1px solid #f2f2f2;'><tr><td class='orderGoodsFace'>"+sp_img+"</td><td><div id='div_goodsName' class='orderGoodsName'>"+json.data[i].title+"</div><div class='orderGoodsModel'><font id='font_goodsModel'>型号："+json.data[i].gg+"</font></div><div style='width:100%; line-height:30px;'><font class='div_money'>"+price+"</font><font style='font-size:12px;'>碳票</font><div style='float:right; margin-right:15px;'>×<font style=' font-size:18px;'>"+number+"</font></div></div><div style='width:100%; line-height:10px; font-size:12px;' class='orderGoodsModel'>附送碳("+json.data[i].zsCcerCnumber+"): <font color='#F60'>"+ccer+"</font>吨</div></td></tr></table><div style='width:100%; height:50px; line-height:50px; font-size:14px; background-color:#fff; border-bottom:1px solid #f2f2f2;'><div style='float:right; margin-right:5px;'>合计:<font class='div_money'>"+priceSum+"</font>碳票（含运费:"+freight+"碳票）</div></div> <div style='width:100%; height:50px; line-height:50px; font-size:14px; background-color:#fff;  border-bottom:1px solid #f2f2f2;'><span style='float:right;background-color:#1AAD19; color:#fff; border-radius:3px; width:80px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:10px; border:1px solid #1AAD19;' onclick='showPasswordPanel(&apos;"+json.data[i].orderId+"&apos;);'>确认收货</span><span style='background-color:#f9f9f9; color:#333; border-radius:3px;width:80px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:10px; float:right; border:1px solid #bbbbbb;' onclick='queryExpress(&apos;"+json.data[i].orderId+"&apos;,0);'>查看物流</span></div></div>";	
+					}
+					var pageNextNo=parseInt(pageNo)+1;
+					result+="<div id='div_hassend"+pageNextNo+"'></div>";
+					$("#div_hassend"+pageNo).html(result);
+					pageNo++;
+				}
+				$("#loadingToast").css("display","none");				
+			}
+			else
+			{
+				$("#loadingToast").css("display","none");
+				jectNotice(json.msg);
+			}
+			myScroll.refresh();
+		},
+		error : function(textStatus) 
+		{
+			$("#loadingToast").css("display","none");
+			myScroll.refresh();
+		}
+	});		
+}
+
+function loadOrderHasRecive()
+{	
+	$("#loadingToast").css("display","block");
+	result="";
+	$.ajax	
+	({
+		type : "POST",url:"http://114.55.103.71:9006/ldy/order/getOrdersToJSON?callback=?&token="+token+"&type=1&status=3&pageNo="+pageNo,data: {},dataType : "jsonp",
+		success : function(data) 
+		{   
+			var json = eval(data); 	
+			if (json.code==200){
+				if (json.data.length==0 && pageNo==1) {
+					$("#div_hasrecive1").html("<div style='width:100%; text-align:center; margin-top:100px;'><img src='ico/ico_orderEmpty.png' style='max-height:100px; margin-bottom:10px;' /><br /><font style='font-size:14px; color:#8a8a8a;'>没有相关订单</font></div>");
+				} else if (json.data.length>0) {
+					for (var i=0; i<json.data.length; i++) {
+						
+						price=parseFloat(json.data[i].price).toFixed(2);					
+						ccer=parseFloat(json.data[i].zsccer).toFixed(2);
+						freight=parseFloat(json.data[i].freight).toFixed(2);
+						number=parseInt(json.data[i].sl);			
+						priceSum=(parseFloat(price*number)+parseFloat(freight)).toFixed(2);			
+						sp_img="";
+						if(json.data[i].sp_img.indexOf("img_goodsFace")==-1){
+							sp_img="<img class='img_goodsFace' src='"+json.data[i].sp_img+"'/>";	
+						}else{
+							
+							sp_img=json.data[i].sp_img;
+						}	
+						result+="<div id='orderId"+json.data[i].orderId+"' style='margin-bottom:5px;'><div style='width:100%; height:50px; line-height:50px; background-color:#fff; font-size:14px; color:#333; border-bottom:1px solid #f2f2f2;' class='td_userLogo' onclick='go_store(\""+json.data[i].saleUserId+"\");'><img src='"+json.data[i].saleUserLogo+"'/><font id='font_orderId' style='margin-left:10px;'>"+json.data[i].storeName+" ></font></div><table width='100%' border='0' cellspacing='0' cellpadding='0' height='100' bgcolor='#FFFFFF' style=' border-bottom:1px solid #f2f2f2;'><tr><td class='orderGoodsFace'>"+sp_img+"</td><td><div id='div_goodsName' class='orderGoodsName'>"+json.data[i].title+"</div><div class='orderGoodsModel'><font id='font_goodsModel'>型号："+json.data[i].gg+"</font></div><div style='width:100%; line-height:30px;'><font class='div_money'>"+price+"</font><font style='font-size:12px;'>碳票</font><div style='float:right; margin-right:15px;'>×<font style=' font-size:18px;'>"+number+"</font></div></div><div style='width:100%; line-height:10px; font-size:12px;' class='orderGoodsModel'>附送碳("+json.data[i].zsCcerCnumber+"): <font color='#F60'>"+ccer+"</font>吨</div></td></tr></table><div style='width:100%; height:50px; line-height:50px; font-size:14px; background-color:#fff; border-bottom:1px solid #f2f2f2;'><div style='float:right; margin-right:5px;'>合计:<font class='div_money'>"+priceSum+"</font>碳票（含运费:"+freight+"碳票）</div></div>";
+						if(json.data[i].evalId=="" ||json.data[i].evalId==undefined || json.data[i].evalId==null){
+							result+="<div style='width:100%; height:50px; line-height:50px; font-size:14px; background-color:#fff;  border-bottom:1px solid #f2f2f2;' id='return"+json.data[i].orderId+"'><span style='float:right;background-color:#1AAD19; color:#fff; border-radius:3px; width:80px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:10px; border:1px solid #1AAD19;' onclick='go_evaluation(&apos;"+json.data[i].spId+"&apos;,&apos;"+json.data[i].orderId+"&apos;);'>评价</span><span style='background-color:#f9f9f9; color:#333; border-radius:3px;width:80px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:10px; float:right; border:1px solid #bbbbbb;' onclick='orderDelAsk(&apos;"+json.data[i].orderId+"&apos;);'>删除订单</span></div>";
+						}else{
+							result+="<div style='width:100%; height:50px; line-height:50px; font-size:14px; background-color:#fff; border-bottom:1px solid #f2f2f2;' id='return"+json.data[i].orderId+"'><span style='background-color:#f9f9f9; color:#333; border-radius:3px;width:80px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:10px; float:right; border:1px solid #bbbbbb;'>已评价</span><span style='background-color:#f9f9f9; color:#333; border-radius:3px;width:80px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:10px; float:right; border:1px solid #bbbbbb;' onclick='orderDelAsk(&apos;"+json.data[i].orderId+"&apos;);'>删除订单</span></div>";
+						}
+						result+="</div>";	
+
+					}
+					var pageNextNo=parseInt(pageNo)+1;
+					result+="<div id='div_hasrecive"+pageNextNo+"'></div>";
+					$("#div_hasrecive"+pageNo).html(result);
+					pageNo++;
+				}
+				$("#loadingToast").css("display","none");				
+			}
+			else
+			{
+				$("#loadingToast").css("display","none");
+				jectNotice(json.msg);
+			}
+			myScroll.refresh();
+		},
+		error : function(textStatus) 
+		{
+			$("#loadingToast").css("display","none");
+			myScroll.refresh();
+		}
+	});		
+}
+
+function orderDelAsk(oId)
+{
+	$("#dialogOrderDel").css("display","block");
+	if(orderType==0){
+		$("#dialogOrderDel #dialogContent").html("是否确定取消该订单");
+	}else if(orderType==3){
+		$("#dialogOrderDel #dialogContent").html("是否确认删除该订单？");
+	}
+	orderId=oId;
+}
+
+function freightEdit(oId)
+{
+	orderId=oId;
+	$("#txt_freight").val("0.00");
+	$("#div_ejectFreight").css("display","block");
+}
+
+function freightEditConfirm()
+{
+	$("#loadingToast").css("display","block");
+	
+	freight=$("#txt_freight").val();
+	if (freight==""){ return; }
+		
+	$.ajax	
+	({
+		type : "POST",url:"http://114.55.103.71:9006/ldy/order/changeFreight?callback=?&token="+token+"&orderId="+orderId+"&freight="+freight,data: {},dataType : "jsonp",
+		success : function(data) 
+		{   
+			var json = eval(data); 	
+			if (json.code==200){
+				price=parseFloat($("#font_goodsPrice"+orderId).html());
+				number=parseInt($("#font_goodsNum"+orderId).html());
+				priceSum=parseFloat(price*number)+parseFloat(freight);
+				
+				$("#font_freight"+orderId).html(parseFloat(freight).toFixed(2));
+				$("#font_priceSum"+orderId).html(parseFloat(priceSum).toFixed(2));	
+						
+				$("#div_ejectFreight").css("display","none");
+				$("#loadingToast").css("display","none");
+				
+				$("#toastContent").html("修改成功");
+				$("#toast").css("display","block");
+				setTimeout(function(){$("#toast").css("display","none");},1000);
+			}
+			else
+			{
+				$("#loadingToast").css("display","none");
+				jectNotice(json.msg);
+			}
+		},
+		error : function(textStatus) 
+		{
+			$("#loadingToast").css("display","none");
+		}
+	});		
+}
+
+function delConfirm()
+{
+	$("#loadingToast").css("display","block");
+	$.ajax	
+	({
+		type : "POST",url:"http://114.55.103.71:9006/ldy/order/hideOrderToJSON?callback=?&type=1&token="+token+"&orderId="+orderId,data: {},dataType : "jsonp",
+		success : function(data) 
+		{   
+			var json = eval(data); 	
+			if (json.code==200){				
+				$("#loadingToast").css("display","none");
+				$("#dialogOrderDel").css("display","none");
+				$("#orderId"+orderId).css("display","none");
+				if(orderType==0 && parseInt($("#font_orderWaitPay").html())>0){
+					$("#font_orderWaitPay").html(parseInt($("#font_orderWaitPay").html())-1);
+				}else if(orderType==3 && parseInt($("#font_orderHasRecive").html())>0){
+					$("#font_orderHasRecive").html(parseInt($("#font_orderHasRecive").html())-1);
+				}
+				
+				
+				$("#toastContent").html("操作完成");
+				$("#toast").css("display","block");
+				
+				setTimeout(function(){$("#toast").css("display","none");},1000);
+			}
+			else
+			{
+				$("#loadingToast").css("display","none");
+				jectNotice(json.msg);
+			}
+		},
+		error : function(textStatus) 
+		{
+			$("#loadingToast").css("display","none");
+		}
+	});		
+}
+
+
+/*function go_back(){
+	url=window.location.href;
+	backurl=getFootprint(url,1);
+	window.location=backurl;
+}*/
+function go_store(userid){
+	window.location="mall_shop.html?token="+token+"&userid="+userid;
+}
+function go_evaluation(spid,orderId){
+	window.location="mall_goodsEvaluation.html?token="+token+"&spId="+spid+"&orderId="+orderId;
+}
+function checkPwd(oId,money){
+	$.ajax	
+	({
+		type : "POST",url:"http://114.55.103.71:9006/ldy/user/checkSecPwdToJSON?callback=?&token="+token,data: {},dataType : "jsonp",
+		success : function(data) 
+		{   
+			var json = eval(data); 	
+			if (json.code==200){				
+				if(json.data==1){
+					orderCanPay(money,oId);
+					
+				}else{
+					$("#dialogPwd").css("display","block");
+				}
+			}
+			
+		},
+		error : function(textStatus) 
+		{
+			
+		}
+	});		
+}
+function goSetPwd(){
+	aif.javaGoSetPassword();
+}
+function goSetPay(){
+	aif.javaGoRecharge();
+}
+function showPasswordPanel(oId) 
+{
+	$("#txt_password").val("");
+	orderId=oId;
+	
+	var maskPassword = $('#maskPassword');
+	var weuiActionsheetPassword = $('#weui_actionsheetPassword');
+	weuiActionsheetPassword.addClass('weui_actionsheet_toggle');
+	maskPassword.show().addClass('weui_fade_toggle').click(function() {
+		hideActionSheetPassword(weuiActionsheetPassword, maskPassword);
+	});
+	weuiActionsheetPassword.unbind('transitionend').unbind('webkitTransitionEnd');
+	if(orderType==0)
+		orderCanPay();
+}
+function hideActionSheetPassword() {
+	var maskPassword = $('#maskPassword');
+	var weuiActionsheetPassword = $('#weui_actionsheetPassword');
+
+	weuiActionsheetPassword.removeClass('weui_actionsheet_toggle');
+	maskPassword.removeClass('weui_fade_toggle');
+	weuiActionsheetPassword.on('transitionend', function() {
+		maskPassword.hide();
+	}).on('webkitTransitionEnd',
+		function() {
+			maskPassword.hide();
+		})
+}
+function typePassword(obj)
+{
+	if ($(obj).html()!="×"){
+		typeNumber=$(obj).html();
+		typed=$("#txt_password").val();
+		$("#txt_password").val(typed+typeNumber);
+		if ($("#txt_password").val().length==6){
+			if(orderType==0){
+				pay();
+			}else if(orderType==2){
+				shouhuo();
+			}
+				
+		}
+	} else {
+		typeLength=$("#txt_password").val().length;
+		typeed=$("#txt_password").val();
+		$("#txt_password").val(typed.substring(0,typeLength-1));
+	}
+}
+
+
+function orderCanPay(money,oId){
+	$.ajax	
+	({
+		type : "POST",url:"http://114.55.103.71:9006/ldy/order/orderCanPay?callback=?&token="+token+"&money="+money,data: {},dataType : "jsonp",	//支付
+		success : function(data) 
+		{   
+
+			var json = eval(data); 	
+			if (json.code==200){
+				if(json.data.status==0){
+					$("#dialogMoney").css("display","block");
+					$("#div_nomoney").html(json.data.account);
+				}else{
+					$("#dialogMoney").css("display","none");
+					showPasswordPanel(oId);
+				}
+				
+					
+			}
+		},
+		error : function(textStatus) 
+		{
+			$("#dialogMoney").css("display","none");
+		}
+	});		
+}
+function pay()
+{
+	$("#loadingToast").css("display","block");
+	
+	pwd=Encrypt($("#txt_password").val())+"";
+	
+	//必须对+和&进行转义替换，否则服务端接收后会变成空格
+    pwd = pwd.replace(/\+/g,"%2B");
+    pwd = pwd.replace(/\&/g,"%26"); 
+	//END //必须对+和&进行转义替换，否则服务端接收后会变成空格	
+		
+	$.ajax	
+	({
+		type : "POST",url:"http://114.55.103.71:9006/ldy/order/orderPayMoneyToJSON?callback=?&token="+token+"&orderId="+orderId+"&payPwd="+pwd,data: {},dataType : "jsonp",	//支付
+		success : function(data) 
+		{   
+
+			var json = eval(data); 	
+			if (json.code==200){
+				setTimeout(function(){
+					$("#loadingToast").css("display","none");
+					window.location="mall_paySuccess.html?token="+token;},1000);
+			}
+			else
+			{
+				$("#loadingToast").css("display","none");
+				window.location="mall_payFaile.html?token="+token;
+				jectNotice(json.msg);
+			}
+		},
+		error : function(textStatus) 
+		{
+			$("#loadingToast").css("display","none");
+		}
+	});		
+}
+function shouhuo()
+{
+	$("#loadingToast").css("display","block");
+	
+	pwd=Encrypt($("#txt_password").val())+"";
+	
+	//必须对+和&进行转义替换，否则服务端接收后会变成空格
+    pwd = pwd.replace(/\+/g,"%2B");
+    pwd = pwd.replace(/\&/g,"%26"); 
+	//END //必须对+和&进行转义替换，否则服务端接收后会变成空格	
+		
+	$.ajax	
+	({
+		type : "POST",url:"http://114.55.103.71:9006/ldy/order/shouHuoToJSON?callback=?&token="+token+"&orderId="+orderId+"&pwd="+pwd,data: {},dataType : "jsonp",	//支付
+		success : function(data) 
+		{   
+			var json = eval(data); 	
+			if (json.code==200){
+				
+				$("#toastfsuccessContent").html("操作完成");
+				$("#toast_success").css("display","block");
+				$("#loadingToast").css("display","none");
+				setTimeout(function(){$("#toast_success").css("display","none");},1000);
+				hideActionSheetPassword();
+				loadOrderHasRecive();
+			}
+			else
+			{
+				$("#toastfailContent").html(json.msg);
+				$("#toast_fail").css("display","block");
+				$("#loadingToast").css("display","none");
+				setTimeout(function(){$("#toast_fail").css("display","none");},1000);
+			}
+		},
+		error : function(textStatus) 
+		{
+			
+		}
+	});		
+}
+
+function showReturnPanel(oId) 
+{
+	orderId=oId;
+	
+	var maskReturn = $('#maskReturn');
+	var weui_actionsheetReturn = $('#weui_actionsheetReturn');
+	weui_actionsheetReturn.addClass('weui_actionsheet_toggle');
+	maskReturn.show().addClass('weui_fade_toggle').click(function() {
+		hideActionSheetReturn(weui_actionsheetReturn, maskReturn);
+	});
+	weui_actionsheetReturn.unbind('transitionend').unbind('webkitTransitionEnd');
+}
+function hideActionSheetReturn() {
+	var maskReturn = $('#maskReturn');
+	var weui_actionsheetReturn = $('#weui_actionsheetReturn');
+
+	weui_actionsheetReturn.removeClass('weui_actionsheet_toggle');
+	maskReturn.removeClass('weui_fade_toggle');
+	weui_actionsheetReturn.on('transitionend', function() {
+		maskReturn.hide();
+	}).on('webkitTransitionEnd',
+		function() {
+			maskReturn.hide();
+		})
+}
+function returnReson(obj){
+	$.ajax	
+	({
+		type : "POST",url:"http://114.55.103.71:9006/ldy/order/sendOrderReturn?callback=?&token="+token+"&orderId="+orderId+"&reason="+$(obj).html(),data: {},dataType : "jsonp",	//支付
+		success : function(data) 
+		{   
+
+			var json = eval(data); 	
+			if (json.code==200){
+				$("#return"+orderId).html("<span style='background-color:#f9f9f9; color:#333; border-radius:3px;width:80px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:10px; float:right; border:1px solid #bbbbbb;'>已申请退款</span>");			
+			}
+			hideActionSheetReturn();
+		},
+		error : function(textStatus) 
+		{
+			$("#loadingToast").css("display","none");
+		}
+	});		
+}
+
+function queryExpress(oId)
+{
+	$("#loadingToast").css("display","block");
+	$.ajax	
+	({
+		type : "POST",url:"http://114.55.103.71:9006/ldy/ship/getShipperInfoToJSOP?callback=?&orderId="+oId,data: {},dataType : "jsonp",
+		success : function(data) 
+		{   
+			var json = eval(data); 	
+			if (json.code==200){
+				$("#div_expName").html(json.data.shipName+"<img onclick='hideExpress();' src='ico/ico_close_8a.png' style='float:right; margin-right:10px; max-height:30px; margin-top:15px;' />");
+				$("#div_expId").html(json.data.expNo);
+				var expNumber=json.data.traces.length;
+				var result="";
+
+				for (var i=parseInt(expNumber)-1; i>=0; i--){
+					result+="<div style='line-height:28px; font-size:14px; color:#8a8a8a;'>"+json.data.traces[i].AcceptTime+"</div><div style='line-height:28px; font-size:14px; color:#333333; border-bottom:1px solid #f2f2f2;'>"+json.data.traces[i].AcceptStation+"</div>";
+				}
+				$("#div_expContent").html(result);
+				$("#loadingToast").css("display","none");
+				showExpress();				
+			}
+			else
+			{
+				$("#loadingToast").css("display","none");
+				jectNotice(json.msg);
+			}
+		},
+		error : function(textStatus) 
+		{
+			$("#loadingToast").css("display","none");
+		}
+	});			
+}
+
+function showExpress() 
+{
+	$('html,body').animate({scrollTop: 0}, 100);
+	$('html').addClass('scrollFix');
+	var maskExpress = $('#maskExpress');
+	var weuiActionsheetExpress = $('#weui_actionsheetExpress');
+	weuiActionsheetExpress.addClass('weui_actionsheet_toggle');
+	maskExpress.show().addClass('weui_fade_toggle').click(function() {
+		weuiActionsheetExpress(weuiActionsheetExpress, maskExpress);
+	});
+	weuiActionsheetExpress.unbind('transitionend').unbind('webkitTransitionEnd');
+	document.body.removeEventListener('touchmove',bodyScroll,false);
+}
+
+function hideExpress() {
+	var maskExpress = $('#maskExpress');
+	var weuiActionsheetExpress = $('#weui_actionsheetExpress');
+
+	weuiActionsheetExpress.removeClass('weui_actionsheet_toggle');
+	maskExpress.removeClass('weui_fade_toggle');
+	weuiActionsheetExpress.on('transitionend', function() {
+		maskExpress.hide();
+	}).on('webkitTransitionEnd',
+		function() {
+			maskExpress.hide();
+		})
+	$('html').removeClass('scrollFix');
+	document.body.addEventListener('touchmove',bodyScroll,false);
+}
+
+function Encrypt(word){  
+	srcs = CryptoJS.enc.Utf8.parse(word);
+	var encrypted = CryptoJS.TripleDES.encrypt(srcs, key, {iv:iv, mode:CryptoJS.mode.CBC,padding: CryptoJS.pad.Pkcs7});
+	return encrypted;
+	
+} 
+
+	var myScroll,  
+	pullDown = $("#pullDown"),  
+	pullDownLabel = $(".pullDownLabel"),  
+
+	loadingStep = 0;//加载状态0默认，1显示加载状态，2执行加载数据，只有当为0时才能再次加载，这是防止过快拉动刷新  
+//  
+	pullDown.hide();  
+  
+	myScroll = new IScroll("#wrapper", {  
+		preventDefault:false,
+		scrollbars: false,  
+		mouseWheel: false,  
+		interactiveScrollbars: true,  
+		shrinkScrollbars: 'scale',  
+		fadeScrollbars: true,  
+		scrollY:true,  
+		probeType: 2,  
+		bindToWrapper:true  
+	});  
+
+	myScroll.on("scroll",function(){  
+	
+		if(loadingStep == 0 && !pullDown.attr("class").match('refresh|loading')){  
+			
+			if(this.y >=40){//下拉刷新操作
+			 
+				$(".pulldown-tips").hide();  
+				pullDown.addClass("refresh").show();  
+				pullDownLabel.text("松手刷新数据");  
+				loadingStep = 1;  
+				myScroll.refresh();  				
+			}else if(this.y <= (this.maxScrollY-60)  && this.directionY == 1){//上拉加载更多 
+				
+				loadingStep = 1;  
+				$("#p_loadContent").html("正在加载");
+				$("#loadingToast").css("display","block");
+				pullUpAction();  
+			}
+		}  
+	});  
+	myScroll.on("scrollEnd",function(){  
+		if(loadingStep == 1){  
+			if( pullDown.attr("class").match("refresh") ){//下拉刷新操作  
+				pullDown.removeClass("refresh").addClass("loading");  
+				$("#p_loadContent").html("正在刷新");
+				$("#loadingToast").css("display","block");
+				loadingStep = 2;  
+				pullDownAction();  
+			}  
+		}  
+	});  
+
+	function pullDownAction(){  
+		setTimeout(function(){  
+			$("#div_orderContent1").html('<div id="div_waitpay1"></div><div id="div_waitsend1"></div> <div id="div_hassend1"></div> <div id="div_hasrecive1"></div>');
+
+			$("#loadingToast").css("display","block");
+			$("#pullDown").hide();;
+			
+			if(orderType==0){
+				clickWaitPay();
+			}else if(orderType==1){
+				clickWaitSend();
+			}else if(orderType==2){
+				clickHasSend();
+			}else if(orderType==3){
+				clickHasRecive();
+			}
+			
+			//setTimeout(function(){iscorll();},500);	
+
+			pullDown.attr('class','').hide();  
+			loadingStep = 0;  
+			$(".pulldown-tips").show(); 
+			$("#loadingToast").css("display","none");
+		},500);  
+		setTimeout(function(){myScroll.refresh();},1000);
+	}		
+	function pullUpAction(){  
+		setTimeout(function(){  
+			loadingStep = 0;  
+			if(orderType==0){
+				loadOrderWaitPay();
+			}else if(orderType==1){
+				loadOrderWaitSend();
+			}else if(orderType==2){
+				loadOrderHasSend();
+			}else if(orderType==3){
+				loadOrderHasRecive();
+			}			
+		},500);  
+		setTimeout(function(){myScroll.refresh();},1000);
+	}  
+
+	document.body.addEventListener('touchmove',bodyScroll,false); 
+	
+/*$(window).on("load resize",function(){
+        var h=window.innerHeight||document.body.clientHeight||document.documentElement.clientHeight;
+		h=h+100;
+        $("#div_orderContent1").css("height",h);
+    });	*/
+function bodyScroll(event){
+   event.preventDefault();
+}
+</script>

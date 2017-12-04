@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+	</head>
+	<link rel="stylesheet" type="text/css" href="css/weui.css">
+	<script type="text/javascript" src="js/jquery-3.1.1.min.js" ></script>
+	<script type="text/javascript" src="js/iscroll-probe.js"></script>
+	<script src="js/functionPublic.js"></script>
+	</head>
+	<style>
+		body{
+			background: #F2F2F0;
+			font-family: sans-serif;
+		}
+		
+		.txt
+		{
+			width:95%;
+			height:40px;
+			border-radius:0px;
+			border:1px solid #CCCCCC;
+			color:#999;
+			font-size:14px;
+			padding:0px;
+			-webkit-appearance: none;
+			background: #F0F0F2;
+			margin-top: 5px;
+			margin-left: 10px;
+		}
+		
+		/*列表样式*/
+		.listFather{
+			width: 100%; height: 50px; background: #FFFFFF; border-top: 1px solid #E8E8E8;
+		}
+		.listUserLogo{
+			width: 40px; height: 50px; float: left; margin-left: 10px;
+		}
+		.listUserLogo img{
+			width: 40px; height: 40px; border-radius: 50%; margin-top: 5px;
+		}
+		.listUserNickname{
+			width: 50%; height: 50px; line-height: 50px; float: left; margin-left: 10px; overflow: hidden;
+		}
+		.listBtnMsg{
+			width: 60px; float: right; margin-right: 10px; height: 34px; line-height: 34px; text-align: center; background: #1AAD19; color: #FFFFFF; margin-top: 8px; font-size: 12px; border-radius: 3px;
+		}
+		.listTime{
+			width: auto; height: 50px; line-height: 50px; float: right; font-size: 12px; color: #888888; margin-right: 10px;
+		}
+		.listMsg{
+			margin: 0px 10px 0px 60px; line-height: 24px; font-size: 14px; color: #666666; word-break: break-all; background: #FFFFFF; 
+		}		
+		
+		.positionTop{
+			height:45px; background-color:#1AAD19; top:0px; z-index:8888;
+		}
+		.positionFixed{
+			position: fixed;
+		}
+		/*END 列表样式 */
+		
+		/*iScorll*/
+		
+		#wrapper {  
+		    position: absolute;  
+		    z-index: 1;  
+		    top: 100px;  
+		    bottom: 0px;  
+		    left: 0;  
+		    width: 100%;   
+		    /*overflow: hidden; */ 
+		}  
+		  
+		#scroller {  
+		    position: absolute;  
+		    z-index: 1;  
+		    -webkit-tap-highlight-color: rgba(0,0,0,0);  
+			-webkit-transform:translate3d(0,0,0);
+		    width: 100%;  
+			min-height:100.25%;
+		    -webkit-transform: translateZ(0);  
+		    -moz-transform: translateZ(0);  
+		    -ms-transform: translateZ(0);  
+		    -o-transform: translateZ(0);  
+		    transform: translateZ(0);  
+		    -webkit-touch-callout: none;  
+		    -webkit-user-select: none;  
+		    -moz-user-select: none;  
+		    -ms-user-select: none;  
+		    user-select: none;  
+		    -webkit-text-size-adjust: none;  
+		    -moz-text-size-adjust: none;  
+		    -ms-text-size-adjust: none;  
+		    -o-text-size-adjust: none;  
+		    text-size-adjust: none;  
+		}  
+		  
+		#pullDown,#pullUp,.pulldown-tips{  
+		    height:40px;  
+		    line-height:40px;  
+		    text-align:center; 
+			background-color:#fff; 
+			color:#979797;
+			font-size:12px;
+		}  
+		.pulldown-tips{  
+			position:absolute;  
+			top:-40px;  
+			left:0;  
+			width:100%;
+			display:none;
+		}
+		/*END iScorll*/	
+	</style>
+	<body onload="init();">
+		<table id="tb_banner" width="100%" border="0" cellspacing="0" cellpadding="0" class="positionTop positionFixed">
+			<tr>
+				<td style="width:40px; text-align:center;" onclick="closeCurrent()"><img src="ico/ico_back.png" style="max-width:26px; margin-top: 7px;" /></td>
+				<td id="td_shopName" style="text-align:center; font-size:16px; color:#fff;" onclick="beginMsg();">中和名单</td>
+				<td id="td_shopShare" style="width:40px; text-align:center; font-size:12px; color:#fff;">&nbsp;</td>
+			</tr>
+		</table>
+		<div id="divNull" style="width: 100%; height: 50px;"></div>
+		<div style="width: 100%; height: 50px; background: #FFFFFF;">
+			<div style="margin-left: 10px; height: 50px; line-height: 50px; font-size: 14px; float: left;">共有</div>
+			<div style="margin-left: 10px; height: 50px; line-height: 50px; font-size: 18px; float: left; font-weight: bold;" id="div_nameListCount">0</div>
+			<div style="margin-left: 10px; height: 50px; line-height: 50px; font-size: 14px; float: left;">人次&nbsp;参与该碳中和</div>
+		</div>		
+		
+		
+		<!--<div id="wrapper"> 
+		<div id="scroller">
+		<div id="pullDown" class=""><div class="pullDownLabel"></div></div>
+		<div class="pulldown-tips">下拉刷新</div>-->
+			<div id="div_nameListContent" style="background: #FFFFFF; top: 100px;">
+				<div id="div_nameListContent1"></div>
+			</div>
+		<!--</div>--><!--scroller-->
+		<!--</div>--><!--wrapper-->		
+		
+		<!--<div class="listFather">
+			<div class="listUserLogo">
+				<img src="img/ccer1.png" />				
+			</div>
+			<div class="listUserNickname">
+				dfasf
+			</div>
+		</div>-->
+		<div style="width: 100%; height: 60px;"></div>
+		<div id="divBottom" style="position: fixed; bottom: 0px; background: #FFFFFF; width: 100%; height: 50px; border-top: 1px solid #CCCCCC; z-index: 10; display: none;">			
+			<div style="width: 80%; float: left; height: 50px; display: inline;">		
+				<input id="txt_netuMessage" type="text" class="txt" onblur="txtBlur();" />
+			</div>
+			<div style="width: 20%; float: left; height: 50px; display: inline;">		
+				<div style="width: 60px; float: right; margin-right: 10px; height: 34px; line-height: 34px; text-align: center; background: #1AAD19; color: #FFFFFF; margin-top: 8px; font-size: 12px; border-radius: 3px;">确定</div>
+			</div>			
+		</div>		
+	</body>
+</html>
+
+<!--============================================================================================================-->
+<div id="loadingToast" class="weui_loading_toast" style="display:none; z-index:999999;">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui_toast">
+        <div class="weui_loading">
+            <div class="weui_loading_leaf weui_loading_leaf_0"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_1"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_2"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_3"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_4"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_5"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_6"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_7"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_8"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_9"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_10"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_11"></div>
+        </div>
+        <p id="p_loadContent" class="weui_toast_content">正在加载</p>
+    </div>
+</div>
+<!--============================================================================================================-->
+
+<script>
+	//==判断IOS操作，针对看度使用的iframe==
+	var u = navigator.userAgent;
+	var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+	var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端	
+	if (isAndroid==true){
+		
+	} else if (isiOS==true){
+		document.getElementById("tb_banner").classList.remove("positionFixed");
+		$("#divNull").css("display","none");
+	}	
+	//==END 判断IOS操作
+	var token=GetUrlParam("token");
+	var netuId=GetUrlParam("netuId");
+	var fromPage=GetUrlParam("fromPage");
+	var pageNo=1;
+	var userId="";
+	var noMoreData=false;
+	
+	function init(){
+		$("#loadingToast").css("display","block");		
+//		getUserInfo();
+//		loadNameListCount();
+		loadNameList();
+	}
+	
+	function waitPlease(){
+		aif.javaToastNotice("即将开放");
+	}
+	
+	function closeCurrent(){
+		if (fromPage=="H5"){
+			history.go(-1);	
+		} else {
+			aif.javaCloseActivity();
+		}
+	}
+	
+	function goUserSpace(userId){
+		var newUrl="http://www.lvdoya.com/H5/user_space.html?token="+token+"&userId="+userId;
+		aif.javaOpenNewWindow(newUrl);
+	}
+	
+	function pubNetu(){
+		aif.javaToastNotice("即将开放");
+	}
+	
+	function getUserInfo(){
+		$("#loadingToast").css("display","block");
+		$.ajax	//获取用户信息
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/user/getCurrentUserToJSON?callback=?&token="+token,data: {},dataType : "jsonp",
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+					userId=json.data.user_id;
+					loadNameList();
+				}
+				else{
+					jectNotice(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});			
+	}
+
+	function loadNameListCount(){
+		$.ajax	
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/neutral/getExchangeListById?callback=?&neutralId="+netuId+"&pageNo=0",data: {},dataType : "jsonp",	
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+					$("#div_nameListCount").html(json.data.length);
+				}
+				else
+				{
+					$("#loadingToast").css("display","none");
+					jectNotice(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});			
+	}
+
+	function loadNameList(){
+		var result="";
+		
+		$.ajax	
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/neutral/getExchangeListById?callback=?&neutralId="+netuId+"&pageNo=0",data: {},dataType : "jsonp",	
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+					$("#div_nameListCount").html(json.data.length);
+					if (json.data.length==0){
+						noMoreData=true;
+					}
+					for (var i=0; i<json.data.length; i++){
+						result+="<div class='listFather' onclick='goUserSpace(&apos;"+json.data[i].c_recUserId+"&apos;);'>";
+						result+="<div class='listUserLogo'><img src='"+json.data[i].user_logo+"' />";
+						result+="</div><div class='listUserNickname'>";
+						result+=json.data[i].user_nickname+"</div>";
+						if (userId==json.data[i].c_recUserId){
+//							result+="<div class='listBtnMsg'>我要留言</div>	";
+						}		
+						result+="<div class='listTime'>"+json.data[i].c_recTime.substring(0,16)+"</div>";
+						result+="</div>";
+						if (json.data[i].msg.length>0){
+							result+="<div class='listMsg'>"+json.data[i].msg+"</div>";	
+						}
+						
+					}
+					
+					$("#div_nameListContent"+pageNo).html(result);
+					var nextPageNo=pageNo+1;
+					$("#div_nameListContent"+pageNo).append("<div id='div_nameListContent"+nextPageNo+"'></div>");
+					pageNo++;
+					
+					$("#loadingToast").css("display","none");
+				}
+				else
+				{
+					$("#loadingToast").css("display","none");
+					jectNotice(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});	
+	}
+	
+	function beginMsg(){
+		$("#divBottom").css("display","block");
+		$("#txt_netuMessage").focus();
+	}
+	
+	function txtBlur(){
+		$("#divBottom").css("display","none");
+	}
+	
+	// Iscorll
+//	var myScroll,  
+//	pullDown = $("#pullDown"),  
+//	pullDownLabel = $(".pullDownLabel"),  
+//
+//	loadingStep = 0;//加载状态0默认，1显示加载状态，2执行加载数据，只有当为0时才能再次加载，这是防止过快拉动刷新  
+//	pullDown.hide();  
+//
+//	myScroll = new IScroll("#wrapper", {  
+//		preventDefault:false,
+//		scrollbars: false,  
+//		mouseWheel: false,  
+//		interactiveScrollbars: true,  
+//		shrinkScrollbars: 'scale',  
+//		fadeScrollbars: true,  
+//		scrollY:true,  
+//		probeType: 2,  
+//		bindToWrapper:true  
+//	});  
+//
+//	myScroll.on("scroll",function(){  
+//		if(loadingStep == 0 && !pullDown.attr("class").match('refresh|loading')){  
+//			if(this.y > 40){//下拉刷新操作  
+//				$(".pulldown-tips").hide();  
+//				pullDown.addClass("refresh").show();  
+//				pullDownLabel.text("松手刷新数据");  
+//				loadingStep = 1; 
+//				
+//				myScroll.refresh();  				
+//			}else if(this.y <= (this.maxScrollY)  && this.directionY == 1){//上拉加载更多
+//				if (noMoreData==false){
+//					loadingStep = 1;  
+//					$("#p_loadContent").html("正在加载");
+//					$("#loadingToast").css("display","block");
+//					pullUpAction(); 					
+//				} else {
+//					setTimeout(function(){myScroll.refresh();},1);
+//				}
+//
+//			}  
+//		}  
+//	});  
+//	myScroll.on("scrollEnd",function(){  
+//		if(loadingStep == 1){  
+//			if( pullDown.attr("class").match("refresh") ){//下拉刷新操作  
+//				pullDown.removeClass("refresh").addClass("loading");  
+//				$("#p_loadContent").html("正在刷新");
+//				$("#loadingToast").css("display","block");
+//				loadingStep = 2;  
+//				pullDownAction();  
+//			}  
+//		}  
+//	});  
+//
+//	function pullDownAction(){  
+//		setTimeout(function(){  
+//			pullDown.attr('class','').hide();
+//			loadingStep = 0;
+//			// do your something
+//			pageNo=1;
+//			noMoreData=false;
+//			init();
+//			$(".pulldown-tips").show(); 
+//			$("#loadingToast").css("display","none");
+//			$(".pulldown-tips").css("display","none");
+//		},500);  
+//		setTimeout(function(){myScroll.refresh();},1000);
+//	}		
+//	function pullUpAction(){  
+//		setTimeout(function(){  
+//			loadingStep = 0;  
+//			// do your something
+//			loadNameList();
+//		},500);  
+//		setTimeout(function(){myScroll.refresh();},100);
+//	}  
+//
+//  document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);  
+	// END Iscorll	
+</script>

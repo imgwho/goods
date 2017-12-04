@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+		<meta http-equiv="Access-Control-Allow-Origin" content="*">
+		<title>碳广场</title>
+		<style>
+			body {
+				margin:0;
+				background-color:#f0f0f2;
+				font-family: sans-serif; 
+				overflow: hidden; /* this is important to prevent the whole page to bounce FOR iScorll */
+			}
+			.td_carbonPlaza{
+				width:33%; text-align: center; vertical-align: middle; background-color: #fff; border-right: 1px solid #f2f2f2; font-size: 14px;
+			}
+		</style>
+	</head>
+	<script type="text/javascript" src="js/jquery-3.1.1.min.js" ></script>
+	<body>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td class="td_carbonPlaza" onclick="go_carbonStore();"><img src="ico/ico_carbonShop.png" style="max-height: 40px;" /><br>碳铺</td>
+				<td class="td_carbonPlaza" onclick="go_carbonMarket();"><img src="ico/ico_carbonMarket.png" style="max-height: 40px;" /><br>碳市场</td>
+				<td class="td_carbonPlaza"><img src="ico/ico_carbonExchange.png" style="max-height: 40px;" /><br>碳兑换</td>
+			</tr>
+		</table>
+		<div style="width:100%; height: 40px; line-height: 40px; text-align: left; background-color: #e9e9e9;">
+			<font style="margin-left: 10px; font-size: 14px; color: #666;">第三方服务</font>
+		</div>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td class="td_carbonPlaza"><img src="ico/ico_greenCertification.png" style="max-height: 40px;" /><br>绿证购买</td>
+				<td class="td_carbonPlaza"><img src="img/serviceBQ.jpg" style="max-height: 40px;" /><br>北汽</td></td>
+				<td class="td_carbonPlaza">&nbsp;</td>
+			</tr>
+		</table>	
+	</body>
+</html>
+
+<script>
+	//根据屏宽调整td高度
+	var td_carbonPlazaHeight=$(window).width()/3;
+	$(".td_carbonPlaza").css("height",td_carbonPlazaHeight+"px");
+	//END 根据屏宽调整td高度
+	
+	function go_carbonStore(){
+		window.location="carbon_shop.html";
+	}
+	
+	function go_carbonMarket(){
+		window.location="carbon_market.html";
+	}
+	
+</script>

@@ -1,0 +1,320 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<title>shopCar</title>
+<style>
+body
+{
+	margin:0;
+	background-color:#f0f0f2;
+	font-family: sans-serif; 
+}
+.div_chooseAll 
+{
+	width:40px; height:20px; line-height:20px; color:#1AAD19; background-color:#fff; font-size:12px; text-align:center; border-radius:5px; border:1px solid #1AAD19; margin-left:10px;
+}
+/*BEGIN list*/
+.listFather
+{
+	width:100%; height:40px; vertical-align:middle; margin-top:5px; background-color:#fff;
+}
+.listUserLogo img
+{
+	border-radius:50%; height:30px; width:30px; vertical-align:middle; float:left; margin-left:10px; margin-top:5px;
+}
+.listShopName
+{
+	height:40px; line-height:40px; float:left; margin-left:5px;
+}
+.listDel 
+{
+	max-height:20px; margin-right:5px; float:right; vertical-align:middle; margin-top:10px;
+}
+.listTdGoodsFace
+{
+	width:100px; text-align:center; vertical-align:middle;
+}
+.listTdGoodsFace img
+{
+	width:80px; height:80px;
+}
+.listGoodsModel
+{
+	width:100%; line-height:12px; overflow:hidden; font-size:12px; color:#979797;
+}
+.listGoodsName
+{
+	width:100%; height:40px; line-height:40px; overflow:hidden; font-size:16px;
+}
+/*END list*/
+</style>
+</head>
+<link rel="stylesheet" type="text/css" href="css/weui.css">
+<script type="text/javascript" src="js/jquery-3.1.1.min.js" ></script>
+<script src="js/functionPublic.js"></script>
+<body onload="init();">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; background-color:#1AAD19; position:fixed; top:0px; z-index:8888;">
+  <tr>
+    <td style="width:40px; text-align:center; vertical-align:middle;" onclick="closeCurrent();"><img src="ico/ico_back.png" style="max-width:26px;" /></td>
+    <td id="td_shopName" style="text-align:center; font-size:16px; color:#fff;">购物车</td>
+    <td id="td_shopShare" style="width:40px; vertical-align:middle; text-align:center;">&nbsp;</td>
+  </tr>
+</table>
+<div style="width:100%; height:30px;"></div>
+<div id="div_shopCarContent" class="weui_cells weui_cells_checkbox" style="background-color:#f0f0f2;">
+</div>
+
+<div style="width:100%; height:60px;"></div>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:50px; position:fixed; bottom:0px; background-color:#fff; border-top:1px solid #ccc; z-index:7777;">
+  <tr>
+    <td style="width:10px;">
+    	<!--<div class="div_chooseAll" onclick="chooseAll(this);">全选</div>-->
+    </td>
+    <td>    	
+        <div style="width:100%; height:30px; line-height:36px;">
+        	<font style="font-size:12px;">合计:</font><font id="font_priceSum" style="font-size:18px; color:#1AAD19; font-weight:bold;">0.00</font><font style="font-size:12px;">碳票</font>
+        </div>
+        <div style="width:100%; height:20px; line-height:22px; font-size:12px; color:#333;">合计附送碳:<font id="font_ccerSum" style="font-size:12px; font-weight:bold; color:#C03;">0.00</font>吨</div>
+    </td>
+    <td onclick="go_settle();" style="background-color:#1AAD19; text-align:center; vertical-align:middle; width:100px; color:#fff;">去结算(<font id="font_chooseNum">0</font>)</td>
+  </tr>
+</table>
+
+</body>
+</html>
+<!--BEGIN ==================================================================================================================================================-->
+<input id="hid_goodsId" type="hidden" value="" />
+<input id="hid_goodsModel" type="hidden" value="" />
+
+<div id="loadingToast" class="weui_loading_toast" style="display:none; z-index:999999;">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui_toast">
+        <div class="weui_loading">
+            <div class="weui_loading_leaf weui_loading_leaf_0"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_1"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_2"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_3"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_4"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_5"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_6"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_7"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_8"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_9"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_10"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_11"></div>
+        </div>
+        <p id="p_loadContent" class="weui_toast_content">正在加载</p>
+    </div>
+</div>
+
+<div class="weui_dialog_confirm" id="dialogAsk" style="display: none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title" id="dialogTitle"></strong></div>
+        <div id="dialogContent" class="weui_dialog_bd"></div>
+      <div class="weui_dialog_ft">
+            <a id="dialogCancle" href="javascript:$('#dialogAsk').css('display','none');" class="weui_btn_dialog default">取消</a>
+            <a id="dialogConfirm" href="javascript:shopCarDel();" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+
+<div class="weui_dialog_alert" id="notice" style="display:none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
+        <div class="weui_dialog_bd" id="noticeContent">&nbsp;</div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:$('#notice').css('display','none');" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+<!--END  ==================================================================================================================================================-->            
+<script>
+var token=GetUrlParam("token");
+var goodsIds="";
+
+function closeCurrent(){
+	aif.javaCloseActivity();
+}
+
+function init(){
+	var reg;
+	url=window.location.href;
+	saveFootprint(url);
+	$("#loadingToast").css("display","block");
+	$.ajax	
+	({
+		type : "POST",url:"http://114.55.103.71:9006/ldy/ubc/getBuyCarSpsToJSON?callback=?&token="+token,data: {},dataType : "jsonp",	
+		success : function(data) 
+		{   
+			var json = eval(data); 	
+			var result="";
+			if (json.code==200){
+				if (json.data.length>0){
+					for(var i=0;i<json.data.length;i++){
+						
+						//对SpID+gg(ID+规格）进行转义
+						var makeLongID=json.data[i].spId+escape(json.data[i].gg);
+						reg = new RegExp("/","g");//g,表示全部替换。
+						makeLongID=makeLongID.replace(reg,"_");
+						reg = new RegExp("%","g");//g,表示全部替换。
+						makeLongID=makeLongID.replace(reg,"_");
+						console.log(makeLongID);
+						//END //对SpID+gg(ID+规格）进行转义
+						
+						result+="<div id='div_goods"+json.data[i].spId+"'><div class='listFather'>";
+						result+="<div id='div_listUserLogo' class='listUserLogo' onclick='go_shop(&apos;"+json.data[i].storeId+"&apos;);'>";
+						result+="<img src='"+json.data[i].spUserLogo+"' /></div>";
+						result+="<div id='div_listShopName' class='listShopName' onclick='go_shop(&apos;"+json.data[i].storeId+"&apos;);'>"+json.data[i].storeName+"</div>";
+						result+="<img src='ico/ico_del.png' class='listDel' onClick='shopCarDelAsk(&apos;"+json.data[i].spId+"&apos;,&apos;"+json.data[i].gg+"&apos;);' /></div>";
+						result+="<label id='lab_carGoods' class='weui_cell weui_check_label' style='padding:5px 0px 5px 10px; background-color:#fff;'><div class='weui_cell_hd'>";
+						result+="<input type='checkbox' class='weui_check' id='chk_shopCar' onChange='checkChange(this,&apos;"+makeLongID+"&apos;);'><i class='weui_icon_checked'></i></div>";
+						result+="<div class='weui_cell_bd weui_cell_primary' style='margin:0px; padding:0px;'>";
+						result+="<table width='100%' border='0' cellspacing='0' cellpadding='0' height='100'>";
+						result+="<tr><td class='listTdGoodsFace'>"+json.data[i].sp_img+"</td><td>";
+						result+="<div id='div_goodsName' class='listGoodsName'>"+json.data[i].title+"</div>";
+						result+="<div class='listGoodsModel'><font id='font_goodsModel'>"+json.data[i].gg+"</font>";
+						result+="×<font id='font_goodsNum"+makeLongID+"'>"+json.data[i].sl+"</font></div>";
+						result+="<div style='width:100%; line-height:30px;'>";
+						result+="<font id='font_goodsPrice"+makeLongID+"' style='font-size:18px; color:#1AAD19; font-weight:bold;'>"+parseFloat(json.data[i].price).toFixed(2)+"</font>";
+						result+="<font style='font-size:12px;'>碳票</font></div>";
+						result+="<div style='width:100%; line-height:30px; font-size:14px;'>附送碳:<font id='font_goodsCcer"+makeLongID+"' color='#C03'>"+parseFloat(json.data[i].zsccer).toFixed(2)+"</font>吨</div></td></tr></table></div></label></div>";
+					}				
+					$("#div_shopCarContent").html(result);
+					setTimeout(function(){$("#loadingToast").css("display","none");},500);
+					console.log($("#font_goodsNum"+makeLongID).html());
+					
+				} else {
+					$("#div_shopCarContent").html("<div style='width:100%; text-align:center; margin-top:100px;'><img src='ico/ico_shopCar_8a1.png' style='max-height:100px; margin-bottom:10px;' /><br /><font style='font-size:14px; color:#8a8a8a;'>你的购物车竟然是空的</font></div>");  //<div onclick='go_mall();' style='margin:0 auto; width:80px; height:30px; line-height:30px; border-radius:3px; text-align:center; color:#1AAD19; border:1px solid #1AAD19; font-size:14px; margin-top:20px;'>去逛逛</div>
+					$("#loadingToast").css("display","none");
+				}				
+			}
+			else
+			{
+				$("#loadingToast").css("display","none");
+				jectNotice(json.msg);
+			}
+		},
+		error : function(textStatus) 
+		{
+			$("#loadingToast").css("display","none");
+		}
+	});			
+}
+
+function shopCarDelAsk(goodsId,goodsModel)
+{
+	$("#dialogTitle").html("删除");
+	$("#dialogContent").html("确定将该商品从购物车删除吗？");
+	$("#dialogAsk").css("display","block");
+	$("#hid_goodsId").val(goodsId);
+	$("#hid_goodsModel").val(goodsModel);
+}
+
+function shopCarDel()
+{
+	goodsId=$("#hid_goodsId").val();
+	goodsModel=$("#hid_goodsModel").val();
+	$("#dialogAsk").css("display","none");
+	$("#loadingToast").css("display","block");
+	$.ajax	
+	({
+		type : "POST",url:"http://114.55.103.71:9006/ldy/ubc/delSpToJSON?callback=?&token="+token+"&key="+goodsId+":"+goodsModel,data: {},dataType : "jsonp",	
+		success : function(data) 
+		{   
+			var json = eval(data);
+			if (json.code==200){
+				setTimeout(function(){					
+					$("#div_goods"+goodsId).css("display","none");					
+					$("#loadingToast").css("display","none");
+				},500);		
+			}
+			else
+			{
+				$("#loadingToast").css("display","none");
+				jectNotice(json.msg);
+			}
+		},
+		error : function(textStatus) 
+		{
+			$("#loadingToast").css("display","none");
+		}
+	});	
+}
+
+function checkChange(obj,goodsId)
+{
+	if (obj.checked==true){	
+		//计算碳票合计
+		goodsPrice=parseFloat($("#font_goodsPrice"+goodsId).html());
+		goodsNum=parseInt($("#font_goodsNum"+goodsId).html());
+		tiketSum=parseFloat(goodsPrice*goodsNum).toFixed(2);
+		$("#font_priceSum").html((parseFloat($("#font_priceSum").html())+parseFloat(tiketSum)).toFixed(2));
+		//计算附送碳合计
+		goodsCcer=parseFloat($("#font_goodsCcer"+goodsId).html());
+		ccerSum=parseFloat(goodsCcer*goodsNum).toFixed(2);
+		$("#font_ccerSum").html((parseFloat($("#font_ccerSum").html())+parseFloat(ccerSum)).toFixed(2));
+		//累计商品总数
+		$("#font_chooseNum").html(parseInt($("#font_chooseNum").html())+1);	
+		//goodsIds用于参数传递到结算页
+		goodsIds+=goodsId+",";
+	} else { 
+		//计算合计
+		goodsPrice=parseFloat($("#font_goodsPrice"+goodsId).html());
+		goodsNum=parseInt($("#font_goodsNum"+goodsId).html());
+		tiketSum=parseFloat(goodsPrice*goodsNum).toFixed(2);
+		$("#font_priceSum").html((parseFloat($("#font_priceSum").html())-parseFloat(tiketSum)).toFixed(2));
+		//计算附送碳合计
+		goodsCcer=parseFloat($("#font_goodsCcer"+goodsId).html());
+		ccerSum=parseFloat(goodsCcer*goodsNum).toFixed(2);
+		$("#font_ccerSum").html((parseFloat($("#font_ccerSum").html())-parseFloat(ccerSum)).toFixed(2));		
+		//减去总数	
+		$("#font_chooseNum").html(parseInt($("#font_chooseNum").html())-1); 
+		//goodsIds用于参数传递到结算页
+		goodsIds=goodsIds.replace(goodsId+",","");
+		
+		$(".div_chooseAll").css("background-color","#fff");
+		$(".div_chooseAll").css("color","#1AAD19");
+	}
+}
+
+function chooseAll(obj)
+{
+	if ($(obj).css("background-color")=="rgb(255, 255, 255)"){		
+		for (var i=1; i<=2; i++)
+		{
+			$("#chk_shopCar"+i).prop("checked",true);
+		}
+		$(obj).css("background-color","#1AAD19");
+		$(obj).css("color","#fff");
+	} else if ($(obj).css("background-color")=="rgb(26, 173, 25)"){ 
+		for (var i=1; i<=2; i++)
+		{
+			$("#chk_shopCar"+i).prop("checked",false);
+		}
+		$(obj).css("background-color","#fff");
+		$(obj).css("color","#1AAD19");
+		$("#font_chooseNum").html("0");
+	}
+}
+
+function go_settle()
+{
+	if ($("#font_chooseNum").html()=="0"){
+		jectNotice("未选择任何商品");
+		return;
+	}
+	
+	window.location="mall_settle.html?token="+token+"&goodsIds="+goodsIds;
+}
+
+function go_mall()
+{
+	window.location="mall.html?token="+token;
+}
+
+</script>

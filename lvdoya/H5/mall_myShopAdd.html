@@ -1,0 +1,553 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>myShopAdd</title>
+<style>
+body
+{
+	margin:0;
+	background-color:#f0f0f2;
+	font-family: sans-serif;
+}
+
+.txt
+{
+	width:100%;
+	height:45px;
+	border-radius:0px;
+	border:none;
+	color:#999;
+	font-size:16px;
+	padding:0px;
+	-webkit-appearance: none;
+}
+#xm_setp{width:100%; height:100%; background:#fff; z-index:9000; top:0px; left:100%; display:none; overflow:scroll; position:fixed;}
+
+#clipArea {
+	/*height: 90%;*/
+}
+#file,
+#clipBtn {   
+	display:block;
+	text-align: center;
+}
+</style>
+<link rel="stylesheet" href="css/weui.css">
+
+<script type="text/javascript" src="js/jquery-3.1.1.min.js" ></script>
+<!--图片上传-->
+<script src="plugIn/imgyasuo/lib/iscroll-zoom.js"></script>
+<script src="plugIn/imgyasuo/lib/hammer.min.js"></script>
+<script src="plugIn/imgyasuo/lib/lrz.all.bundle.js" type="text/javascript" ></script>
+<script src="plugIn/imgyasuo/lib/PhotoClip.js"></script>
+<script src="plugIn/imgyasuo/lib/jquery.min.js" type="text/javascript" ></script>
+<script src="plugIn/imgyasuo/lib/goodsAddFace.js" type="text/javascript" ></script>
+<link rel="stylesheet" type="text/css" href="plugIn/imgyasuo/lib/progress.css">
+
+<script type="text/javascript" src="pluginUpimg/mallGoodsDetails.js"></script>
+<!--<script type="text/javascript" src="pluginUpimg/lrz.all.bundle.js" ></script>-->
+<!--END 图片上传-->
+<script type="text/javascript" src="js/jquery.easing.min.js"></script>	<!--右侧弹出分类-->
+<script type="text/javascript" src="js/iscroll.js"></script>
+<script src="js/functionPublic.js"></script>
+<!--产品分类页面使用-->
+<link rel="stylesheet" href="pluginGoodsType/css/font-awesome.min.css">
+<link rel="stylesheet" href="pluginGoodsType/css/swiper-3.2.5.min.css" />
+<link rel="stylesheet" href="pluginGoodsType/css/ectouch.css" />
+<link rel="stylesheet" href="pluginGoodsType/fonts/iconfont.css" />
+<link rel="stylesheet" href="pluginGoodsType/css/search.css" />
+<!--<script type="text/javascript" src="pluginGoodsType/js/jquery-2.1.4.min.js"></script>-->
+<script type="text/javascript" src="pluginGoodsType/js/swiper-3.2.5.min.js"></script>
+<script type="text/javascript" src="pluginGoodsType/js/ectouch.js"></script>
+<script type="text/javascript" src="pluginGoodsType/js/jquery.json.js"></script> 
+<script type="text/javascript" src="pluginGoodsType/js/common.js"></script>
+<script type="text/javascript">
+	$(function($){
+		$('#sidebar ul li').click(function(){
+			$(this).addClass('active').siblings('li').removeClass('active');
+			var index = $(this).index();
+			$('.j-content').eq(index).show().siblings('.j-content').hide();
+		})
+	})
+</script>
+<!--END 产品分类页面使用-->
+</head>
+
+<body onload="loaded();">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; background-color:#1AAD19; position:fixed; top:0px; z-index:8888;">
+  <tr>
+    <td style="width:40px; text-align:center; vertical-align:middle;" onclick="go_back(1);"><img src="ico/ico_back.png" style="max-width:26px;" /></td>
+    <td style="text-align:center; font-size:16px; color:#fff; vertical-align:middle;">添加新商品</td>
+    <td style="width:40px; vertical-align:middle; text-align:center; font-size:14px; color:#fff;" onclick="saveGoodsAsk();"><img src="ico/ico_save_fff.png" style="max-height:20px;" /><br />保存</td>
+  </tr>
+</table>
+<div style="width:100%; height:45px;"></div>
+<div style="width:100%; display:none;" id="div_imgMallGoodsFace" class="div_imgMallGoodsFace"></div>
+<div id="tb_upMallGoodsFace">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td style="vertical-align:middle; text-align:center; height:120px;">
+            <img src="ico/ico_camera_circle.png" id="img_upFace" style="max-height:70px; vertical-align:middle; margin-top:10px; margin-bottom:10px;" /><br />
+            <font style="color:#333; font-size:14px;">添加商品封面图</font><br />
+        </td>
+      </tr>
+    </table>
+</div>
+
+<!--截图框-->
+<div style="width:100%;"><div class="fileListFace"></div></div>        
+<div id="clip" style="position:absolute; width:100%; height:100%; top:0px; left:0px; display:none;">        
+
+    <div id="clipArea"></div>
+    <div style="width:100%; height:50px; background-color:#f9f9f9; text-align:center;">  
+        <button id="clipBtn" style="width:80%; height:40px; border:1px solid #cccccc; background-color:#1AAD19; color:#fff; font-size:16px; margin:0 auto; margin-top:5px; border:none; border-radius:3px;">确定</button>
+    </div>
+</div>
+<!--截图框-->
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#fff; border-top:1px solid #bbbbbb; border-bottom:1px solid #bbbbbb;">
+  <tr>
+    <td style="width:10px;">&nbsp;</td>
+    <td><input id="txt_goodsName" class="txt" maxlength="20" type="text" onfocus="if(this.value==defaultValue) {this.value=''; this.style.color='#000';}" onblur="if(!value) {value=defaultValue; this.style.color='#999';};" value="请填写商品名称（2-20个字）" /></td>
+    <td style="width:10px;">&nbsp;</td>
+  </tr>
+</table>
+<div style="width:100%; height:45px; background-color:#fff; margin-top:10px; border-top:1px solid #bbbbbb; border-bottom:1px solid #bbbbbb;" onclick="chooseGoodsType();">
+	<div style="line-height:45px; float:left; margin-left:10px; font-size:16px; color:#333;" id="div_chooseGoodsType">选择分类</div>
+    <img src="ico/ico_more_444.png" style="float:right; margin-right:10px; max-height:21px; margin-top:12px;" />
+</div>
+<div style="width:100%; height:45px;">
+	<div onclick="modelAdd();" style="line-height:45px; float:right; margin-right:10px; font-size:16px; color:#333;">添加商品型号(<font id="font_modelNo">1</font>/4)</div>
+    <img src="ico/ico_add_1.png" style="float:right; margin-right:5px; max-height:21px; margin-top:12px;" />
+</div>
+<div id="div_goodsModel0" style="display:block; margin-bottom:10px;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; border-top:1px solid #bbbbbb; background-color:#fff;">
+      <tr>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">型号</td>
+        <td style=""><input id="txt_goodsModel0" class="txt" maxlength="10" type="text" onfocus="if(this.value==defaultValue) {this.value=''; this.style.color='#000';}" onblur="if(!value) {value=defaultValue; this.style.color='#999';};" value="2-10个字" /></td>
+        <td style="width:60px; text-align:center; vertical-align:middle;">&nbsp;</td>
+      </tr>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; border-top:1px solid #bbbbbb; background-color:#fff;">
+      <tr>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">单价</td>
+        <td style=""><input id="txt_goodsPrice0" class="txt" maxlength="20" type="number" style="color:#000;" onkeyup="clearNoNum(this);" /></td>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">碳票</td>
+      </tr>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; border-top:1px solid #bbbbbb; border-bottom:1px solid #bbbbbb; background-color:#fff;">
+      <tr>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">运费</td>
+        <td style=""><input id="txt_goodsFreight0" class="txt" maxlength="10" type="number" style="color:#000;" onkeyup="clearNoNum(this);" onfocus="if(this.value==defaultValue) {this.value='';}" onblur="if(!value) {value=defaultValue;};" value="0.00"/></td>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">碳票</td>
+      </tr>
+    </table>    
+</div>
+<div id="div_goodsModel1" style="display:none; margin-bottom:10px;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; border-top:1px solid #bbbbbb; background-color:#fff;">
+      <tr>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">型号</td>
+        <td style=""><input id="txt_goodsModel1" class="txt" maxlength="10" type="text" onfocus="if(this.value==defaultValue) {this.value=''; this.style.color='#000';}" onblur="if(!value) {value=defaultValue; this.style.color='#999';};" value="2-10个字" /></td>
+        <td style="width:60px; text-align:center; vertical-align:middle;" onclick="modelDel(1);"><img src="ico/ico_del.png" style="max-height:26px; vertical-align:middle;" /></td>
+      </tr>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; border-top:1px solid #bbbbbb; background-color:#fff;">
+      <tr>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">单价</td>
+        <td style=""><input id="txt_goodsPrice1" class="txt" maxlength="20" type="number" style="color:#000;" onkeyup="clearNoNum(this);" /></td>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">碳票</td>
+      </tr>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; border-top:1px solid #bbbbbb; border-bottom:1px solid #bbbbbb; background-color:#fff;">
+      <tr>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">运费</td>
+        <td style=""><input id="txt_goodsFreight1" class="txt" maxlength="10" type="number" style="color:#000;" onkeyup="clearNoNum(this);" onfocus="if(this.value==defaultValue) {this.value='';}" onblur="if(!value) {value=defaultValue;};" value="0.00"/></td>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">碳票</td>
+      </tr>
+    </table>    
+</div>
+<div id="div_goodsModel2" style="display:none; margin-bottom:10px;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; border-top:1px solid #bbbbbb; background-color:#fff;">
+      <tr>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">型号</td>
+        <td style=""><input id="txt_goodsModel2" class="txt" maxlength="10" type="text" onfocus="if(this.value==defaultValue) {this.value=''; this.style.color='#000';}" onblur="if(!value) {value=defaultValue; this.style.color='#999';};" value="2-10个字" /></td>
+        <td style="width:60px; text-align:center; vertical-align:middle;" onclick="modelDel(2);"><img src="ico/ico_del.png" style="max-height:26px; vertical-align:middle;" /></td>
+      </tr>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; border-top:1px solid #bbbbbb; background-color:#fff;">
+      <tr>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">单价</td>
+        <td style=""><input id="txt_goodsPrice2" class="txt" maxlength="20" type="number" style="color:#000;" onkeyup="clearNoNum(this);" /></td>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">碳票</td>
+      </tr>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; border-top:1px solid #bbbbbb; border-bottom:1px solid #bbbbbb; background-color:#fff;">
+      <tr>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">运费</td>
+        <td style=""><input id="txt_goodsFreight2" class="txt" maxlength="10" type="number" style="color:#000;" onkeyup="clearNoNum(this);" onfocus="if(this.value==defaultValue) {this.value='';}" onblur="if(!value) {value=defaultValue;};" value="0.00"/></td>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">碳票</td>
+      </tr>
+    </table>    
+</div>
+<div id="div_goodsModel3" style="display:none; margin-bottom:10px;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; border-top:1px solid #bbbbbb; background-color:#fff;">
+      <tr>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">型号</td>
+        <td style=""><input id="txt_goodsModel3" class="txt" maxlength="10" type="text" onfocus="if(this.value==defaultValue) {this.value=''; this.style.color='#000';}" onblur="if(!value) {value=defaultValue; this.style.color='#999';};" value="2-10个字" /></td>
+        <td style="width:60px; text-align:center; vertical-align:middle;" onclick="modelDel(3);"><img src="ico/ico_del.png" style="max-height:26px; vertical-align:middle;" /></td>
+      </tr>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; border-top:1px solid #bbbbbb; background-color:#fff;">
+      <tr>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">单价</td>
+        <td style=""><input id="txt_goodsPrice3" class="txt" maxlength="20" type="number" style="color:#000;" onkeyup="clearNoNum(this);" /></td>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">碳票</td>
+      </tr>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; border-top:1px solid #bbbbbb; border-bottom:1px solid #bbbbbb; background-color:#fff;">
+      <tr>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">运费</td>
+        <td style=""><input id="txt_goodsFreight3" class="txt" maxlength="10" type="number" style="color:#000;" onkeyup="clearNoNum(this);" onfocus="if(this.value==defaultValue) {this.value='';}" onblur="if(!value) {value=defaultValue;};" value="0.00"/></td>
+        <td style="width:60px; text-align:center; vertical-align:middle; font-size:16px;">碳票</td>
+      </tr>
+    </table>    
+</div>
+<div style="width:100%; line-height:50px; font-size:16px; color:#333; text-align:center;">商品详情</div>
+<div style="border-top:1px solid #bbbbbb; border-bottom:1px solid #bbbbbb; margin-bottom:10px;">
+	<textarea id="txt_detailPs" class="txt" rows="20" style="color:#333; height:100px; font-size:16px; line-height:32px; overflow:scroll; overflow-y:hidden; overflow-x:hidden;" onfocus="window.activeobj=this;this.clock=setInterval(function(){activeobj.style.height=activeobj.scrollHeight+'px';},200);" onblur="clearInterval(this.clock);"></textarea>
+</div>
+<div id="div_imgMallGoodsDetails" class="div_imgMallGoodsDetails"></div>
+<div style="width:100%; height:45px; margin-bottom:30px;">
+	<div style="line-height:45px; float:right; margin-right:10px; font-size:16px; color:#333;" id="tb_upMallGoodsDetails">添加商品详情图（<font id="font_imgNo">0</font>/9）</div>
+    <img src="ico/ico_camera_green.png" style="float:right; margin-right:5px; max-height:21px; margin-top:12px;" />
+</div>
+</body>
+</html>
+<!--==================================================================================================================================================-->
+<input id="hid_goodsFace" type="hidden" value="" />
+<input id="hid_goodsDetails" type="hidden" value="" />
+<input id="hid_seletedBigTypeId" type="hidden" value=""  />
+<input id="hid_seletedBigTypeName" type="hidden" value=""  />
+
+<div id="toast" style="display: none;">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui_toast">
+        <i class="weui_icon_toast"></i>
+        <p class="weui_toast_content">保存成功</p>
+    </div>
+</div>
+
+<div class="weui_dialog_alert" id="notice" style="display:none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
+        <div class="weui_dialog_bd" id="noticeContent">&nbsp;</div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:$('#notice').css('display','none');" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+
+<div id="loadingToast" class="weui_loading_toast" style="display:none;">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui_toast">
+        <div class="weui_loading">
+            <!-- :) -->
+            <div class="weui_loading_leaf weui_loading_leaf_0"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_1"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_2"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_3"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_4"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_5"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_6"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_7"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_8"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_9"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_10"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_11"></div>
+        </div>
+        <p class="weui_toast_content">正在处理</p>
+    </div>
+</div>
+
+<div class="weui_dialog_confirm" id="dialogAsk" style="display: none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title" id="dialogTitle"></strong>询问</div>
+        <div id="dialogContent" class="weui_dialog_bd">确定保存该商品？</div>
+      <div class="weui_dialog_ft">
+            <a id="dialogCancle" href="javascript:$('#dialogAsk').css('display','none');" class="weui_btn_dialog default">取消</a>
+            <a id="dialogConfirm" href="javascript:saveGoodsClick();" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+
+<!--弹出分类菜单层-->
+<div id="xm_setp">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; background-color:#1AAD19; position:fixed; top:0px; z-index:9999; display:none;" id="tb_jectTopBar">
+      <tr>
+        <td style="width:40px; text-align:center; vertical-align:middle;" onclick="goodsTypeBack();"><img src="ico/ico_back.png" style="max-width:26px; vertical-align:middle;" /></td>
+        <td style="text-align:center; font-size:16px; color:#fff; vertical-align:middle;">选择分类</td>
+        <td style="width:40px; vertical-align:middle; text-align:center; font-size:14px; color:#fff;">&nbsp;</td>
+      </tr>
+    </table>
+    <div id="loading"><img src="" /></div><div class="con">
+        <aside>
+            <div class="menu-left scrollbar-none" id="sidebar" style="top:45px;">
+                <ul id="ul_goodsType"></ul>
+            </div>
+        </aside>
+        <section class="menu-right">
+            <ul id="ul_goodsSmallType"></ul>
+        </section>   
+    </div>
+</div>
+<!--END 弹出分类菜单层-->
+<!--==================================================================================================================================================-->
+<script>
+function loaded()
+{
+	url=window.location.href;
+	saveFootprint(url);
+	$("#loadingToast").css("display","block");
+	var interFaceUrl="http://114.55.103.71:9006/ldy/sptype/getTypesToJSONP?callback=?";
+	$.ajax
+	({
+		type : "POST",url:interFaceUrl,data: {},dataType : "jsonp",
+		success : function(data) 
+		{   
+			var json = eval(data); 	
+			if (json.code==200){	
+				for(var i=0; i<json.data.length; i++){	//加载商品大类循环
+					if (i==0){
+						$("#ul_goodsType").html('<li id='+"'li"+json.data[i].spBigTypeId+"'"+' onclick="goodsSmallType('+"'"+json.data[i].spBigTypeId+"'"+');" class="active">'+json.data[i].typeName+'</li>');
+						$("#hid_seletedBigTypeId").val(json.data[i].spBigTypeId);
+						$("#hid_seletedBigTypeName").val(json.data[i].typeName);
+					}else{
+						$("#ul_goodsType").html($("#ul_goodsType").html()+'<li id='+"'li"+json.data[i].spBigTypeId+"'"+'onclick="goodsSmallType('+"'"+json.data[i].spBigTypeId+"'"+');">'+json.data[i].typeName+'</li>');
+					}
+					goodsSmallType($("#hid_seletedBigTypeId").val());
+					$("#loadingToast").css("display","none");
+				}
+			}
+			else
+			{
+				alert(json.code);
+			}
+		},
+		error : function(textStatus) 
+		{
+		}
+	});		
+		
+}
+
+function goodsSmallType(a)
+{
+	var seletedBigId=$("#hid_seletedBigTypeId").val();
+	$("#li"+a).addClass("active");
+	$("#li"+seletedBigId).removeClass("active");
+	$("#hid_seletedBigTypeId").val(a);
+	$("#hid_seletedBigTypeName").val($("#li"+a).html());
+		
+	var interFaceUrl="http://114.55.103.71:9006/ldy/sptype/getSmallTypesByTypeIdToJSONP?callback=?&typeId="+a;
+	$.ajax
+	({
+		type : "POST",url:interFaceUrl,data: {},dataType : "jsonp",
+		success : function(data) 
+		{   
+			var json = eval(data); 	
+			if (json.code==200){	
+				$("#ul_goodsSmallType").html("");
+				for(var i=0; i<json.data.length; i++){
+					$("#ul_goodsSmallType").html($("#ul_goodsSmallType").html()+'<li class="w-3"><a href="javascript:chooseSmallType('+"'"+json.data[i].stypeName+"'"+');"></a><img src="pluginGoodsType/images/17601_thumb_G_1441858514908.jpg" /><span>'+json.data[i].stypeName+'</span></li>');
+				}
+			}
+			else
+			{
+				alert(json.code);
+			}
+		},
+		error : function(textStatus) 
+		{
+		}
+	});		
+}
+
+function chooseSmallType(a)
+{
+	$("#div_chooseGoodsType").html($("#hid_seletedBigTypeName").val()+":"+a);
+	"block"==$("#xm_setp").animate({left:"100%"},500,"easeOutQuart",function(){$("#xm_setp").hide()})
+}
+
+function modelAdd()
+{
+  for (var i=1; i<4; i++){
+	  if ($("#div_goodsModel"+i).css("display")=="none"){
+		  $("#div_goodsModel"+i).css("display","block");
+		  $("#font_modelNo").html(parseInt($("#font_modelNo").html())+1);
+		  break;
+	  }
+  }
+}
+
+function saveGoodsAsk()
+{
+	if (!$(".imgDivFace")) {
+		jectNotice("请添加商品封面图");
+		return;
+	}
+	if ($("#txt_goodsName").val()=="请填写商品名称（2-20个字）"){
+		jectNotice("请填写商品名称");
+		return;		
+	}
+	if ($("#div_chooseGoodsType").html()=="选择分类"){
+		jectNotice("请选择商品分类");
+		return;		
+	}
+	if ($("#txt_detailPs").val()==""){
+		jectNotice("请填写商品详情介绍");
+		return;		
+	}	
+	if ($("#font_imgNo").html()=="0"){
+		jectNotice("请至少添加一张商品详情图");
+		return;
+	}
+	
+	$("#dialogAsk").css("display","block");	
+}
+
+function saveGoodsClick()
+{
+	$("#loadingToast").css("display","block");
+	setTimeout(function(){saveGoods();},500);
+}
+
+function saveGoods()
+{
+	post_mallGoodsFace();	//上传封面图片
+	post_mallGoodsDetails();//上传详情图片
+	var token=GetUrlParam("token");
+	var coverImg=$("#hid_goodsFace").val();
+	var title=$("#txt_goodsName").val();
+	var type=$("#div_chooseGoodsType").html();
+	var detailPs=$("#txt_detailPs").val();
+	var detailImgs=$("#hid_goodsDetails").val();
+	//var normsJson="[{'name':'卡其色','price':'123.00','freight':'运费'},{'name':'黑色','price':'200.00','freight':'60.00'}]";
+	var normsJson="";
+	//组装型号字符串
+	for (var i=0; i<4; i++){
+		if ($("#div_goodsModel"+i).css("display")=="block"){
+			var goodsModel=$("#txt_goodsModel"+i).val();
+			var goodsPrice=$("#txt_goodsPrice"+i).val();
+			var goodsFreight=$("#txt_goodsFreight"+i).val();
+			normsJson=normsJson+"{'name':'"+goodsModel+"','price':'"+goodsPrice+"','freight':'"+goodsFreight+"'},";
+		}
+	}
+	normsJson="["+normsJson+"]";
+	normsJson=normsJson.replace(",]","]");
+	//END 组装型号字符串
+	var interFaceUrl="http://114.55.103.71:9006/ldy/goods/addGoods?callback=?&token="+token+"&coverImg="+coverImg+"&title="+title+"&type="+type+"&detailPs="+detailPs+"&detailImgs="+detailImgs+"&normsJson="+normsJson;
+	$("#dialogAsk").css("display","none");
+	$.ajax
+	({
+		
+		type : "POST",url:interFaceUrl,data: {},dataType : "jsonp",
+		success : function(data) 
+		{   
+			var json = eval(data); 	
+			if (json.code==200){	
+				$("#dialogAsk").css("display","none");
+				$("#toast").css("display","block");
+				setTimeout(function(){$("#toast").css("display","none");},1000);
+			}
+			else
+			{
+				alert(json.code);
+			}
+		},
+		error : function(textStatus) 
+		{
+		}
+	});		
+}
+
+function modelDel(modelNO)
+{
+	$("#div_goodsModel"+modelNO).css("display","none");
+	$("#font_modelNo").html(parseInt($("#font_modelNo").html())-1);
+}
+
+
+function clearNoNum(obj){  
+	obj.value = obj.value.replace(/[^\d.]/g,"");  //清除“数字”和“.”以外的字符   
+	obj.value = obj.value.replace(/\.{2,}/g,"."); //只保留第一个. 清除多余的   
+	obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");  
+	obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');//只能输入两个小数   
+	if(obj.value.indexOf(".")< 0 && obj.value !=""){//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额  
+		obj.value= parseFloat(obj.value);  
+	}  
+}
+
+function chooseGoodsType()
+{
+	$("#xm_setp,#xm_quicklogin").show();
+	$("#xm_setp").animate({left:0},500,"easeOutQuart")
+	var jectTopbar=setTimeout(function(){$("#tb_jectTopBar").css("display","block");},500);
+	//clearTimeout("jectTopbar");
+}
+
+function goodsTypeBack()
+{
+	"block"==$("#xm_setp").animate({left:"100%"},500,"easeOutQuart",function(){$("#xm_setp").hide()})	
+}
+
+//截图
+var pc = new PhotoClip('#clipArea', {
+size: 260,
+outputSize: 640,
+//adaptive: ['60%', '80%'],
+file: '#file',
+view: '#view',
+ok: '#clipBtn',
+
+loadStart: function() {
+	$("#loadingToast").css("display","block");
+	console.log('开始读取照片');
+},
+loadComplete: function() {
+	//计算clipArea高度
+	cah=$(window).height();
+	cah=cah-50;
+	$("#clipArea").css("height",cah+"px");
+	//END 计算clipArea高度
+	
+	//隐藏选择框
+	$("#tb_upMallGoodsFace").css("display","none");
+	$("#loadingToast").css("display","none");
+	console.log('照片读取完成');
+},
+done: function(dataURL) {
+		
+		var imgDivFace = $(configFace['img_tpl']);           
+	   
+		var img = imgDivFace.children('img');
+		img.attr("src",dataURL);              
+		var filename = get_randfile();
+		imgdataFace[filename] = {
+			'filename':filename,
+			'content':dataURL,
+			'filelen':dataURL.length
+		}
+		img.attr('key', filename);
+	   
+		 $(".fileListFace").append(imgDivFace);
+		 $("#clip").hide();
+},
+fail: function(msg) {
+	alert(msg);
+}
+});
+//END 截图
+</script>

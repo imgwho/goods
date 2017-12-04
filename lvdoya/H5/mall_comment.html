@@ -1,0 +1,353 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<title>商品评价</title>
+<style>
+body
+{
+	margin:0;
+	background-color:#f0f0f2;
+	font-family: sans-serif; 
+}
+
+.div_userLogo
+{
+	float:left; margin-left:10px;
+}
+.div_userLogo img
+{
+	width:30px; height:30px; border-radius:50%; margin-top:5px;
+}
+.div_userNickname
+{
+	float:left; font-size:14px; margin-left:10px; line-height:40px;
+}
+.div_star
+{
+	float:right; margin-right:10px;
+}
+.div_star img
+{
+	width:20px; height:20px; float:right; margin-top:10px;
+}
+.div_commentContent
+{
+	margin-left:10px; margin-right:10px; font-size:14px; line-height:24px; word-break:break-all;
+}
+.td_commentImg
+{
+	width:25%; text-align:center; vertical-align:middle; background-color:#fff;
+}
+.td_commentImg img
+{
+	vertical-align:middle; max-width:95%;
+}
+.font_commentTime
+{
+	font-size:12px; color:#8a8a8a; float:right; margin-right:10px;
+}
+
+/*iScorll*/
+#wrapper {  
+    position: absolute;  
+    z-index: 1;  
+    top: 50px;  
+    bottom: 0px;  
+    left: 0;  
+    width: 100%;  
+    background: #f0f0f2;  
+    /*overflow: hidden; */ 
+}  
+  
+#scroller {  
+    position: absolute;  
+    z-index: 1;  
+    -webkit-tap-highlight-color: rgba(0,0,0,0);  
+    width: 100%;  
+    -webkit-transform: translateZ(0);  
+    -moz-transform: translateZ(0);  
+    -ms-transform: translateZ(0);  
+    -o-transform: translateZ(0);  
+    transform: translateZ(0);  
+    -webkit-touch-callout: none;  
+    -webkit-user-select: none;  
+    -moz-user-select: none;  
+    -ms-user-select: none;  
+    user-select: none;  
+    -webkit-text-size-adjust: none;  
+    -moz-text-size-adjust: none;  
+    -ms-text-size-adjust: none;  
+    -o-text-size-adjust: none;  
+    text-size-adjust: none;  
+}  
+  
+#pullDown,#pullUp,.pulldown-tips{  
+    height:40px;  
+    line-height:40px;  
+    text-align:center; 
+	background-color:#fff; 
+	color:#979797;
+	font-size:12px;
+	display:none;
+}  
+.pulldown-tips{  
+	position:absolute;  
+	top:-40px;  
+	left:0;  
+	width:100%; 
+}
+/*END iScorll*/
+</style>
+</head>
+<link rel="stylesheet" type="text/css" href="css/weui.css">
+<script type="text/javascript" src="js/jquery-3.1.1.min.js" ></script>
+<script type="text/javascript" src="js/iscroll-probe.js"></script>
+<script src="js/functionPublic.js"></script>
+<body onload="init();">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; background-color:#1AAD19; position:fixed; top:0px; z-index:8888;">
+  <tr>
+    <td style="width:40px; text-align:center; vertical-align:middle;" onclick="go_back(1);"><img src="ico/ico_back.png" style="max-width:26px;" /></td>
+    <td id="td_shopName" style="text-align:center; font-size:16px; color:#fff;">查看评价</td>
+    <td id="td_shopShare" style="width:40px; vertical-align:middle; text-align:center;">&nbsp;</td>
+  </tr>
+</table>
+
+<div id="wrapper"> 
+<div id="scroller">
+<div id="pullDown" class=""><div class="pullDownLabel"></div></div>
+<div class="pulldown-tips">下拉刷新</div>
+
+	<div id="div_commentList1"></div>
+    
+</div><!--scroller-->
+</div><!--wrapper-->    
+
+<!--<div id="div_comment">
+    <div style="width:100%; height:40px; line-height:40px; background-color:#fff;">
+        <div class="div_userLogo" id="div_userLogo"><img src="img/goods.jpg" /></div>
+        <div class="div_userNickname" id="div_userNickname">你好</div>
+        <div class="div_star" id="div_star"><img src="ico/ico_star_gold.png" /><img src="ico/ico_star_gold.png" /><img src="ico/ico_star_gold.png" /><img src="ico/ico_star_gold.png" /><img src="ico/ico_star_gold.png" /></div>
+    </div>
+    <div style="width:100%; background-color:#fff; border-top:1px solid #bbbbbb;">
+        <div class="div_commentContent" id="div_commentContent">5月27日上午，北京市委召开全体会议，宣布了中央关于郭金龙、蔡奇、陈吉宁职务调整的决定，陈吉宁同志任北京市委委员、常委、副书记。当天下午，市委常委会召开会议</div>
+    </div>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr id="tr_commentImg">
+        <td class="td_commentImg"><img class="img_commentImg" src="img/goods.jpg" /></td>
+      </tr>
+    </table>
+    <div style="width:100%; height:24px; line-height:24px; border-top:1px solid #f2f2f2; background-color:#fff;"><font id="font_commentTime" class="font_commentTime">2017-10-15 12:22</font></div>
+</div>-->
+</body>
+</html>
+
+<!--==================================================================================================================================================-->
+<div id="loadingToast" class="weui_loading_toast" style="display:none; z-index:999999;">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui_toast">
+        <div class="weui_loading">
+            <div class="weui_loading_leaf weui_loading_leaf_0"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_1"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_2"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_3"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_4"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_5"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_6"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_7"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_8"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_9"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_10"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_11"></div>
+        </div>
+        <p id="p_loadContent" class="weui_toast_content">正在加载</p>
+    </div>
+</div>
+<!--==================================================================================================================================================-->
+
+<script>
+var pageNo=1;
+var goodsId=GetUrlParam("goodsId");
+
+var tdWidth=$(window).width()/4;
+$(".td_commentImg").css("width",tdWidth+"px");
+$(".td_commentImg").css("height",tdWidth+"px");
+$(".img_commentImg").css("width",parseInt(tdWidth)*0.95+"px");
+$(".img_commentImg").css("height",parseInt(tdWidth)*0.95+"px");
+
+
+function init()
+{
+	url=window.location.href;
+	saveFootprint(url);
+	pageNo=1;
+	loadComment();
+}
+
+function loadComment()
+{
+	$("#loadingToast").css("display","block");
+	
+	var result="";
+	var userLogo=0;
+	var star="";
+	var commentImg="";
+	
+	$.ajax	//加载商品
+	({
+		type : "POST",url:"http://114.55.103.71:9006/ldy/goods/getGoodsEvalByspId?callback=?&spId="+goodsId+"&pageNo="+pageNo,data: {},dataType : "jsonp",
+		success : function(data) 
+		{   		
+			var json = eval(data); 	
+			if (json.code==200)
+			{
+				if (json.data.length==0 && pageNo!=1) 
+				{
+					$("#loadingToast").css("display","none");
+				}
+				if (json.data.length==0 && pageNo==1)
+				{
+					$("#div_commentList1").html("<div style='width:100%; text-align:center; margin-top:100px;'><img src='ico/ico_commentEmpty.png' style='max-height:100px; margin-bottom:10px;' /><br /><font style='font-size:14px; color:#8a8a8a;'>还没有评价</font></div>");
+					$("#loadingToast").css("display","none");
+				}
+				else	
+				{
+					for (var i=0; i<json.data.length; i++) 
+					{
+						//是否匿名
+						if (json.data[i].beAnonymity==0) {
+							userLogo="<div class='div_userLogo' id='div_userLogo'><img src='"+json.data[i].userLogo+"' /></div><div class='div_userNickname' id='div_userNickname'>"+json.data[i].userNname+"</div>";
+						} else  {
+							userLogo="<div class='div_userNickname' id='div_userNickname'>匿名评价</div>";
+						}
+						//计算星级						
+						for (var j=1; j<=5-json.data[i].integral; j++) {
+							star+="<img src='ico/ico_star_cd.png' />";
+						}								
+						for (var j=1; j<=json.data[i].integral; j++) {
+							star+="<img src='ico/ico_star_gold.png' />";
+						}							
+						//显示图片
+						var imgs = new Array();
+						imgs=json.data[i].imgs.split(",");
+						if (imgs.length==0) 
+						{
+							commentImg="";
+						} 
+						else 
+						{
+							for(var l=0; l<4; l++)	
+							{
+								if (l<imgs.length) 
+								{
+									commentImg+="<td class='td_commentImg'>"+imgs[l]+"</td>";
+								} 
+								else 
+								{
+									commentImg+="<td class='td_commentImg'>&nbsp;</td>";
+								}
+							}
+						}
+						
+						result+="<div id='div_comment"+json.data[i].evalId+"' style='margin-bottom:5px;'><div style='width:100%; height:40px; line-height:40px; background-color:#fff;'>"+userLogo+"<div class='div_star' id='div_star'>"+star+"</div></div><div style='width:100%; background-color:#fff; border-top:1px solid #f9f9f9;'><div class='div_commentContent' id='div_commentContent'>"+json.data[i].ps+"</div></div><table width='100%' border='0' cellspacing='0' cellpadding='0'><tr id='tr_commentImg'>"+commentImg+"</tr></table><div style='width:100%; height:24px; line-height:24px; border-top:1px solid #f2f2f2; background-color:#fff;'><font id='font_commentTime' class='font_commentTime'>"+json.data[i].createTime+"</font></div></div>";
+						
+						star="";
+						commentImg="";						
+					}
+					
+					var nextPageNo=parseInt(pageNo)+1;
+					result+="<div id='div_commentList"+nextPageNo+"'></div>"
+					
+					$("#div_commentList"+pageNo).html(result);
+					pageNo++;
+					
+					setTimeout(function(){myScroll.refresh();},1000);
+					
+					$("#loadingToast").css("display","none");
+				}
+			}
+			else 
+			{
+				jectNotice(json.msg);
+				$("#loadingToast").css("display","none");
+			}
+		},
+		error : function(textStatus) 		
+		{
+			$("#loadingToast").css("display","none");
+		}
+	});		
+}
+
+//function iscorll () {  
+	var myScroll,  
+	pullDown = $("#pullDown"),  
+	pullDownLabel = $(".pullDownLabel"),  
+
+	loadingStep = 0;//加载状态0默认，1显示加载状态，2执行加载数据，只有当为0时才能再次加载，这是防止过快拉动刷新  
+//  
+	pullDown.hide();  
+  
+	myScroll = new IScroll("#wrapper", {  
+		preventDefault:false,
+		scrollbars: false,  
+		mouseWheel: true,  
+		interactiveScrollbars: true,  
+		shrinkScrollbars: 'scale',  
+		fadeScrollbars: true,  
+		scrollY:true,  
+		probeType: 2,  
+		checkDOMChanges:true,
+		bindToWrapper:true  
+	});  
+	myScroll.on("scroll",function(){  
+		if(loadingStep == 0 && !pullDown.attr("class").match('refresh|loading')){  
+			if(this.y > 40){//下拉刷新操作  
+				$(".pulldown-tips").hide();  
+				pullDown.addClass("refresh").show();  
+				pullDownLabel.text("松手刷新数据");  
+				loadingStep = 1;  
+				myScroll.refresh();  				
+			}else if(this.y < (this.maxScrollY - 60)){//上拉加载更多  
+				loadingStep = 1;  
+				$("#p_loadContent").html("正在加载");
+				$("#loadingToast").css("display","block");
+				pullUpAction();  
+			}  
+		}  
+	});  
+	myScroll.on("scrollEnd",function(){  
+		if(loadingStep == 1){  
+			if( pullDown.attr("class").match("refresh") ){//下拉刷新操作  
+				pullDown.removeClass("refresh").addClass("loading");  
+				$("#p_loadContent").html("正在刷新");
+				$("#loadingToast").css("display","block");
+				loadingStep = 2;  
+				pullDownAction();  
+			}  
+		}  
+	});  
+
+	function pullDownAction(){  
+		setTimeout(function(){  
+			init();
+			pullDown.attr('class','').hide();  
+			loadingStep = 0;  
+			$(".pulldown-tips").show(); 
+			$("#loadingToast").css("display","none");
+		},500);  
+		setTimeout(function(){myScroll.refresh();},1000);
+	}		
+	function pullUpAction(){  
+		setTimeout(function(){  
+			loadingStep = 0;
+			loadComment();	
+		},500);  
+		setTimeout(function(){myScroll.refresh();},1000);
+	}  
+  
+    document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);  
+//}
+</script>

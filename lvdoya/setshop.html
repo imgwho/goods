@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.2/weui.css">
+  <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+  <title>共享碳铺设置</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-size: 12px;
+      line-height: 1.2;
+    }
+
+    header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 45px;
+      color: #ffffff;
+      background-color: #1aac19;
+      font-size: 16.0px;
+      font-weight: normal;
+      font-style: normal;
+      z-index: 3;
+      opacity: 1;
+      pointer-events: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <header>共享碳铺设置</header>
+  <main>
+    <div class="weui-cell">
+
+      <div class="weui-cell__bd">
+        <input id="price" class="weui-input" type="number" pattern="[0-9]*" placeholder="设置加入碳铺价格">
+      </div>
+      <div class="weui-cell__hd">
+        <label class="weui-label" for="price">碳票/天</label>
+      </div>
+    </div>
+
+    <div class="weui-cell weui-cell_switch">
+      <div class="weui-cell__bd">申请加入需要审核</div>
+      <div class="weui-cell__ft">
+        <input class="weui-switch permission" type="checkbox">
+      </div>
+    </div>
+
+    <div class="weui-cell">
+      <a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary">确定</a>
+    </div>
+  </main>
+  <footer></footer>
+  <script>
+    $('.weui-btn_primary').on('click', function() {
+      $.get('/test', {
+       
+      }).always(data => {
+        console.log(data)
+      })
+
+      $.ajax({
+        type: 'POST',
+        url: 'test',
+        data: {
+          price: $('#price').value,
+          permission: $('.permission').checked
+        },
+        dataType: 'json'
+      })
+      .success(function(data) {
+        console.log(data)
+      }).fail(() => {}).done(() => {})
+    })
+  
+  </script>
+</body>
+
+</html>

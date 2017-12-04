@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+		<meta http-equiv="Access-Control-Allow-Origin" content="*">
+		<title>碳项目</title>		
+		<style>
+			body {
+				margin: 0;
+				background-color: #f0f0f2;
+				font-family: sans-serif;
+				overflow: hidden; /* this is important to prevent the whole page to bounce FOR iScorll */
+			}
+			
+			/*推荐列表*/
+			.cssDivRecommend{
+				width: 100%; height: 80px; background-color: #FFFFFF; position: relative; margin-bottom: 5px;
+			}
+			.cssDivRecommendImgCover img {
+				width: 60px; height: 60px; margin: 10px; float: left;
+			}
+			.cssDivRecommendTitle {
+				width: auto; overflow: hidden; height: 40px; line-height: 40px; font-size: 16px;
+			}
+			.cssDivRecommendContent {
+				width: auto; overflow: hidden; height: 40px; line-height: 40px; font-size: 14px;
+			}
+			.cssDivRecommendImgDel{
+				position: absolute; top: 10px; right: 10px; max-height: 20px;
+			}			
+			/*END 推荐列表*/
+		</style>		
+	</head>
+	<link rel="stylesheet" type="text/css" href="css/weui.css">
+	<script type="text/javascript" src="js/jquery-3.1.1.min.js" ></script>
+	<script type="text/javascript" src="js/iscroll-probe.js"></script>
+	<script src="js/functionPublic.js"></script>
+	<script src="js/tripledes.js"></script>
+	<script src="js/mode-ecb.js"></script>
+	<body onload="init();">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; background-color:#1AAD19;">
+			<tr>
+				<td style="width:40px; text-align:center; vertical-align:middle;" onclick="go_back()"><img src="ico/ico_back.png" style="max-width:26px;" /></td>
+				<td style="text-align:center; font-size:16px; color:#fff;">碳铺设置</td>
+				<td style="width:40px; vertical-align:middle; text-align:center; font-size:14px; color:#fff; line-height: 14px;" onclick="saveStore();">
+					<img src="ico/ico_save_fff.png" style="max-height:20px;" /><br />保存
+				</td>
+			</tr>
+		</table>
+		
+		<div style="width: 100%; height: 30px; line-height: 30px; color: #666666; font-size: 14px; margin-bottom: -12px;">
+			<font style="margin: auto auto auto 10px;">碳铺内项目排序规则</font>
+		</div>
+		
+		<div class="weui_cells weui_cells_radio">
+            <label class="weui_cell weui_check_label" for="x11">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>综合排序</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <input type="radio" class="weui_check" name="radio1" onclick="sortRule('1');" id="x11">
+                    <span class="weui_icon_checked"></span>
+                </div>
+            </label>
+            <label class="weui_cell weui_check_label" for="x12">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>收购优先</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <input type="radio" name="radio1" onclick="sortRule('2');" class="weui_check" id="x12">
+                    <span class="weui_icon_checked"></span>
+                </div>
+            </label>
+            <label class="weui_cell weui_check_label" for="x13">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>成交优先</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <input type="radio" name="radio1" onclick="sortRule('3');" class="weui_check" id="x13">
+                    <span class="weui_icon_checked"></span>
+                </div>
+            </label>                    
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+			<div style="margin:0px 10px 0px 10px; line-height:40px; font-size:14px;">
+				设置推荐项目(<font id="font_recommendNum">0</font>/2)
+				<font style="font-size: 12px; color: #8A8A8A;">推荐项目同碳铺一起展示</font>
+			</div>
+			<div style="margin:0px 10px 0px 10px; line-height:20px; font-size:12px; color:#FF9900; position:relative;">
+				(只能添加已有转让/收购挂单的项目)
+				<div onclick="showRecommend();" style="width:60px; line-height:30px; color:#fff; background-color:#2baf2b; position:absolute; bottom:0px; right:0px; text-align:center; border-radius:3px; font-size:14px;">添加</div>
+			</div>
+		</div>
+		
+	
+		<div id="div_recommendContent">
+			<!--<div class="cssDivRecommend">
+				<div class="cssDivRecommendImgCover"><img src="img/shopDefaultBackImg.jpg" /></div>
+				<div class="cssDivRecommendTitle">阳原大黑沟100MW光伏项目</div>
+				<div class="cssDivRecommendContent">LDY0426&nbsp;持仓&nbsp;20吨</div>
+				<img src="ico/ico_del.png" class="cssDivRecommendImgDel"/>
+			</div>
+			<div class="cssDivRecommend">
+				<div class="cssDivRecommendImgCover"><img src="img/shopDefaultBackImg.jpg" /></div>
+				<div class="cssDivRecommendTitle">阳原大黑沟100MW光伏项目</div>
+				<img src="ico/ico_del.png" class="cssDivRecommendImgDel"/>
+			</div>-->
+		</div> 		
+	</body>
+</html>
+
+
+<!--============================================================================================================-->
+<div id="toastSave" style="display: none;">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui_toast">
+        <i class="weui_icon_toast"></i>
+        <p class="weui_toast_content">保存成功</p>
+    </div>
+</div>
+
+<div class="weui_dialog_alert" id="notice" style="display:none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
+        <div class="weui_dialog_bd" id="noticeContent">&nbsp;</div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:$('#notice').css('display','none');" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+
+<div id="loadingToast" class="weui_loading_toast" style="display:none; z-index:999999;">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui_toast">
+        <div class="weui_loading">
+            <div class="weui_loading_leaf weui_loading_leaf_0"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_1"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_2"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_3"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_4"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_5"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_6"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_7"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_8"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_9"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_10"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_11"></div>
+        </div>
+        <p id="p_loadContent" class="weui_toast_content">正在加载</p>
+    </div>
+</div>
+
+
+<!--BEGIN actionSheetRecommend-->
+<div id="actionSheet_wrapRecommend">
+    <div class="weui_mask_transition" id="maskRecommend"></div>
+    <div class="weui_actionsheet" id="weui_actionsheetRecommend" style="height:100%; overflow:scroll;">
+		<div style="width:100%; height:40px; text-align:center; background-color:#1AAD19; color:#fff; font-size:16px; line-height:40px;"><img src="ico/ico_close_fff.png" style="float:right; margin-right:10px; max-height:30px; margin-top:5px;" onclick="hideActionSheetRecommend();" /></div>
+        
+        <div id="div_recommendList">
+        	<div id="div_recommendList1"></div>      
+        </div>
+    </div>
+</div>
+<!--END actionSheetRecommend-->
+<!--============================================================================================================-->
+
+
+<script>
+	var token=GetUrlParam("token");
+	var userId=GetUrlParam("userId");
+
+	var sortString="";  //用于存放排序规则，默认综合排序
+	var sort="";  //searchStoreCcerList参数
+	var pageNo=1; //searchStoreCcerList参数
+	var order=0;  //searchStoreCcerList参数
+	var recommendIds="";  //存放推荐的carbonNumber，逗号分隔
+	var storeId="";  //碳铺ID
+
+	function go_back(){
+		aif.javaCloseActivity();
+	}
+
+	function init(){
+//		$("#loadingToast").css("display","block");
+		loadStoreInfo();
+	}
+
+
+	function loadStoreInfo(){
+		var result="";
+		$.ajax	//获取当前用户碳铺信息
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/cstore/getCcerStoreByUserid?callback=?&searchText=&userid="+userId+"&token="+token,data: {},dataType : "jsonp",
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+//					console.log(json.data.store_order);
+					switch(json.data.store_order){
+						case 1:
+							$("#x11").attr("checked","true");
+							sortString=1;
+							break;
+						case 2:
+							$("#x12").attr("checked","true");
+							sortString=2;
+							break;
+						case 3:
+							$("#x13").attr("checked","true");
+							sortString=3;
+							break;							
+							
+					}
+					storeId=json.data.store_id;
+					if (json.data.tj_list){
+						for (var i=0; i<json.data.tj_list.length; i++){
+							result+="<div class='cssDivRecommend' id='divRecommend"+json.data.tj_list[i].c_number+"'><div class='cssDivRecommendImgCover'><img src='"+json.data.tj_list[i].c_img+"' /></div><div class='cssDivRecommendTitle'>"+json.data.tj_list[i].c_title+"</div><img src='ico/ico_del.png' class='cssDivRecommendImgDel' onclick='removeRecommend(&apos;"+json.data.tj_list[i].c_number+"&apos;);'/></div>";
+							recommendIds+=json.data.tj_list[i].c_number+",";
+							$("#font_recommendNum").html(parseInt($("#font_recommendNum").html())+1);
+						}
+						$("#div_recommendContent").html(result);
+//						console.log(recommendIds.substr(recommendIds.length-1,1));
+						
+					}
+					sort=json.data.store_order;
+					searchStoreCcerList();
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});			
+	}
+
+	function searchStoreCcerList(){
+	/**
+	 * 查找用户挂单
+	 * 	userid
+	 *  searchText   该值为""时，查询所有，支持多关键字，用空格或者逗号间隔
+	 *  pageNo    页码
+	 *  sort		1:综合排序，2：收购优先，3：成交优先，默认1
+	 *  order     排序方式 0为降序，1为升序 ，该字段只有在sortName不为""的时候有效
+	 */	
+		$.ajax	
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/cshop/getCcerListByUser?callback=?&searchText=&userid="+userId+"&pageNo=0&sort="+sort+"&order="+order,data: {},dataType : "jsonp",	
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+					var result="";
+					if (json.data.length==0) {
+						noMoreData=true;
+					}
+					if (json.data.length==0 && pageNo==1){
+						$("#div_recommendList"+pageNo).html("<div style='width: 100%; margin-top: 30px; text-align: center;'><img src='ico/ico_noContent.png' style='max-height: 50px;'><br><font style='color: #8A8A8A; font-size: 14px;'>你还没有任何挂单</font></div>");
+						$("#loadingToast").css("display","none");
+						return;
+					}
+					for (var i=0; i<json.data.length; i++){
+						result+="<div class='cssDivRecommend' onclick='chooseRecommend(&apos;"+json.data[i].c_number+"&apos;);'>";
+						result+="<div class='cssDivRecommendImgCover' id='divRecommendImgCover"+json.data[i].c_number+"'>";
+						result+="<img src='"+json.data[i].c_img+"' /></div>";
+						result+="<div class='cssDivRecommendTitle' id='divRecommendTitle"+json.data[i].c_number+"'>"+json.data[i].c_title+"</div>";
+						result+="<div class='cssDivRecommendContent'>"+json.data[i].c_number+"&nbsp;持仓&nbsp;"+json.data[i].c_quantity+"吨</div>";
+						result+="</div>";
+					}
+					if (pageNo==1){
+						$("#div_recommendList").html("<div id='div_recommendList1'></div>");
+					}
+					$("#div_recommendList"+pageNo).html(result);
+					$("#div_recommendList"+pageNo).append("<div id='div_recommendList"+parseInt(pageNo+1)+"'></div>");
+					$("#loadingToast").css("display","none");
+					pageNo++;
+				}
+				else
+				{
+					$("#loadingToast").css("display","none");
+					jectNotice(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});			
+	}
+
+	function showRecommend() 
+	{
+		var maskRecommend = $('#maskRecommend');
+		var weuiActionsheetRecommend = $('#weui_actionsheetRecommend');
+		weuiActionsheetRecommend.addClass('weui_actionsheet_toggle');
+		maskRecommend.show().addClass('weui_fade_toggle').click(function() {
+			hideActionSheetRecommend(weuiActionsheetRecommend, maskRecommend);
+		});
+		weuiActionsheetRecommend.unbind('transitionend').unbind('webkitTransitionEnd');
+	}
+	
+	function hideActionSheetRecommend() {
+		pageNo=1;
+		var maskRecommend = $('#maskRecommend');
+		var weuiActionsheetRecommend = $('#weui_actionsheetRecommend');
+	
+		weuiActionsheetRecommend.removeClass('weui_actionsheet_toggle');
+		maskRecommend.removeClass('weui_fade_toggle');
+		weuiActionsheetRecommend.on('transitionend', function() {
+			maskRecommend.hide();
+		}).on('webkitTransitionEnd',
+			function() {
+				maskRecommend.hide();
+			})
+	}
+	
+	function chooseRecommend(carbonNumber)
+	{
+		if ($("#font_recommendNum").html()=="2"){
+			hideActionSheetRecommend();
+//			jectNotice("已添加2项目，不能再添加");
+			aif.javaToastNotice("已添加2项目，不能再添加");
+			return;
+		}
+		
+		if (recommendIds.indexOf(carbonNumber+",")>=0){
+			hideActionSheetRecommend();
+//			jectNotice("该项目已被选择，请重新选择");
+			aif.javaToastNotice("该项目已选，请重新选择");
+			return;
+		}
+		
+		var result="<div class='cssDivRecommend' id='divRecommend"+carbonNumber+"'><div class='cssDivRecommendImgCover'>"+$("#divRecommendImgCover"+carbonNumber).html()+"</div><div class='cssDivRecommendTitle'>"+$("#divRecommendTitle"+carbonNumber).html()+"</div><img src='ico/ico_del.png' class='cssDivRecommendImgDel' onclick='removeRecommend(&apos;"+carbonNumber+"&apos;);'/></div>";
+		
+		recommendIds+=carbonNumber+",";
+		
+		$("#div_recommendContent").html($("#div_recommendContent").html()+result);
+		
+		$("#font_recommendNum").html(parseInt($("#font_recommendNum").html())+1);
+		
+		hideActionSheetRecommend();	
+		
+		console.log(recommendIds);
+		
+	}
+
+	function removeRecommend(carbonNumber){
+		$("#divRecommend"+carbonNumber).remove();
+		$("#font_recommendNum").html(parseInt($("#font_recommendNum").html())-1);
+		recommendIds=recommendIds.replace(carbonNumber+",","");
+		console.log(recommendIds);
+	}
+
+	function sortRule(sortStr) {
+		sortString=sortStr;
+	}
+	
+	function saveStore(){
+		console.log(recommendIds);
+		if (recommendIds.substr(recommendIds.length-1,1)==","){
+			recommendIds=recommendIds.substr(0,recommendIds.length-1); //去掉末位逗号		
+		}
+		console.log(recommendIds);
+		$.ajax	//获取当前用户碳铺信息
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/cstore/updateCcerStore?callback=?&token="+token+"&storeid="+storeId+"&order="+sortString+"&tuijian="+recommendIds,data: {},dataType : "jsonp",
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){ 
+//					if (recommendIds!=""){
+//						recommendIds+=",";	//由于会停在当页，所以保存成功后把末位逗号补齐
+//					}					
+					$("#loadingToast").css("display","none");			
+					$("#toastSave").css("display","block");			
+					setTimeout(function(){
+						$("#toastSave").css("display","none");
+						aif.javaCloseActivity();
+					},2000);
+				}
+				else{
+					$("#loadingToast").css("display","none");
+					jectNotice(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+				$("#loadingToast").css("display","none");
+			}
+		});				
+	}
+</script>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+	</head>
+	<link rel="stylesheet" type="text/css" href="css/weui.css">
+	<script type="text/javascript" src="js/jquery-3.1.1.min.js" ></script>
+	<script type="text/javascript" src="js/iscroll-probe.js"></script>
+	<script src="js/functionPublic.js"></script>
+	<style>
+		body{
+			background: #F2F2F0;
+			font-family: sans-serif;
+		}
+		.txt
+		{
+			width:100%;
+			height:45px;
+			border-radius:0px;
+			border:1px solid #CCCCCC;
+			color:#999;
+			font-size:16px;
+			padding:0px;
+			-webkit-appearance: none;
+		}
+	</style>
+	<body>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; background-color:#1AAD19; position:fixed; top:0px; z-index:8888;">
+			<tr>
+				<td style="width:40px; text-align:center;" onclick="go_back()"><img src="ico/ico_back.png" style="max-width:26px; margin-top: 7px;" /></td>
+				<td id="td_shopName" style="text-align:center; font-size:16px; color:#fff;">绿豆芽用户注册</td>
+				<td id="td_shopShare" style="width:40px; text-align:center; font-size:12px; color:#fff;">&nbsp;</td>
+			</tr>
+		</table>
+		<div style="width: 100%; height: 50px;"></div>
+		<div style="width: 100%; height: 30px; margin-top: 10px;">
+			<div style="margin: 0px 10px 0px 10px; line-height: 30px; font-size: 14px; color: #999999;">请输入你的手机号</div>
+		</div>		
+		<div style="width: 100%;">
+			<div style="margin: 0px 10px 0px 10px; text-align: right;">
+				<input id="txt_mobile" class="txt" maxlength="11" type="text" style="color: #666666; font-size: 14px; text-align: center;" onfocus="if(this.value==defaultValue) {this.value=''; $('#txt_mobile').css('font-size','30px'); $('#txt_mobile').css('color','#000000');}" onblur="if(!value) {value=defaultValue; $('#txt_mobile').css('font-size','14px'); $('#txt_mobile').css('color','#666666');};" value="点击输入11位手机号"/>
+			</div>
+		</div>	
+		<div style="width: 100%;">
+			<div style="margin: 5px 10px 5px 10px;">
+				<input type="button" id="btn_valiCode" value="免费获取验证码" onclick="getCode();" style="float: right; height: 40px; background: #ADF3AD; border-radius: 3px; border: 1px solid #DFDFDF;" />
+			</div>
+		</div>
+		<div style="width: 100%; height: 30px; margin-top: 50px;">
+			<div style="margin: 0px 10px 0px 10px; line-height: 30px; font-size: 14px; color: #999999;">请输入收到的手机验证码</div>
+		</div>		
+		<div style="width: 100%;">
+			<div style="margin: 0px 10px 0px 10px; text-align: right;">
+				<input id="txt_valiCode" class="txt" maxlength="4" type="text" style="color: #666666; font-size: 14px; text-align: center;" onfocus="if(this.value==defaultValue) {this.value=''; $('#txt_valiCode').css('font-size','30px'); $('#txt_valiCode').css('color','#FF9900');}" onblur="if(!value) {value=defaultValue; $('#txt_valiCode').css('font-size','14px'); $('#txt_valiCode').css('color','#666666');};" value="点击输入4位验证码"/>
+			</div>
+		</div>	
+		
+		<div style="width: 100%; height: 50px;">
+			<div style="height: 40px; line-height: 40px;  text-align: center; font-size: 14px; background: #1AAD19; margin:  20px 10px 20px 10px; border-radius: 3px; color: #FFFFFF;" onclick="confirm();">确定</div>
+		</div>		
+		
+		<div style="width: 100%;">
+			<div style="margin: 0px 10px 0px 10px; line-height: 34px; font-size: 12px; color: #F90; font-weight: bold;">
+				如你已下载并登录APP，请从APP进入领取<br>
+				<!--在此登录后，再次进入APP请重新登录-->
+			</div>
+		</div>
+	</body>
+</html>
+
+<!--================================================================================================-->
+<div class="weui_dialog_alert" id="notice" style="display:none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
+        <div class="weui_dialog_bd" id="noticeContent">&nbsp;</div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:$('#notice').css('display','none');" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+
+<div id="loadingToast" class="weui_loading_toast" style="display:none;">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui_toast">
+        <div class="weui_loading">
+            <!-- :) -->
+            <div class="weui_loading_leaf weui_loading_leaf_0"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_1"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_2"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_3"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_4"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_5"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_6"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_7"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_8"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_9"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_10"></div>
+            <div class="weui_loading_leaf weui_loading_leaf_11"></div>
+        </div>
+        <p class="weui_toast_content">正在处理</p>
+    </div>
+</div>
+<!--================================================================================================-->
+
+
+<script>
+	function go_back(){
+		history.go(-1);
+	}
+	
+	//手机验证码
+	var wait=60;
+	function time() {
+		if (wait == 0) {
+			$("#btn_valiCode").removeAttr("disabled",true);
+			$("#btn_valiCode").val("免费获取验证码");
+			wait = 60;
+	 	} else { 
+			$("#btn_valiCode").attr("disabled", true);
+			$("#btn_valiCode").val("重新发送(" + wait + ")");
+			wait--;
+	    setTimeout(function() {time()},1000)}
+	 }	
+	
+	function getCode(){
+		var mobileNumber=$("#txt_mobile").val();
+		if (mobileNumber.length!=11 || isNaN(mobileNumber)){
+			jectNotice("请输入正确手机号");
+			return;
+		}
+		
+		if ($("#btn_valiCode").val()=="免费获取验证码"){	
+			$("#loadingToast").css("display","block");
+			
+			$.ajax	
+			({
+				type : "POST",url:"http://114.55.103.71:9006/ldy/vali/sendValiCodeToJSON?callback=?&phone="+mobileNumber,data: {},dataType : "jsonp",
+				success : function(data) 
+				{   
+					var json = eval(data); 	
+					if (json.code==200){
+						jectNotice("发送成功，请注意查收");
+						time();		
+						$("#loadingToast").css("display","none");
+					}
+					else
+					{
+						$("#loadingToast").css("display","none");
+						jectNotice(json.msg);
+					}
+				},
+				error : function(textStatus) 
+				{
+					$("#loadingToast").css("display","none");
+				}
+			});				
+		}
+	}
+	//END 手机验证码
+	
+	function confirm(){
+		var mobileNumber=$("#txt_mobile").val();
+		var valiCode=$("#txt_valiCode").val();
+		
+		if (mobileNumber.length!=11 || isNaN(mobileNumber)){
+			jectNotice("请输入正确手机号");
+			return;
+		}
+		
+		if (valiCode.length!=4){
+			jectNotice("请输入4位验证码");
+			return;
+		}
+		
+		$("#loadingToast").css("display","block");
+		
+		$.ajax	
+		({
+			type : "POST",url:"http://114.55.103.71:9006/ldy/user/LoginorRegisterToJSON?callback=?&mobile="+mobileNumber+"&valiCode="+valiCode+"&countryCode=+86",data: {},dataType : "jsonp",
+			success : function(data) 
+			{   
+				var json = eval(data); 	
+				if (json.code==200){
+					var token=json.token;
+					$("#loadingToast").css("display","none");					
+					window.localStorage.setItem("ldyToken",token);					
+//					window.location="netu_details.html?token="+token+"&netuId=59c61d760cf26891ecdbe6e8&fromPage=H5";
+					window.location="downLoad.html";
+				}
+				else
+				{
+					console.log("2");
+					$("#loadingToast").css("display","none");
+					jectNotice(json.msg);
+				}
+			},
+			error : function(textStatus) 
+			{
+				console.log("3");
+				$("#loadingToast").css("display","none");
+			}
+		});		
+	}
+</script>

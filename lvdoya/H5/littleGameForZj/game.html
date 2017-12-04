@@ -1,0 +1,1464 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>绿豆芽游戏</title>
+    <meta name="description" content="我已GET“独孤求败”称号，快来测试一下你的观察力！" />
+    <meta name="keywords" content="page transition, css animation, website, effect, css3, jquery" />
+    <meta name="author" content="Codrops" />
+    <link rel="stylesheet" type="text/css" href="ani/default.css" />
+    <!--<link rel="stylesheet" type="text/css" href="ani/multilevelmenu.css" />-->
+    <link rel="stylesheet" type="text/css" href="ani/component.css" />
+    <link rel="stylesheet" type="text/css" href="ani/animations.css" />
+    <script src="ani/modernizr.custom.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script> 
+    <style type="text/css">
+        .GameArea{ border-left: 0.3em solid #E79B0A; border-bottom: 0.3em solid #E79B0A;}
+        .GameArea td{border-right:0.3em solid #E79B0A;border-top: 0.3em solid #E79B0A; padding:0px;}
+        @-webkit-keyframes twinkling{
+          0% {
+              opacity:1; 
+              width:1.5em;
+          }
+          100% {
+              opacity:0.2;
+              width:2em;
+          }
+        }
+        @-webkit-keyframes douya{
+          0% {
+              opacity:1; 
+          }
+          100% {
+              opacity:0.2;
+          }
+        }
+        .photoItem img{ padding:0px; display:block;}
+        .ani {
+            -webkit-animation: twinkling 0.3s infinite ease-in-out; 
+            -webkit-animation-iteration-count:3;
+        }
+        .anidouya {
+            -webkit-animation: douya 0.3s infinite ease-in-out; 
+            -webkit-animation-iteration-count:3;
+        }
+
+        .btn { border:solid 2px #000; background:#8F37EA; padding:3px 10px; border-radius:5px; font-weight:bold; color:#fff; }
+    </style>
+</head>
+<body>
+	<!--why-->
+	<div id="div_share" style="position: fixed; width: 100%; top: 0px; z-index: 9999;">
+		<div style="float: left; width: 35px; height: 35px; line-height: 35px; border-radius: 50%; background: #FF4224; text-align: center; font-size: 20px; margin-left: 10px; margin-top: 10px;" onclick="closeCurrent();">×</div>
+		<!--<img src="Images/icoShare.png" style="max-height: 35px; float: right; margin-right: 100px; margin-top: 10px;" onclick="shareGame();"/>-->
+		<img src="Images/icoShare.png" style="max-height: 35px; float: right; margin-right: 10px; margin-top: 10px;" onclick="shareGame();"/>
+	</div>
+	<script>
+		function shareGame(){
+			aif.javaShare("绿豆芽小游戏","各种大礼等着你","http://www.lvdoya.com/H5/littleGame/game.html","http://www.lvdoya.com/H5/littleGame/Images/baoxiang.png")
+		}
+
+		function GetUrlParam(name) //获取url参数
+		{
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+			var r = window.location.search.substr(1).match(reg);
+			if(r != null) return unescape(r[2]);
+			return null;
+		}
+		urlToken=GetUrlParam("token");		
+		if (urlToken==null) {
+			document.getElementById("div_share").style.display="none";
+		}
+	</script>
+	<!--end why-->
+    <audio id="bgmusic" autoplay="autoplay" loop="loop" preload="auto" src="music/gamebg.mp3">
+        你的浏览器不支持audio标签
+    </audio>
+    <audio id="giftyinxiao" preload="auto" src="music/gift.mp3">
+        你的浏览器不支持audio标签
+    </audio>
+    <audio id="douyayinxiao" preload="auto" src="music/douya.mp3">
+        你的浏览器不支持audio标签
+    </audio>
+    <audio id="zhadan" preload="auto" src="music/zhadan.mp3">
+        你的浏览器不支持audio标签
+    </audio>
+    <!--<div class="codrops-top clearfix">
+        <a class="codrops-icon codrops-icon-prev" href="http://tympanus.net/Tutorials/AutomaticFigureNumbering/"><span>Previous Demo</span></a>
+        <span class="right"><a class="codrops-icon codrops-icon-drop" href="http://tympanus.net/codrops/?p=15001"><span>Back to the Codrops Article</span></a></span>
+    </div>-->
+
+    <div class="pt-triggers" style="-webkit-user-select: none; -moz-user-select: none;">
+        <!--<button id="iterateEffects" class="pt-touch-button">Show next page transition</button>-->
+        
+        <!--<div id="dl-menu" class="dl-menuwrapper">
+            <button class="dl-trigger">Choose a transition</button>
+            <ul class="dl-menu">
+                <li>
+                    <a href="#">Move</a>
+                    <ul class="dl-submenu">
+                        <li data-animation="1"><a href="#">Move to left/ from right</a></li>
+                        <li data-animation="2"><a href="#">Move to right/ from left</a></li>
+                        <li data-animation="3"><a href="#">Move to top/ from bottom</a></li>
+                        <li data-animation="4"><a href="#">Move to bottom/ from top</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Fade</a>
+                    <ul class="dl-submenu">
+                        <li data-animation="5"><a href="#">Fade / from right</a></li>
+                        <li data-animation="6"><a href="#">Fade / from left</a></li>
+                        <li data-animation="7"><a href="#">Fade / from bottom</a></li>
+                        <li data-animation="8"><a href="#">Fade / from top</a></li>
+                        <li data-animation="9"><a href="#">Fade left / Fade right</a></li>
+                        <li data-animation="10"><a href="#">Fade right / Fade left</a></li>
+                        <li data-animation="11"><a href="#">Fade top / Fade bottom</a></li>
+                        <li data-animation="12"><a href="#">Fade bottom / Fade top</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Different easing</a>
+                    <ul class="dl-submenu">
+                        <li data-animation="13"><a href="#">Different easing / from right</a></li>
+                        <li data-animation="14"><a href="#">Different easing / from left</a></li>
+                        <li data-animation="15"><a href="#">Different easing / from bottom</a></li>
+                        <li data-animation="16"><a href="#">Different easing / from top</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Scale</a>
+                    <ul class="dl-submenu">
+                        <li data-animation="17"><a href="#">Scale down / from right</a></li>
+                        <li data-animation="18"><a href="#">Scale down / from left</a></li>
+                        <li data-animation="19"><a href="#">Scale down / from bottom</a></li>
+                        <li data-animation="20"><a href="#">Scale down / from top</a></li>
+                        <li data-animation="21"><a href="#">Scale down / scale down</a></li>
+                        <li data-animation="22"><a href="#">Scale up / scale up</a></li>
+                        <li data-animation="23"><a href="#">Move to left / scale up</a></li>
+                        <li data-animation="24"><a href="#">Move to right / scale up</a></li>
+                        <li data-animation="25"><a href="#">Move to top / scale up</a></li>
+                        <li data-animation="26"><a href="#">Move to bottom / scale up</a></li>
+                        <li data-animation="27"><a href="#">Scale down / scale up</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Rotate</a>
+                    <ul class="dl-submenu">
+                        <li>
+                            <a href="#">Glue</a>
+                            <ul class="dl-submenu">
+                                <li data-animation="28"><a href="#">Glue left / from right</a></li>
+                                <li data-animation="29"><a href="#">Glue right / from left</a></li>
+                                <li data-animation="30"><a href="#">Glue bottom / from top</a></li>
+                                <li data-animation="31"><a href="#">Glue top / from bottom</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Flip</a>
+                            <ul class="dl-submenu">
+                                <li data-animation="32"><a href="#">Flip right</a></li>
+                                <li data-animation="33"><a href="#">Flip left</a></li>
+                                <li data-animation="34"><a href="#">Flip top</a></li>
+                                <li data-animation="35"><a href="#">Flip bottom</a></li>
+                            </ul>
+                        </li>
+                        <li data-animation="36"><a href="#">Fall</a></li>
+                        <li data-animation="37"><a href="#">Newspaper</a></li>
+                        <li>
+                            <a href="#">Push / Pull</a>
+                            <ul class="dl-submenu">
+                                <li data-animation="38"><a href="#">Push left / from right</a></li>
+                                <li data-animation="39"><a href="#">Push right / from left</a></li>
+                                <li data-animation="40"><a href="#">Push top / from bottom</a></li>
+                                <li data-animation="41"><a href="#">Push bottom / from top</a></li>
+
+                                <li data-animation="42"><a href="#">Push left / pull right</a></li>
+                                <li data-animation="43"><a href="#">Push right / pull left</a></li>
+                                <li data-animation="44"><a href="#">Push top / pull bottom</a></li>
+                                <li data-animation="45"><a href="#">Push bottom / pull top</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Fold / Unfold</a>
+                            <ul class="dl-submenu">
+                                <li data-animation="46"><a href="#">Fold left / from right</a></li>
+                                <li data-animation="47"><a href="#">Fold right / from left</a></li>
+                                <li data-animation="48"><a href="#">Fold top / from bottom</a></li>
+                                <li data-animation="49"><a href="#">Fold bottom / from top</a></li>
+                                <li data-animation="50"><a href="#">Move to right / unfold left</a></li>
+                                <li data-animation="51"><a href="#">Move to left / unfold right</a></li>
+                                <li data-animation="52"><a href="#">Move to bottom / unfold top</a></li>
+                                <li data-animation="53"><a href="#">Move to top / unfold bottom</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Room</a>
+                            <ul class="dl-submenu">
+                                <li data-animation="54"><a href="#">Room to left</a></li>
+                                <li data-animation="55"><a href="#">Room to right</a></li>
+                                <li data-animation="56"><a href="#">Room to top</a></li>
+                                <li data-animation="57"><a href="#">Room to bottom</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Cube</a>
+                            <ul class="dl-submenu">
+                                <li data-animation="58"><a href="#">Cube to left</a></li>
+                                <li data-animation="59"><a href="#">Cube to right</a></li>
+                                <li data-animation="60"><a href="#">Cube to top</a></li>
+                                <li data-animation="61"><a href="#">Cube to bottom</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Carousel</a>
+                            <ul class="dl-submenu">
+                                <li data-animation="62"><a href="#">Carousel to left</a></li>
+                                <li data-animation="63"><a href="#">Carousel to right</a></li>
+                                <li data-animation="64"><a href="#">Carousel to top</a></li>
+                                <li data-animation="65"><a href="#">Carousel to bottom</a></li>
+                            </ul>
+                        </li>
+                        <li data-animation="66"><a href="#">Sides</a></li>
+                    </ul>
+                </li>
+                <li data-animation="67"><a href="#">Slide</a></li>
+            </ul>
+        </div>-->
+    
+    <!-- /dl-menu-wrapper-->
+    </div><!-- /triggers -->
+
+    <div id="pt-main" class="pt-perspective">
+        <div class="pt-page pt-page-1" style="background:#6A5B18 url(Images/gamebg1.jpg) no-repeat; background-size:cover;">
+            <div style="padding:8em 0 0 0; text-align:center;"><img src="Images/game_home_1.png" style="width:70%;" /></div>
+            <div style="position:absolute; bottom:2em; text-align:center; width:100%;">
+                
+                <img src="Images/game_home_2.png" style="width:50%;" onclick="ToNextPage()" />
+                <p style="text-align:center; padding-top:2em;"><img src="Images/baoxiang.png" onclick="showResult()" /></p>
+            </div>
+
+            <button id="Page1Btn" style="display:none;"></button>
+        </div>
+        
+        <div class="pt-page pt-page-2" style="background:#6A5B18 url(Images/gamebg1.jpg) no-repeat; background-size:cover;">
+            <div style="position:absolute; width:100%; height:100%; background:#000000; opacity:0.7;"></div>
+            <div style="position:absolute; bottom:6em; text-align:center; width:100%;"><img src="Images/game_rule.png" style="width:80%;" onclick="ToNextPage()" /></div>
+            <button id="Page2Btn" style="display:none;"></button>
+        </div>
+        <!-- 第一关 -->
+        <div class="pt-page pt-page-3" style="background:#6A5B18 url(Images/gamebg1.jpg) no-repeat; background-size:cover;">
+            <div style="position:absolute; top:1.5em; left:1em;top:0px;width:8em;height:3.5em; margin:auto; background:url(Images/jishiban.png) no-repeat bottom; background-size:cover; ">
+                <div style="padding-top:1.5em;">
+                    <table style="width:90%; margin:auto;  ">
+                        <tr>
+                            <td style="width:60%;"><img id="jishiban" src="Images/diyijishi.png" style="width:90%;" /></td>
+                            <td id="timeRound1Td" style="font-size:0.8em;color:#000; font-weight:bold;">90秒</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <canvas id="canvas1" style="position:absolute;top:0px;width:100%; height:100%;">Your browser does not support the canvas element.</canvas>
+            <div style="position:absolute; top:1.5em; right:1em; font-size:0.8em; color:#000000; ">
+                <table style="border-radius:0.5em; padding:0.2em;">
+                    <tr>
+                        <td id="GiftIcon"><img src="Images/gift.png" style="width:1.5em;" /></td>
+                        <td id="giftNumRound" style="font-size:1.3em; font-weight:bold;">x 0</td>
+                        <td style="width:2em;"></td>
+                        <td id="douyaRound"><img src="Images/douya2_gray.png" style="height:2em;" /> <img src="Images/douya2_gray.png" style="height:2em;" /></td>               
+                        <!--<td><img src="Images/douya2_gray.png" style="height:2em;" /></td>  
+                        <td><img src="Images/douya2_gray.png" style="height:2em;" /></td>
+                        <td><img src="Images/douya2_gray.png" style="height:2em;" /></td>-->    
+                    </tr>
+                </table>                
+            </div>
+            <div class="round1result" style="position:absolute; width:100%; height:100%; background:#000000; opacity:0.7; display:none;"></div>
+            <div class="round1result" style="position:absolute; bottom:6em; text-align:center; width:100%; display:none;"><img src="Images/gongxiguoguan.png" style="width:80%;" onclick="ToNextRound()" /><button id="Page3Btn" style="display:none;"></button></div>
+            <div class="tongguan" style="position:absolute; width:100%; height:100%; background:#000000; opacity:0.7; display:none;"></div>    
+            <div class="tongguan" style="position:absolute; bottom:6em; text-align:center; width:100%; display:none;"><img src="Images/gongxiguoguan.png" style="width:80%;" onclick="showResult()" /></div>
+            <div class="gameover" style="position:absolute; width:100%; height:100%; background:#000000; opacity:0.7; display:none;"></div>
+            <div class="gameover" style="position:absolute; bottom:6em; text-align:center; width:100%; display:none;"><img src="Images/gameover.png" style="width:80%;" onclick="showResult()" /></div>
+            <div class="getgoods" style="position:absolute; width:100%; height:100%; background:#000000; opacity:0.7; display:none;"></div>
+            <div class="getgoods" style="position:absolute; width:100%; bottom:6em; display:none;">
+                <div style="width:20em; height:26em; background:url(Images/juanzhou.png) no-repeat; background-size:contain; margin:auto;">
+                    <p style="text-align:center; padding-top:2em;"><img src="Images/gongxi.png" /></p>
+                    <p id="getgoodsName" style="text-align:center; padding-top:0.5em; font-size:1.1em; color:#000000;">获得</p>
+                    <p id="getgoodsImage" style="text-align:center; padding-top:1em;"><img src="Images/hongbao.png" /></p>
+                    <p style="text-align:center; padding-top:1em;">
+                        <table style="width:90%; text-align:center; margin:auto;">
+                            <tr>
+                                <td><img id="getgoodsBtn" src="Images/srnz.png" style="width:8em;" onclick="acceptGoods()" /></td>
+                                <td id="getgoodsGoonBtn" style="display:none;"><img src="Images/goon.png" style="width:8em;" onclick="goonGame()" /></td>
+                            </tr>
+                        </table>
+                    </p>
+                </div>
+            </div>
+
+            <!--<div style="position:absolute; width:100%; bottom:2em;">                
+                <button id="Page3Btn" style="display:none;"></button>-->
+            </div>
+        
+        
+        <!--结果页-->
+        <div class="pt-page pt-page-4">
+            <div style="position:absolute; width:100%; height:100%; background:#000000; opacity:0.7;"></div>
+            <div id="LoginArea" style="position:absolute; width:100%; top:6em;display:none;">
+                <div style="width:20em; height:26em; background:url(Images/juanzhou.png) no-repeat; background-size:contain; margin:auto;">
+                    <p style="text-align:center; padding-top:2em;"><img src="Images/loginBtn.png" /></p>
+                    <p style="width:18em; margin:auto; padding-top:2em; padding-left:1em;padding-right:1em;"><input type="text" id="phone" style="padding:0.8em; border:0px;border-radius:0.3em; width:90%; " value="" placeholder="请输入手机号" /> </p>
+                    <p style="width:18em; margin:auto; padding-top:1em; padding-left:1em;padding-right:1em;">
+                        <input type="text" id="InputValiCode" style="padding:0.8em; border:0px;border-radius:0.3em; width:50%;" value="" placeholder="请输入短信验证码" /> 
+                        <button id="getValiCodeBtn" style="padding:0.6em; border:0px;border-radius:0.3em;" onclick="sendValiCode()">获取验证码</button>
+                    </p>
+                    <p style="text-align:center; padding-top:1em;">
+                        <img id="LoginBtn" src="Images/login.png" style="width:8em;" onclick="login()" />
+                    </p>
+                </div>
+            </div>
+            <div id="BoxArea" style="position:absolute; width:100%; top:1em; display:none;">
+                <p style="text-align:center;"><img src="Images/baoxiang.png" style="width:5em;" /></p>
+                <div style="width:20em; height:20em; margin:auto; overflow:auto;">                    
+                    <table id="BoxList">
+                        <tr><td>努力加载中...</td></tr>
+                    </table>
+                </div>
+                <p style="text-align:center;"><img src ="Images/backtogame.png" style="width:50%;" onclick="restartGame()" /></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="pt-message">
+        <p>Your browser does not support CSS animations.</p>
+    </div>
+    <script src="ani/jquery.min.js"></script>
+    <script src="ani/jquery.dlmenu.js"></script>
+    <script src="ani/pagetransitions.js"></script>
+    <script src="js/gamedata.js"></script>
+</body>
+</html>
+<script type="text/javascript">
+    var isWeb = 1;
+    var token = "";
+    //why
+    token=GetUrlParam("token");
+    if (token==null){
+    	token="";
+    }
+    //end why
+
+    var waiting = false;
+    var lastImageUrl = "";
+    var roundId = 0;
+    var pageId = 1;
+    var timeRound1 = 0;
+    var timeRound2 = 0;
+    var timeRound3 = 0;
+    var timeRound4 = 0;
+    var timeRound5 = 0;
+
+    var giftRound1 = 0;
+    var giftRound2 = 0;
+    var giftRound3 = 0;
+    var giftRound4 = 0;
+    var giftRound5 = 0;
+
+    var douyaRound1 = 0;
+    var douyaRound2 = 0;
+    var douyaRound3 = 0;
+    var douyaRound4 = 0;
+    var douyaRound5 = 0;
+
+    var gameover = 0;
+    var gameparse = 0;
+
+    var c = document.getElementById("canvas1");
+    var cxt;
+    var player = new Image();
+    var canvasW = window.innerWidth;
+    var canvasH = window.innerHeight;
+    var playerWidth = 87;
+    var playerHeight = 139;
+    var x = 0;
+
+
+
+    //降落物体相关
+    var imageArray = new Array();
+
+    var getGoodsJson = [];
+    var tempGoods;
+
+    var getValiCode = "";
+
+    function reset() {
+        /*waiting = false;
+        lastImageUrl = "";
+        roundId = 0;
+        pageId = 1;
+        timeRound1 = 0;
+        timeRound2 = 0;
+        timeRound3 = 0;
+        timeRound4 = 0;
+        $(".photoItem").removeClass("aniPhoto");
+        initRound(1);
+        initRound(2);
+        initRound(3);
+        initRound(4);
+        */
+    }
+
+    function restartGame() {
+        location.reload();
+//      window.location=window.location;
+//		aif.javaReloadGame();
+    }
+
+    var order_org = [];
+    //运行时数据
+    var json_round = [];
+    //第一关图片JSON
+    //jsondata.data.json_round1.NeedDouya
+    var jsondata = {
+        "json_round1": {
+            "NeedDouya": 2, "ObjList": [
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": { "GoodsId": "251251", "GoodsName": "商品名称", "GoodsImage": "http://www.micgoo.com/a.png", "GoodsDesc": "商品介绍", "GoodsLink": "http://www.baidu.com" } },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "bomb", "ImageUrl": "Images/zhadan.png", "width": 80, "height": 75, "x": 0, "y": -75, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "douya", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "douya", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} }
+            ]
+        },
+        "json_round2": {
+            "NeedDouya": 3, "ObjList": [
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": { "GoodsId": "251251", "GoodsName": "商品名称", "GoodsImage": "http://www.micgoo.com/a.png", "GoodsDesc": "商品介绍", "GoodsLink": "http://www.baidu.com" } },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "bomb", "ImageUrl": "Images/zhadan.png", "width": 80, "height": 75, "x": 0, "y": -75, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "bomb", "ImageUrl": "Images/zhadan.png", "width": 80, "height": 75, "x": 0, "y": -75, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "douya", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "douya", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "douya", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} }
+            ]
+        },
+        "json_round3": {
+            "NeedDouya": 4, "ObjList": [
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": { "GoodsId": "251251", "GoodsName": "商品名称", "GoodsImage": "http://www.micgoo.com/a.png", "GoodsDesc": "商品介绍", "GoodsLink": "http://www.baidu.com" } },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "bomb", "ImageUrl": "Images/zhadan.png", "width": 80, "height": 75, "x": 0, "y": -75, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "bomb", "ImageUrl": "Images/zhadan.png", "width": 80, "height": 75, "x": 0, "y": -75, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "bomb", "ImageUrl": "Images/zhadan.png", "width": 80, "height": 75, "x": 0, "y": -75, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "douya", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "douya", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "douya", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "douya", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} }
+            ]
+        },
+        "json_round4": {
+            "NeedDouya": 5, "ObjList": [
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": { "GoodsId": "251251", "GoodsName": "商品名称", "GoodsImage": "http://www.micgoo.com/a.png", "GoodsDesc": "商品介绍", "GoodsLink": "http://www.baidu.com" } },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "douya", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "bomb", "ImageUrl": "Images/zhadan.png", "width": 80, "height": 75, "x": 0, "y": -75, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "bomb", "ImageUrl": "Images/zhadan.png", "width": 80, "height": 75, "x": 0, "y": -75, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "bomb", "ImageUrl": "Images/zhadan.png", "width": 80, "height": 75, "x": 0, "y": -75, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "bomb", "ImageUrl": "Images/zhadan.png", "width": 80, "height": 75, "x": 0, "y": -75, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "douya", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "douya", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "douya", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "douya", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} }
+            ]
+        },
+        "json_round5": {
+            "NeedDouya": 6, "ObjList": [
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": { "GoodsId": "251251", "GoodsName": "商品名称", "GoodsImage": "http://www.micgoo.com/a.png", "GoodsDesc": "商品介绍", "GoodsLink": "http://www.baidu.com" } },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -50, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift3.png", "width": 50, "height": 41, "x": 0, "y": -41, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift4.png", "width": 49, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "gift", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "bomb", "ImageUrl": "Images/zhadan.png", "width": 80, "height": 75, "x": 0, "y": -75, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "bomb", "ImageUrl": "Images/zhadan.png", "width": 80, "height": 75, "x": 0, "y": -75, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "bomb", "ImageUrl": "Images/zhadan.png", "width": 80, "height": 75, "x": 0, "y": -75, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "bomb", "ImageUrl": "Images/zhadan.png", "width": 80, "height": 75, "x": 0, "y": -75, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "bomb", "ImageUrl": "Images/zhadan.png", "width": 80, "height": 75, "x": 0, "y": -75, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "douya", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "douya", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "douya", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "douya", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "douya", "ImageUrl": "Images/downGift1.png", "width": 64, "height": 70, "x": 0, "y": -70, "StartDownSec": 1, "Get": 0, "GetGoods": {} },
+                { "ObjType": "douya", "ImageUrl": "Images/downGift2.png", "width": 47, "height": 52, "x": 0, "y": -52, "StartDownSec": 1, "Get": 0, "GetGoods": {} }
+            ]
+        }
+    };
+
+    function initGame() {
+	    if (GetUrlParam("token")==null) {
+        	isWeb=1;
+        } else {
+        	isWeb=0;
+        }
+//      alert("begin6");
+        $.ajax({
+            type: "POST",
+            dataType: "jsonp",
+            url: "http://114.55.103.71:9006/ldy/game/getGameData?callback=?",
+            data: {isWeb: isWeb },
+            success: function (msg) {
+                jsondata = msg;
+                //alert(jsondata.data.json_round1.NeedDouya);
+            },
+            error: function (xhr, msg, e) {
+                alert("error");
+            }
+        });
+    }
+    
+    Array.prototype.shuffle = function (n) {
+        var len = this.length, num = n ? Math.min(n, len) : len, arr = this.slice(0)
+        arr.sort(function (a, b) {
+            return Math.random() - 0.5
+        })
+        return arr.slice(0, num)
+    }
+
+    function initRound(round) {
+        //waiting = true;
+        
+
+        json_round = jsondata.data.json_round1.ObjList;
+        var needDouya = 1;
+        if (round == 1) {            
+            json_round = jsondata.data.json_round1.ObjList;
+            needDouya = jsondata.data.json_round1.NeedDouya;
+            $("#jishiban").attr("src", "Images/diyijishi.png");
+        }
+        if (round == 2) {
+            json_round = jsondata.data.json_round2.ObjList;
+            needDouya = jsondata.data.json_round2.NeedDouya;
+            $("#jishiban").attr("src", "Images/dierjishi.png");
+        }
+        if (round == 3) {
+            json_round = jsondata.data.json_round3.ObjList;
+            needDouya = jsondata.data.json_round3.NeedDouya;
+            $("#jishiban").attr("src", "Images/disanjishi.png");
+        }
+        if (round == 4) {
+            json_round = jsondata.data.json_round4.ObjList;
+            needDouya = jsondata.data.json_round4.NeedDouya;
+            $("#jishiban").attr("src", "Images/disijishi.png");
+        }
+        if (round == 5) {
+            json_round = jsondata.data.json_round5.ObjList;
+            needDouya = jsondata.data.json_round5.NeedDouya;
+            $("#jishiban").attr("src", "Images/diwujishi.png");
+        }
+
+        $("#douyaRound").html("");
+        for (var i = 0; i < needDouya; i++) {
+            $("#douyaRound").append('<img src="Images/douya2_gray.png" style="height:2em;" />');
+        }
+
+        order_org = [];
+        var downSpeed = 58 / json_round.length;
+        for (var i = 0; i < json_round.length; i++) {
+            order_org.push(i * downSpeed);
+        }
+        order_org = order_org.shuffle();
+
+        //设置本关掉落物体的时间点,横坐标
+        imageArray.length = 0;
+        for (var i = 0; i < json_round.length; i++) {
+            json_round[i].x = parseInt((canvasW-50) * Math.random());
+            json_round[i].StartDownSec = order_org[i];
+
+            var downobj = new Image();
+            downobj.src = json_round[i].ImageUrl;
+            /*downobj.id = i;
+            downobj.onload = function () {
+                cxt.drawImage(downobj, json_round[i].x, json_round[i].y, json_round[i].width, json_round[i].height);
+            };
+            */
+            //alert(roundId+" "+json_round[i].x)
+            imageArray.push(downobj);
+        }
+
+        //alert(imageArray.length);        
+        //alert(JSON.stringify(json_round));
+        
+    }
+    
+    function StartPlay() {
+        waiting = false;
+        roundId = 1;
+        StartRound();
+        //$(".checkoptions img").css("opacity", 1);
+    }
+
+    function WaitEnd(idx) {
+        waiting = false;
+        $("#round" + roundId + "_" + idx).html(lastImageUrl);
+    }
+
+    function ToNextPage() {
+        waiting = false;
+//      $("#div_share").css("display","none");
+        if (pageId == 1) {
+            $("#Page1Btn").click();
+            pageId = 2;
+        }
+        else if (pageId == 2) {
+            $("#Page2Btn").click();
+            roundId = 1;
+            pageId = 3;
+            //$(".checkoptions img").css("opacity", 0);
+            setTimeout("StartPlay()", 1000);
+        }
+        else if (pageId == 3) {
+            $("#Page3Btn").click();
+            roundId = 2;
+            pageId = 4;
+            //$(".checkoptions img").css("opacity", 0);
+            setTimeout("StartPlay()", 1000);
+        }
+        else if (pageId == 4) {
+            $("#Page4Btn").click();
+            roundId = 3;
+            pageId = 5;
+            //$(".checkoptions img").css("opacity", 0);
+            setTimeout("StartPlay()", 1000);
+        }
+        else if (pageId == 5) {
+            $("#Page5Btn").click();
+            roundId = 4;
+            pageId = 6;
+            //$(".checkoptions img").css("opacity", 0);
+            setTimeout("StartPlay()", 1000);
+        }
+        else if (pageId == 6) {
+            $("#Page6Btn").click();
+            roundId = 0;
+            pageId = 7;
+
+            var gameTime = timeRound1 + timeRound2 + timeRound3 + timeRound4;
+            SaveGameTime(gameTime);
+            $("#timeUsed").html(gameTime + "秒");
+
+            setTimeout("showResult()", 8000);
+            //alert("共耗时：" + timeRound1 + "+" + timeRound2 + "+" + timeRound3 + "+" + timeRound4 + "=" + (timeRound1 + timeRound2 + timeRound3 + timeRound4) + "秒")
+        }
+    }
+
+    function ToNextRound() {
+        if (roundId == 5) {
+            gameover = 1;
+            $(".round1result").hide();
+            $(".gameover").hide();
+            $(".tongguan").show();
+        }
+        else {
+            roundId++;
+            gameover = 0;
+            $(".round1result").hide();
+            $(".gameover").hide();
+            StartRound();
+        }
+        
+    }
+
+    function acceptGoods() {
+        getGoodsJson.push(tempGoods);
+        //alert(JSON.stringify(getGoodsJson));
+        gameparse = 0;
+        $(".getgoods").hide();
+    }
+
+    function goonGame() {
+        gameparse = 0;
+        $(".getgoods").hide();
+    }
+
+    function showResult() {
+        $("#Page3Btn").click();
+        //token = localStorage.getItem("token");
+        token = getCookie('token');
+        //why
+        if (GetUrlParam("token")==null && getCookie("token")==""){
+        	token="";
+        } else if (GetUrlParam("token")!=null && getCookie("token")=="") {
+        	token=GetUrlParam("token");
+        } else if (GetUrlParam("token")==null && getCookie("token")!="") {
+        	token=getCookie("token");
+        }
+        //end why
+        if (token != "") {
+            if (getGoodsJson.length > 0) {
+                SaveGameData();
+            }
+            else {
+                showBox();
+            }            
+            return false;
+        }
+        else {
+            $("#LoginArea").show();
+            $("#BoxArea").hide();
+        }
+    }
+
+    var ResendTimeout = 0;
+    function sendValiCode() {
+        if (ResendTimeout > 0) { return false; }
+        var phone = $("#phone").val();
+        if (phone.length < 11) {
+            alert("请输入正确的手机号");
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            dataType: "jsonp",
+            url: "http://114.55.103.71:9006/ldy/vali/sendValiCodeToJSON?callback=?",
+            data: { phone: phone, countryCode: "+86" },
+            success: function (msg) {
+                //alert(JSON.stringify(msg));
+                if (msg.code == 200) {
+                    ResendTimeout = 60;
+                    setSendValiCodeBtn();
+                }                
+            },
+            error: function (xhr, msg, e) {
+                //alert("error");
+            }
+        });
+    }
+    
+    function setSendValiCodeBtn() {
+        if (ResendTimeout > 0) {
+            $("#getValiCodeBtn").html(ResendTimeout + "秒后可重新发送");
+            ResendTimeout--;
+        }
+        else {
+            $("#getValiCodeBtn").html("发送验证码");
+        }
+        setTimeout("setSendValiCodeBtn()", 1000);
+    }
+
+
+    var phone = "";
+    function login() {        
+        phone = $("#phone").val();
+        var valiCode = $("#InputValiCode").val();
+        if (phone.length < 11) {
+            alert("请输入正确的手机号");
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            dataType: "jsonp",
+            url: "http://114.55.103.71:9006/ldy/user/LoginorRegisterToJSON?callback=?",
+            data: { mobile: phone,valiCode:valiCode, countryCode: "+86" },
+            success: function (msg) {
+                if (msg.code == 200) {
+                    token = msg.token;
+                    setCookie('token', token, 365);
+                    //localStorage.setItem("token", token);
+                    if (getGoodsJson.length > 0) {
+                        SaveGameData();
+                    }
+                    else {
+                        showBox();
+                    }                                                         
+                }
+                else {
+                    alert("登录失败");
+                    return false;
+                }
+            },
+            error: function (xhr, msg, e) {
+                alert("error");
+            }
+        });
+    }
+
+    function setCookie(c_name, value, expiredays) {
+        var exdate = new Date()
+        exdate.setDate(exdate.getDate() + expiredays)
+        document.cookie = c_name + "=" + escape(value) +
+        ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString())
+    }
+
+    //取回cookie
+    function getCookie(c_name) {
+        if (document.cookie.length > 0) {
+            c_start = document.cookie.indexOf(c_name + "=")
+            if (c_start != -1) {
+                c_start = c_start + c_name.length + 1
+                c_end = document.cookie.indexOf(";", c_start)
+                if (c_end == -1) c_end = document.cookie.length
+                return unescape(document.cookie.substring(c_start, c_end))
+            }
+        }
+        return ""
+    }
+
+    function SaveGameData() {
+        //alert(JSON.stringify(getGoodsJson));
+    	//why
+	    if (GetUrlParam("token")==null) {
+        	isWeb="1";
+        } else {
+        	isWeb="0";
+        }
+        //end why
+//      alert("AAAA");
+//      alert(JSON.stringify(getGoodsJson));
+		
+//      $.ajax({
+//          type: "POST",
+//          dataType: "jsonp",
+//          url: "http://114.55.103.71:9006/ldy/game/saveGiftToBox?callback=?",
+//          async: false,
+//          data: { token: token, isWeb: isWeb, giftJson: JSON.stringify(getGoodsJson) },
+//          success: function (msg) {
+//              if (msg.code == 200) {
+//                  //alert("数据已提交");
+//                  showBox();
+//              }
+//              else {
+//                  alert(msg.code);
+//              }
+//          },
+//          error: function (xhr, msg, e) {
+//              alert("error");
+//          }
+//      });
+
+		if (getGoodsJson.length<=10) {
+	        $.ajax({
+	            type: "POST",
+	            dataType: "jsonp",
+	            url: "http://114.55.103.71:9006/ldy/game/saveGiftToBox?callback=?",
+	            async: false,
+	            data: { token: token, isWeb: isWeb, giftJson: JSON.stringify(getGoodsJson) },
+	            success: function (msg) {
+	                if (msg.code == 200) {
+	                    //alert("数据已提交");
+	                    showBox();
+	                }
+	                else {
+	                    alert(msg.code);
+	                }
+	            },
+	            error: function (xhr, msg, e) {
+	                alert("error");
+	            }
+	        });			
+		} else {
+			var forCount=parseInt(getGoodsJson.length/10);
+			var startPosition=0;
+			var endPosition=9;
+			for (var i=0; i<=forCount; i++){
+				var tempArray=[];
+				tempArry=getGoodsJson.slice(startPosition,endPosition);
+		        $.ajax({
+		            type: "POST",
+		            dataType: "jsonp",
+		            url: "http://114.55.103.71:9006/ldy/game/saveGiftToBox?callback=?",
+		            async: true,
+		            data: { token: token, isWeb: isWeb, giftJson: JSON.stringify(tempArry) },
+		            success: function (msg) {
+		                if (msg.code == 200) {
+		                    //alert("数据已提交");
+		                    //showBox();
+		                }
+		                else {
+		                    alert(msg.code);
+		                }
+		            },
+		            error: function (xhr, msg, e) {
+		                alert("error");
+		            }
+		        });
+		        startPosition+=10;
+		        endPosition+=10;
+			}
+			if (endPosition>getGoodsJson.length){
+				showBox();
+			}
+		}
+    }
+
+    function showBox() {
+    	//why
+	    if (GetUrlParam("token")==null) {
+        	isWeb="1";
+        } else {
+        	isWeb="0";
+        }
+        //end why
+        
+        $("#LoginArea").hide();
+        $("#BoxArea").show();
+
+        $.ajax({
+            type: "POST",
+            dataType: "jsonp",
+            url: "http://114.55.103.71:9006/ldy/game/getUserGift?callback=?",
+            data: { token: token, pageNo: 0, sort: "",order:0 },
+            success: function (msg) {
+                $("#BoxList").html("");
+                if (msg.code != 200) {
+                    setCookie('token', "", 365);
+                    token = "";
+                    showResult();
+                }
+
+                for (var i = 0; i < msg.data.length; i++) {
+//              	alert(msg.data[i].GoodsLink.toString().substr(0,4)+"/"+isWeb);
+                	if((msg.data[i].GoodsLink.toString().substr(0,4)=="http" && isWeb=="1") || (msg.data[i].GoodsLink.toString().substr(0,4)!="http" && isWeb=="0") || msg.data[i].GoodsType == 4 || msg.data[i].GoodsType == 5) {
+	                    if (msg.data[i].GoodsType == 4) {
+	                        var getBtn = '已领取';
+	                        if (msg.data[i].status == 0) {
+	                            getBtn = '<button class="btn" onclick="reRedPackage(\''+msg.data[i].giftId+'\')">领取</button>';
+	                        }
+	                        $("#BoxList").append('<tr><td style="text-align:center;"><img src="Images/hongbao.png" style="height:2em;" /></td><td style="padding-left:1em;">' + substring(msg.data[i].GoodsName,10) + '  （' + msg.data[i].GoodsDesc + '碳票）</td><td>' + getBtn + '</td></tr>');
+	                    }
+	                    else if (msg.data[i].GoodsType == 5) {
+	                        var getBtn = '已领取';
+	                        if (msg.data[i].status == 0) {
+	                            getBtn = '<button class="btn" onclick="reRedPackage(\'' + msg.data[i].giftId + '\')">领取</button>';
+	                        }
+	                        $("#BoxList").append('<tr><td style="text-align:center;"><img src="Images/lvbao.png" style="height:2em;" /></td><td style="padding-left:1em;">' + substring(msg.data[i].GoodsName, 10) + '  （' + msg.data[i].GoodsDesc + '吨）</td><td>' + getBtn + '</td></tr>');
+	                    }
+	                    else {
+	                        var viewBtn = '<button class="btn" onclick="viewGoods(\'' + msg.data[i].GoodsLink + '\',&apos;'+msg.data[i].GoodsType+'&apos;)">查看</button>';
+	                        $("#BoxList").append('<tr><td style="text-align:center;"><img src="' + msg.data[i].GoodsImage + '" style="height:2em;" /></td><td style="padding-left:1em;">' + substring(msg.data[i].GoodsName,10) + '</td><td>' + viewBtn + '</td></tr>');
+	                    }
+                	}
+                   
+                }
+
+            },
+            error: function (xhr, msg, e) {
+                
+                //alert(msg);
+            }
+        });
+    }
+
+    function substring(str, len) {
+        if (str.length > len) {
+            return str.substring(0, len)+"...";
+        }
+        else {
+            return str;
+        }
+    }
+
+    function viewGoods(GoodsLink,GoodsType) {
+    	if (GetUrlParam("token")==null){
+//  		location = GoodsLink+"&token="+token;
+    		location = GoodsLink;
+    	} else {
+    		if (GoodsType=="1"){
+    			aif.javaGoGoodsForGame(GoodsLink);	
+    		} else if (GoodsType=="3"){
+    			aif.javaGoCircleForGame(GoodsLink);
+    		} else if (GoodsType=="6"){
+    			aif.javaGoUserSpaceForGame(GoodsLink);
+    		} else if (GoodsType=="2"){
+    			paramCarbonLink=GoodsLink.split(",");
+    			aif.javaGoCarbonForGame(paramCarbonLink[0],paramCarbonLink[1],paramCarbonLink[2],paramCarbonLink[3],paramCarbonLink[4]);
+    		}
+    	}
+    }
+
+    function reRedPackage(giftId) {
+        $.ajax({
+            type: "POST",
+            dataType: "jsonp",
+            url: "http://114.55.103.71:9006/ldy/game/reRedPackage?callback=?",
+            async: false,
+            data: { token: token, giftId: giftId },
+            success: function (msg) {
+                if (msg.code == 200) {
+                    //alert("数据已提交");
+                    showBox();
+                }
+            },
+            error: function (xhr, msg, e) {
+                alert("error");
+            }
+        });
+    }
+
+    //计时
+    function setTime() {
+        if (gameover == 1 || gameparse == 1) { }
+        else {
+            if (roundId == 1) {
+                timeRound1 += 0.05;
+                if (getTimeShow(timeRound1) == "0") {
+                    if (douyaRound1 >= jsondata.data.json_round1.NeedDouya) {
+                        $(".round1result").show();
+                    }
+                    else {
+                        $(".gameover").show();
+                    }
+                }
+                $("#timeRound1Td").html(getTimeShow(timeRound1) + "秒");
+            }
+            else if (roundId == 2) {
+                timeRound2 += 0.05;
+                if (getTimeShow(timeRound2) == "0") {
+                    if (douyaRound2 >= jsondata.data.json_round2.NeedDouya) {
+                        $(".round1result").show();
+                    }
+                    else {
+                        $(".gameover").show();
+                    }
+                }
+                $("#timeRound1Td").html(getTimeShow(timeRound2) + "秒");
+            }
+            else if (roundId == 3) {
+                timeRound3 += 0.05;
+                if (getTimeShow(timeRound3) == "0") {
+                    if (douyaRound3 >= jsondata.data.json_round3.NeedDouya) {
+                        $(".round1result").show();
+                    }
+                    else {
+                        $(".gameover").show();
+                    }
+                }
+                $("#timeRound1Td").html(getTimeShow(timeRound3) + "秒");
+            }
+            else if (roundId == 4) {
+                timeRound4 += 0.05;
+                if (getTimeShow(timeRound4) == "0") {
+                    if (douyaRound4 >= jsondata.data.json_round4.NeedDouya) {
+                        $(".round1result").show();
+                    }
+                    else {
+                        $(".gameover").show();
+                    }
+                }
+                $("#timeRound1Td").html(getTimeShow(timeRound4) + "秒");
+            }
+            else if (roundId == 5) {
+                timeRound5 += 0.05;
+                if (getTimeShow(timeRound5) == "0") {
+                    $(".tongguan").show();
+                }
+                $("#timeRound1Td").html(getTimeShow(timeRound5) + "秒");
+            }
+        }
+        setTimeout("setTime()", 50);
+    }
+
+    function getTimeShow(secs) {
+        /*var minute = parseInt(secs / 60);
+        var second = secs % 60;
+        var showMinute = minute;
+        var showSecond = second;
+        if (minute < 10) {
+            showMinute = "0" + minute;
+        }
+        if (second < 10) {
+            showSecond = "0" + second;
+        }
+        */
+        return (60 - secs < 0) ? 0 : (60 - secs).toFixed(1);
+    }
+
+    function request(paras) {
+        var url = location.href;
+        var paraString = url.substring(url.indexOf("?") + 1, url.length).split("&");
+        var paraObj = {}
+        for (i = 0; j = paraString[i]; i++) {
+            paraObj[j.substring(0, j.indexOf("=")).toLowerCase()] = j.substring(j.indexOf("=") + 1, j.length);
+        }
+        var returnValue = paraObj[paras.toLowerCase()];
+        if (typeof (returnValue) == "undefined") {
+            return "";
+        } else { return returnValue; }
+    }
+    //alert(JSON.stringify(json_round1));
+
+    
+
+    $(function () {
+        //alert(gamedata[0].GameRound1.PassDouyaNum);
+        token = request("token");
+        if (token != "") {
+            isWeb = 0;
+            setCookie('token', token, 365);
+        }
+        //alert("userid:" + userid);
+        //getWxShareParams();  
+
+        initGame();
+
+        c.width=canvasW;
+        c.height=canvasH;
+        cxt = c.getContext("2d");
+
+        player.src = "Images/douya.png";
+        player.onload = function () {
+            cxt.drawImage(player, 200, canvasH - playerHeight, playerWidth, playerHeight);
+        };
+
+        window.addEventListener('deviceorientation', function (event) {
+            var alpha = parseInt(event.alpha);
+            var beta = parseInt(event.beta);
+            var gamma = parseInt(event.gamma);
+            x = parseInt(canvasW / 2) + gamma*3;
+            //$("#tuoluoyi").html(alpha + "<br/>" + beta + "<br/>" + gamma + "<br/>")
+        }, false);
+        
+        
+        /*
+        initRound(2);
+        initRound(3);
+        initRound(4);
+        */
+        setTimeout("setTime()", 1000);
+        //SaveViewTime();
+    });
+
+    var interval;
+    function StartRound() {
+        //alert("开始第" + roundId + "关");
+        $(".pt-page-3").css("background", "#6A5B18 url(Images/gamebg" + roundId + ".jpg) no-repeat");
+        $(".pt-page-3").css("background-size", "cover");
+        $("#giftNumRound").html("x 0");
+        initRound(roundId);
+        var singledowntime = 2.5;
+        if (roundId == 1) { singledowntime = 4; }
+        if (roundId == 2) { singledowntime = 3; }
+        
+        try {
+            clearInterval(interval);
+        }
+        catch (ex) { }
+
+        interval = setInterval(function () {
+            if (timeRound >= 60 || gameover==1) {
+                clearInterval(interval);
+            }
+
+            var timeRound = 0;
+            if (roundId == 1) { timeRound = timeRound1; }
+            else if (roundId == 2) { timeRound = timeRound2; }
+            else if (roundId == 3) { timeRound = timeRound3; }
+            else if (roundId == 4) { timeRound = timeRound4; }
+            else if (roundId == 5) { timeRound = timeRound5; }
+
+
+            if (x >= canvasW - playerWidth / 2) { x = canvasW - playerWidth / 2; }
+            if (x <= 0 - playerWidth / 2) { x = 0 - playerWidth / 2; }
+            cxt.clearRect(0, 0, canvasW, canvasH);
+            cxt.drawImage(player, x, canvasH - playerHeight, playerWidth, playerHeight);
+
+            //if (roundId == 1) {
+
+                for (var i = 0; i < imageArray.length; i++) {                    
+                    var downobjdata = json_round[i];
+                    var downobj = imageArray[i];
+                    var player_centerx = x + playerWidth / 2;
+                    var obj_centerx = downobjdata.x + downobjdata.width / 2;
+                    if (downobjdata.Get == 0 && ((downobjdata.y < canvasH - 50 - downobjdata.height) || (downobjdata.y > canvasH - 40 - downobjdata.height) || ((player_centerx < (obj_centerx - 30) || player_centerx > (obj_centerx + 30)) && downobjdata.y >= canvasH - 50 - downobjdata.height))) {
+                        cxt.drawImage(downobj, downobjdata.x, downobjdata.y, downobjdata.width, downobjdata.height);
+                        downobjdata.y = timeRound - downobjdata.StartDownSec > 0 ? (timeRound - downobjdata.StartDownSec) * (canvasH / singledowntime) : (0 - downobjdata.height);
+                    }
+                    else {
+                        if (downobjdata.ObjType == "gift" && downobjdata.Get == 0) {
+                            if (downobjdata.GetGoods != null) {
+                                tempGoods = downobjdata.GetGoods;
+                                gameparse = 1;
+                                $(".getgoods").show();
+//                              $("#getgoodsName").html("获得 " + substring(downobjdata.GetGoods.GoodsName, 12));
+								$("#getgoodsName").html(substring(downobjdata.GetGoods.GoodsName, 12));
+                                if (downobjdata.GetGoods.GoodsType == 4) {
+                                    $("#getgoodsImage").html('<img src="Images/hongbao.png" />');
+                                    $("#getgoodsGoonBtn").hide();
+                                }
+                                else if (downobjdata.GetGoods.GoodsType == 5) {
+                                    $("#getgoodsImage").html('<img src="Images/lvbao.png" />');
+                                    $("#getgoodsGoonBtn").hide();
+                                }
+                                else {
+                                    $("#getgoodsImage").html('<img src="' + downobjdata.GetGoods.GoodsImage + '" style="height:6em;" />');
+                                    $("#getgoodsGoonBtn").show();
+                                }
+                                //getgoods  getgoodsName getgoodsImage <img src="Images/hongbao.png" /> getgoodsGoonBtn
+                                //alert(downobjdata.GetGoods.GoodsType + ":" + downobjdata.GetGoods.GoodsName);
+                            }
+                            $("#GiftIcon").html('<img src="Images/gift.png" class="ani" style="width:1.5em;" />');
+                            $("#giftyinxiao")[0].play();
+                            if (roundId == 1) {
+                                giftRound1++;
+                                $("#giftNumRound").html("x " + giftRound1);
+                            }
+                            else if (roundId == 2) {
+                                giftRound2++;
+                                $("#giftNumRound").html("x " + giftRound2);
+                            }
+                            else if (roundId == 3) {
+                                giftRound3++;
+                                $("#giftNumRound").html("x " + giftRound3);
+                            }
+                            else if (roundId == 4) {
+                                giftRound4++;
+                                $("#giftNumRound").html("x " + giftRound4);
+                            }
+                            else if (roundId == 5) {
+                                giftRound5++;
+                                $("#giftNumRound").html("x " + giftRound5);
+                            }
+                            
+                        }
+                        else if (downobjdata.ObjType == "douya" && downobjdata.Get == 0) {
+                            $("#douyayinxiao")[0].play();
+                            if (roundId == 1) {
+                                douyaRound1++;
+                                $("#douyaRound").html("");
+                                for (var i = 0; i < douyaRound1; i++) {
+                                    if (i == (douyaRound1 - 1)) {
+                                        $("#douyaRound").append('<img src="Images/douya2.png" class="anidouya" style="height:2em;" />');
+                                    }
+                                    else {
+                                        $("#douyaRound").append('<img src="Images/douya2.png" style="height:2em;" />');
+                                    }
+                                    
+                                }
+                                for (var i = 0; i < jsondata.data.json_round1.NeedDouya - douyaRound1; i++) {
+                                    $("#douyaRound").append('<img src="Images/douya2_gray.png" style="height:2em;" />');
+                                }
+                            }
+                            else if (roundId == 2) {
+                                douyaRound2++;
+                                $("#douyaRound").html("");
+                                for (var i = 0; i < douyaRound2; i++) {
+                                    if (i == (douyaRound2 - 1)) {
+                                        $("#douyaRound").append('<img src="Images/douya2.png" class="anidouya" style="height:2em;" />');
+                                    }
+                                    else {
+                                        $("#douyaRound").append('<img src="Images/douya2.png" style="height:2em;" />');
+                                    }                                    
+                                }
+                                for (var i = 0; i < jsondata.data.json_round2.NeedDouya - douyaRound2; i++) {
+                                    $("#douyaRound").append('<img src="Images/douya2_gray.png" style="height:2em;" />');
+                                }
+                            }
+                            else if (roundId == 3) {
+                                douyaRound3++;
+                                $("#douyaRound").html("");
+                                for (var i = 0; i < douyaRound3; i++) {
+                                    if (i == (douyaRound3 - 1)) {
+                                        $("#douyaRound").append('<img src="Images/douya2.png" class="anidouya" style="height:2em;" />');
+                                    }
+                                    else {
+                                        $("#douyaRound").append('<img src="Images/douya2.png" style="height:2em;" />');
+                                    }
+                                }
+                                for (var i = 0; i < jsondata.data.json_round3.NeedDouya - douyaRound3; i++) {
+                                    $("#douyaRound").append('<img src="Images/douya2_gray.png" style="height:2em;" />');
+                                }
+                            }
+                            else if (roundId == 4) {
+                                douyaRound4++;
+                                $("#douyaRound").html("");
+                                for (var i = 0; i < douyaRound4; i++) {
+                                    if (i == (douyaRound4 - 1)) {
+                                        $("#douyaRound").append('<img src="Images/douya2.png" class="anidouya" style="height:2em;" />');
+                                    }
+                                    else {
+                                        $("#douyaRound").append('<img src="Images/douya2.png" style="height:2em;" />');
+                                    }
+                                }
+                                for (var i = 0; i < jsondata.data.json_round4.NeedDouya - douyaRound4; i++) {
+                                    $("#douyaRound").append('<img src="Images/douya2_gray.png" style="height:2em;" />');
+                                }
+                            }
+                            else if (roundId == 5) {
+                                douyaRound5++;
+                                $("#douyaRound").html("");
+                                for (var i = 0; i < douyaRound5; i++) {
+                                    if (i == (douyaRound5 - 1)) {
+                                        $("#douyaRound").append('<img src="Images/douya2.png" class="anidouya" style="height:2em;" />');
+                                    }
+                                    else {
+                                        $("#douyaRound").append('<img src="Images/douya2.png" style="height:2em;" />');
+                                    }
+                                }
+                                for (var i = 0; i < jsondata.data.json_round5.NeedDouya - douyaRound5; i++) {
+                                    $("#douyaRound").append('<img src="Images/douya2_gray.png" style="height:2em;" />');
+                                }
+                            }
+                            
+                        }
+                        else if (downobjdata.ObjType == "bomb" && downobjdata.Get == 0) {
+                            $("#zhadan")[0].play();
+                            gameover = 1;
+                            $(".gameover").show();
+                        }
+                        downobjdata.Get = 1;
+                    }
+                }
+            //}
+        }, 10);
+    }
+
+    
+</script>
+<script>
+	function closeCurrent(){
+		aif.javaCloseActivity();
+	}    
+</script>

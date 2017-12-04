@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta http-equiv="Access-Control-Allow-Origin" content="*">
+		<title>碳指数</title>
+	</head>
+	<link rel="stylesheet" type="text/css" href="css/weui.css">
+	<script type="text/javascript" src="js/jquery-3.1.1.min.js" ></script>
+	<script type="text/javascript" src="js/iscroll-probe.js"></script>
+	<script src="js/functionPublic.js"></script>
+	
+	<body>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="height:45px; background-color:#1AAD19; position:fixed; top:0px; z-index:8888;">
+			<tr>
+				<td style="width:40px; text-align:center; vertical-align:middle;" onclick="go_back()"><img src="ico/ico_back.png" style="max-width:26px; vertical-align: middle;" /></td>
+				<td id="" style="text-align:center; font-size:16px; color:#fff; position: relative;">
+					碳指数
+					<!--<img src="ico/ico_search_fff.png" style="position: absolute; right: 15px; max-height: 22px;" onclick="go_search();" />-->
+				</td>
+				<td id="" style="width:40px; vertical-align:middle; text-align:center; font-size: 12px; color: #FFFFFF; line-height: 14px;" onclick="showMarketFilter();"><!--<img src="ico/ico_search_fff.png" style="vertical-align:middle; max-height:20px;" />-->
+					<!--<img src="ico/ico_filt_fff.png" style="max-height:22px; vertical-align: middle;" />--><!--<br />筛选-->&nbsp;
+				</td>
+			</tr>
+		</table>
+		<div style="width: 100%; height: 45px;"></div>
+		<!-------------------------------------------------------------->
+		<div style="width: 100%; height: 40px; line-height: 40px; background: #F9F9F9; border-bottom: 1px solid #CCCCCC;">
+			<font style="margin-left: 10px; font-size: 14px; font-weight: bold;">指数</font>
+		</div>
+		<div style="width: 100%; height: 60px; background: #FFFFFF;">
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: left; margin-left: 10px;">中国碳市100指数</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 18px; float: right; margin-right: 10px; color: #1AAD19;">-0.08%</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 18px; float: right; margin-right: 10px; color: #1AAD19;">580.77</div>			
+		</div>
+		<div style="width: 100%; height: 60px; background: #FFFFFF; border-top: 1px solid #F9F9F9;">
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: left; margin-left: 10px;">绿豆芽指数</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 18px; float: right; margin-right: 10px; color: #C03611;">1.25%</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 18px; float: right; margin-right: 10px; color: #C03611;">899.56</div>			
+		</div>
+		<!-------------------------------------------------------------->
+		<div style="width: 100%; height: 40px; line-height: 40px; background: #F9F9F9; border-bottom: 1px solid #CCCCCC; border-top: 1px solid #CCCCCC;">
+			<font style="margin-left: 10px; font-size: 14px; font-weight: bold;">板块</font>
+		</div>	
+		<div style="width: 100%; height: 60px; background: #FFFFFF; border-bottom: 1px solid #F9F9F9;">
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: left; margin-left: 10px;">风电</div>
+			<div style="width: 100px; height: 40px; line-height: 40px; background: #C03611; color: #FFFFFF; float: right; margin: 10px; text-align: center; font-size: 14px;">荐:LDY0426</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: right; margin-right: 10px; color: #C03611;">1.25%</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: right; margin-right: 10px; color: #C03611;">600.00</div>			
+		</div>
+		<div style="width: 100%; height: 60px; background: #FFFFFF; border-bottom: 1px solid #F9F9F9;">
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: left; margin-left: 10px;">光伏</div>
+			<div style="width: 100px; height: 40px; line-height: 40px; background: #C03611; color: #FFFFFF; float: right; margin: 10px; text-align: center; font-size: 14px;">荐:LDY0426</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: right; margin-right: 10px; color: #1AAD19;">-1.25%</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: right; margin-right: 10px; color: #1AAD19;">600.00</div>			
+		</div>	
+		<div style="width: 100%; height: 60px; background: #FFFFFF; border-bottom: 1px solid #F9F9F9;">
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: left; margin-left: 10px;">水电</div>
+			<div style="width: 100px; height: 40px; line-height: 40px; background: #C03611; color: #FFFFFF; float: right; margin: 10px; text-align: center; font-size: 14px;">荐:LDY0426</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: right; margin-right: 10px; color: #C03611;">1.25%</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: right; margin-right: 10px; color: #C03611;">600.00</div>			
+		</div>			
+		<div style="width: 100%; height: 60px; background: #FFFFFF; border-bottom: 1px solid #F9F9F9;">
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: left; margin-left: 10px;">沼气</div>
+			<div style="width: 100px; height: 40px; line-height: 40px; background: #C03611; color: #FFFFFF; float: right; margin: 10px; text-align: center; font-size: 14px;">荐:LDY0426</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: right; margin-right: 10px; color: #C03611;">1.25%</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: right; margin-right: 10px; color: #C03611;">600.00</div>			
+		</div>		
+		<div style="width: 100%; height: 60px; background: #FFFFFF; border-bottom: 1px solid #F9F9F9;">
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: left; margin-left: 10px;">瓦斯</div>
+			<div style="width: 100px; height: 40px; line-height: 40px; background: #C03611; color: #FFFFFF; float: right; margin: 10px; text-align: center; font-size: 14px;">荐:LDY0426</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: right; margin-right: 10px; color: #1AAD19;">-1.25%</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: right; margin-right: 10px; color: #1AAD19;">600.00</div>			
+		</div>	
+		<div style="width: 100%; height: 60px; background: #FFFFFF; border-bottom: 1px solid #F9F9F9;">
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: left; margin-left: 10px;">气电</div>
+			<div style="width: 100px; height: 40px; line-height: 40px; background: #C03611; color: #FFFFFF; float: right; margin: 10px; text-align: center; font-size: 14px;">荐:LDY0426</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: right; margin-right: 10px; color: #1AAD19;">-1.25%</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: right; margin-right: 10px; color: #1AAD19;">600.00</div>			
+		</div>	
+		<div style="width: 100%; height: 60px; background: #FFFFFF; border-bottom: 1px solid #F9F9F9;">
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: left; margin-left: 10px;">余热</div>
+			<div style="width: 100px; height: 40px; line-height: 40px; background: #C03611; color: #FFFFFF; float: right; margin: 10px; text-align: center; font-size: 14px;">荐:LDY0426</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: right; margin-right: 10px; color: #C03611;">1.25%</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: right; margin-right: 10px; color: #C03611;">600.00</div>			
+		</div>	
+		<div style="width: 100%; height: 60px; background: #FFFFFF; border-bottom: 1px solid #F9F9F9;">
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: left; margin-left: 10px;">废电</div>
+			<div style="width: 100px; height: 40px; line-height: 40px; background: #C03611; color: #FFFFFF; float: right; margin: 10px; text-align: center; font-size: 14px;">荐:LDY0426</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: right; margin-right: 10px; color: #1AAD19;">-1.25%</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: right; margin-right: 10px; color: #1AAD19;">600.00</div>			
+		</div>
+		<div style="width: 100%; height: 60px; background: #FFFFFF; border-bottom: 1px solid #F9F9F9;">
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: left; margin-left: 10px;">生物</div>
+			<div style="width: 100px; height: 40px; line-height: 40px; background: #C03611; color: #FFFFFF; float: right; margin: 10px; text-align: center; font-size: 14px;">荐:LDY0426</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: right; margin-right: 10px; color: #C03611;">1.25%</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: right; margin-right: 10px; color: #C03611;">600.00</div>			
+		</div>
+		<div style="width: 100%; height: 60px; background: #FFFFFF; border-bottom: 1px solid #F9F9F9;">
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: left; margin-left: 10px;">废处</div>
+			<div style="width: 100px; height: 40px; line-height: 40px; background: #C03611; color: #FFFFFF; float: right; margin: 10px; text-align: center; font-size: 14px;">荐:LDY0426</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: right; margin-right: 10px; color: #C03611;">1.25%</div>
+			<div style="width: auto; height: 60px; line-height: 60px; font-size: 16px; float: right; margin-right: 10px; color: #C03611;">600.00</div>			
+		</div>			
+	</body>
+</html>
