@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.2/weui.css">
+  <link rel="stylesheet" href="http://apps.bdimg.com/libs/fontawesome/4.4.0/css/font-awesome.min.css">
+  <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+  <title>共享碳铺设置</title>
+  <style>
+    body {
+      font-size: 10px;
+    }
+
+    .header {
+      /* display: flex; */
+      justify-content: center;
+      align-items: center;
+      height: 45px;
+      color: #ffffff;
+      background-color: #1aac19;
+      font-size: 16.0px;
+      font-weight: normal;
+      font-style: normal;
+      z-index: 3;
+      opacity: 1;
+      pointer-events: auto;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <div class="page__bd page__bd_spacing">
+      <div class="weui-flex header">
+        <div class="weui-flex__item">
+          <div class="placeholder">
+            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+          </div>
+        </div>
+        <div class="weui-flex__item">
+          <div class="placeholder">共享碳铺设置</div>
+        </div>
+        <div class="weui-flex__item">
+          <div class="placeholder">完成</div>
+        </div>
+      </div>
+      <div class="weui-flex">
+        <div class="weui-flex__item">
+          <div class="weui-cell">
+            <div class="weui-cell__bd">
+              <input class="weui-input" type="number" pattern="[0-9]*" placeholder="设置碳铺价格">
+            </div>
+            <div class="weui-cell__hd">
+              <label class="weui-label">碳票/天</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="weui-flex">
+        <div class="weui-flex__item">
+          <div class="weui-cell weui-cell_switch">
+            <div class="weui-cell__bd">申请加入需要审核</div>
+            <div class="weui-cell__ft">
+              <input class="weui-switch permission" type="checkbox">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script>
+    $('.weui-btn_primary').on('click', function () {
+      $.get('/test', {
+
+      }).always(data => {
+        console.log(data)
+      })
+
+      $.ajax({
+          type: 'POST',
+          url: 'test',
+          data: {
+            price: $('#price').value,
+            permission: $('.permission').checked
+          },
+          dataType: 'json'
+        })
+        .success(function (data) {
+          console.log(data)
+        }).fail(() => {}).done(() => {})
+    })
+  </script>
+</body>
+
+</html>
